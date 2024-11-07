@@ -73,6 +73,14 @@ CREATE TABLE ENVIOVITAL.CONDUCTORALMACEN
     id_almacen   INT    NOT NULL,
     id_conductor INT    NOT NULL
 );
+CREATE TABLE ENVIOVITAL.EVENTOALMACEN
+(
+    id           SERIAL NOT NULL PRIMARY KEY,
+    id_evento    INT    NOT NULL,
+    id_almacen   INT    NOT NULL,
+    CONSTRAINT FK_EVENTOALMACEN_EVENTO FOREIGN KEY (id_evento) REFERENCES ENVIOVITAL.EVENTO (id),
+    CONSTRAINT FK_EVENTOALMACEN_ALMACEN FOREIGN KEY (id_almacen) REFERENCES ENVIOVITAL.ALMACEN (id)
+);
 
 
 ALTER TABLE ENVIOVITAL.CONDUCTOR
@@ -229,6 +237,18 @@ VALUES ('Ford', 'Transit', 'ABC123A', 1, 1),
 
 
 INSERT INTO ENVIOVITAL.CONDUCTORALMACEN (id_almacen, id_conductor)
+VALUES (1, 1),
+       (2, 2),
+       (3, 3),
+       (4, 4),
+       (5, 5),
+       (6, 6),
+       (7, 7),
+       (8, 8),
+       (9, 9),
+       (10, 10);
+
+INSERT INTO ENVIOVITAL.EVENTOALMACEN (id_evento, id_almacen)
 VALUES (1, 1),
        (2, 2),
        (3, 3),

@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "evento",schema = "enviovital", catalog = "postgres")
@@ -31,5 +32,13 @@ public class Evento {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_provincia", nullable = false)
     private Provincia provincia;
+
+    @ManyToMany
+    @JoinTable(
+            name = "eventoalmacen",
+            joinColumns = @JoinColumn(name = "id_evento"),
+            inverseJoinColumns = @JoinColumn(name = "id_almacen")
+    )
+    private Set<Almacen> almacenes;
 
 }

@@ -46,4 +46,9 @@ public class Almacen {
     @ManyToMany(mappedBy = "almacenes")
     private Set<Conductor> conductores;
 
+    @ManyToMany(mappedBy = "almacenes")
+    private Set<Evento> eventos;
+
+
+
 }
