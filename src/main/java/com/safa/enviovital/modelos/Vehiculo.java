@@ -38,4 +38,6 @@ public class Vehiculo {
     @JoinColumn(name = "id_tipo_vehiculo", nullable = false)
     private TipoVehiculo tipoVehiculo;
 
+
+    //prueba
 }
