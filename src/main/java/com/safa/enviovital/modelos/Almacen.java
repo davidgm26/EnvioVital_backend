@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "almacen",schema = "enviovital", catalog = "postgres")
@@ -41,5 +42,8 @@ public class Almacen {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id")
     private Usuario usuario;
+
+    @ManyToMany(mappedBy = "almacenes")
+    private Set<Conductor> conductores;
 
 }
