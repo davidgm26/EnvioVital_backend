@@ -1,4 +1,4 @@
 package com.safa.enviovital.servicios;
 
-public class TipoVehiculoServicios {
+public class VehiculoService {
 }
