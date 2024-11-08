@@ -1,5 +1,6 @@
 package com.safa.enviovital.modelos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,10 +11,10 @@ import java.util.List;
 @Table(name = "provincia",schema = "enviovital", catalog = "postgres")
 @Getter
 @Setter
-@ToString
+@ToString (exclude = {"eventos"})
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode (exclude = {"eventos"})
 
 public class Provincia {
 
@@ -26,5 +27,6 @@ public class Provincia {
     private String nombre;
 
     @OneToMany(mappedBy = "provincia", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Evento> eventos;
 }

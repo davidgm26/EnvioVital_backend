@@ -27,9 +27,6 @@ public class Usuario {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private String email;
-
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Rol rol;

@@ -11,10 +11,10 @@ import java.util.List;
 @Table(name = "tipovehiculo",schema = "enviovital", catalog = "postgres")
 @Getter
 @Setter
-@ToString
+@ToString (exclude = {"vehiculos"})
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode (exclude = {"vehiculos"})
 
 public class TipoVehiculo {
     @Id
