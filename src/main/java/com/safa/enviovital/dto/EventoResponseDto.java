@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -16,7 +17,7 @@ public class EventoResponseDto {
     private String descripcion;
     private boolean activo;
     private String provincia;
-    private List<Almacen> almacenes;
+    private List<AlmacenResponseDto> almacenes;
 
 
     public static EventoResponseDto EventoResponseDtoFromEvento(Evento evento) {
@@ -25,6 +26,8 @@ public class EventoResponseDto {
                 .nombre(evento.getNombre())
                 .activo(evento.getEsActivo())
                 .provincia(evento.getProvincia().getNombre())
+                .almacenes(evento.getAlmacenes().stream().map(AlmacenResponseDto::createAlmacenResponseDtoFromAlmacen)
+                        .collect(Collectors.toList()))
                 .build();
     }
 

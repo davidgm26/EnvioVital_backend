@@ -1,9 +1,8 @@
 package com.safa.enviovital.modelos;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -14,6 +13,10 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode (exclude = {"almacenes","provincia"})
+@NamedEntityGraph(
+        name = "Evento.almacenes",
+        attributeNodes =@NamedAttributeNode("almacenes")
+)
 public class Evento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +33,7 @@ public class Evento {
     private Boolean esActivo;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "id_provincia", nullable = false)
     private Provincia provincia;
 

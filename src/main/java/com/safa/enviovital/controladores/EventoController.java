@@ -1,7 +1,9 @@
 package com.safa.enviovital.controladores;
 
+import com.safa.enviovital.dto.EventoResponseDto;
 import com.safa.enviovital.modelos.Evento;
 import com.safa.enviovital.servicios.EventoService;
+import jakarta.persistence.NamedEntityGraph;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +20,7 @@ public class EventoController {
     private EventoService eventoService;
 
     @GetMapping("/")
-    private ResponseEntity<List<Evento>> getAllEventos(){
+    private ResponseEntity<List<EventoResponseDto>> getAllEventos(){
      return ResponseEntity.ok(eventoService.getAllEventos());
     }
 

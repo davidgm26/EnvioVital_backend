@@ -1,5 +1,6 @@
 package com.safa.enviovital.servicios;
 
+import com.safa.enviovital.dto.EventoResponseDto;
 import com.safa.enviovital.modelos.Evento;
 import com.safa.enviovital.repositorios.EventoRepository;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -16,8 +18,9 @@ public class EventoService {
     @Autowired
     private EventoRepository eventoRepository;
 
-    public List<Evento> getAllEventos() {
-        return eventoRepository.findAll();
+    public List<EventoResponseDto> getAllEventos() {
+        List<Evento> eventos = eventoRepository.findAll();
+        return eventos.stream().map(EventoResponseDto::EventoResponseDtoFromEvento).collect(Collectors.toList());
     }
 
     public Evento getEventoById(int id){

@@ -1,5 +1,6 @@
 package com.safa.enviovital.modelos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -45,6 +46,7 @@ public class Conductor {
     private String email;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "id_usuario", referencedColumnName = "id")
     private Usuario usuario;
 
