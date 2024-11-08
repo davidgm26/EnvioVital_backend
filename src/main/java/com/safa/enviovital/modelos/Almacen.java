@@ -1,6 +1,7 @@
 package com.safa.enviovital.modelos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,10 +12,10 @@ import java.util.Set;
 @Table(name = "almacen",schema = "enviovital", catalog = "postgres")
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"conductores", "eventos", "usuario", "provincia"})
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode (exclude = {"conductores", "eventos", "usuario", "provincia"})
 public class Almacen {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,12 +31,14 @@ public class Almacen {
     @Column(name ="direccion")
     private String direccion;
 
+    @Column(nullable = false, unique = true)
+    private String email;
+
     @Column(name = "es_activo")
     private Boolean esActivo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_provincia", nullable = false)
-    @JsonIgnore
     private Provincia provincia;
 
 
@@ -43,10 +46,13 @@ public class Almacen {
     @JoinColumn(name = "id_usuario", referencedColumnName = "id")
     private Usuario usuario;
 
+
     @ManyToMany(mappedBy = "almacenes")
+    @JsonIgnore
     private Set<Conductor> conductores;
 
     @ManyToMany(mappedBy = "almacenes")
+    @JsonIgnore
     private Set<Evento> eventos;
 
 

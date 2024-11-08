@@ -10,10 +10,10 @@ import java.util.Set;
 @Table(name = "evento",schema = "enviovital", catalog = "postgres")
 @Getter
 @Setter
-@ToString
+@ToString (exclude = {"almacenes","provincia"})
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode (exclude = {"almacenes","provincia"})
 public class Evento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

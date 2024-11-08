@@ -10,10 +10,10 @@ import java.util.List;
 @Table(name = "vehiculo",schema = "enviovital", catalog = "postgres")
 @Getter
 @Setter
-@ToString
+@ToString (exclude = {"conductor","tipoVehiculo"})
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode (exclude = {"conductor","tipoVehiculo"})
 public class Vehiculo {
 
     @Id
@@ -38,6 +38,4 @@ public class Vehiculo {
     @JoinColumn(name = "id_tipo_vehiculo", nullable = false)
     private TipoVehiculo tipoVehiculo;
 
-
-    //prueba
 }

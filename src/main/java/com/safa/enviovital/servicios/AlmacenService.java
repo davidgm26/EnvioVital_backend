@@ -56,8 +56,12 @@ public class AlmacenService {
         return almacenRepositorio.save(almacen);
     }
 
-
-
-
-
+    /**
+     * Metodo que retorna un almacen por su id
+     * @param id
+     * @return
+     */
+    public Almacen getAlmacenPorId(Integer id) {
+        return almacenRepositorio.findById(id).orElse(null);
+    }
 }
