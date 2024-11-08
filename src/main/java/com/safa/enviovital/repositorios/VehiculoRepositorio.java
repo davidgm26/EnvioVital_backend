@@ -1,4 +1,9 @@
 package com.safa.enviovital.repositorios;
 
-public interface VehiculoRepositorio {
+
+import com.safa.enviovital.modelos.Vehiculo;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface VehiculoRepositorio extends JpaRepository<Vehiculo, Integer> {
 }
+
