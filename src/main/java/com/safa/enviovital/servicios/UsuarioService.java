@@ -1,66 +1,65 @@
 package com.safa.enviovital.servicios;
 
-
+import com.safa.enviovital.dto.UsuarioRequestDTO;
+import com.safa.enviovital.dto.UsuarioResponseDTO;
+import com.safa.enviovital.excepciones.Response;
+import com.safa.enviovital.excepciones.NotFoundException.UsuarioNotFoundException;
 import com.safa.enviovital.modelos.Usuario;
 import com.safa.enviovital.repositorios.UsuarioRepositorio;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class UsuarioService {
 
-    private UsuarioRepositorio usuarioRepositorio;
+    private final UsuarioRepositorio usuarioRepositorio;
 
-    /**
-     * Metodo que se encarga de dar una lista de usuarios
-     *
-     * @return Lista de usuarios
-     */
-
-    public List<Usuario> getAll() {
-        return usuarioRepositorio.findAll();
+    public List<UsuarioResponseDTO> getAll() {
+        List<Usuario> usuarios = usuarioRepositorio.findAll();
+        return usuarios.stream()
+                .map(usuario -> new UsuarioResponseDTO(usuario.getId(), usuario.getUsername(), usuario.getRol()))
+                .toList();
     }
 
-    /**
-     * Metodo que se encarga de guardar un usuario
-     * @param usuario Usuario a guardar
-     * @return Usuario guardado
-     */
-
-    public Usuario guardar(Usuario usuario) {
-        return usuarioRepositorio.save(usuario);
+    public Usuario getUsuarioPorId(Integer id) {
+        return usuarioRepositorio.findById(id)
+                .orElseThrow(() -> new UsuarioNotFoundException("El usuario con ID " + id + " no existe"));
     }
 
-    /**
-     * Metodo que se encarga de eliminar un usuario
-     * @param id Id del usuario a eliminar
-     */
+//    public UsuarioResponseDTO guardar(UsuarioRequestDTO requestDTO) {
+//        Usuario usuario = new Usuario();
+//        usuario.setUsername(requestDTO.getUsername());
+//        usuario.setPassword(requestDTO.getPassword());
+//        usuario.setRol(requestDTO.getRol());
+//        Usuario usuarioGuardado = usuarioRepositorio.save(usuario);
+//        return new UsuarioResponseDTO(usuarioGuardado.getId(), usuarioGuardado.getUsername(), usuarioGuardado.getRol());
+//    }
+//
+//    public UsuarioResponseDTO editar(Integer id, UsuarioRequestDTO requestDTO) {
+//        Usuario usuario = usuarioRepositorio.findById(id)
+//                .orElseThrow(() -> new RuntimeException("El usuario con ID " + id + " no existe"));
+//        usuario.setUsername(requestDTO.getUsername());
+//        usuario.setPassword(requestDTO.getPassword());
+//        usuario.setRol(requestDTO.getRol());
+//        Usuario usuarioActualizado = usuarioRepositorio.save(usuario);
+//        return new UsuarioResponseDTO(usuarioActualizado.getId(), usuarioActualizado.getUsername(), usuarioActualizado.getRol());
+//    }
 
-    public void eliminar(Integer id) {
-        Usuario usuario = usuarioRepositorio.findById(id).orElse(null);
+    public Response eliminar(Integer id) {
+        Usuario usuario = usuarioRepositorio.findById(id)
+                .orElseThrow(() -> new UsuarioNotFoundException("El usuario con ID " + id + " no existe"));
 
-        if (usuario == null) {
-            throw new RuntimeException("El usuario con id: " + id + " no existe");
-        }
-        try {
-            usuarioRepositorio.deleteById(id);
-        } catch (Exception e) {
-            throw new RuntimeException("El usuario con id: " + id + " no puede ser eliminado");
-        }
+        usuarioRepositorio.delete(usuario);
+
+        return new Response(
+                "Usuario con ID " + id + " ha sido eliminado exitosamente",
+                HttpStatus.OK.value(),
+                LocalDateTime.now()
+        );
     }
-
-    /**
-     * Metodo que se encarga de actualizar un usuario
-     * @param usuario Usuario a actualizar
-     * @return Usuario actualizado
-     */
-
-    public Usuario actualizar(Usuario usuario) {
-        return usuarioRepositorio.save(usuario);
-
-    }
-
 }

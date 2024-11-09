@@ -4,20 +4,18 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "conductor",schema = "enviovital", catalog = "postgres")
+@Table(name = "conductor", schema = "enviovital", catalog = "postgres")
 @Getter
 @Setter
-@ToString (exclude = {"usuario","almacenes"})
+@ToString(exclude = {"usuario", "almacenes"})
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode (exclude = {"usuario","almacenes"})
-
+@EqualsAndHashCode(exclude = {"usuario", "almacenes"})
 public class Conductor {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -41,19 +39,18 @@ public class Conductor {
     @Column(name = "fecha_nacimiento")
     private LocalDate fechaNacimiento;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id")
     private Usuario usuario;
 
     @ManyToMany
     @JoinTable(
-            name = "conductoralmacen",
+            name = "eventoalmacenconductor",
             joinColumns = @JoinColumn(name = "id_conductor"),
-            inverseJoinColumns = @JoinColumn(name = "id_almacen")
+            inverseJoinColumns = @JoinColumn(name = "id_eventoalmacen")
     )
-    private Set<Almacen> almacenes;
-
+    private Set<Evento> eventos = new HashSet<>();
 }

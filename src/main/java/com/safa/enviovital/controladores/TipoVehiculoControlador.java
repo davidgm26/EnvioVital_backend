@@ -1,34 +1,69 @@
 package com.safa.enviovital.controladores;
 
-import com.safa.enviovital.modelos.TipoVehiculo;
+import com.safa.enviovital.dto.TipoVehiculoRequestDTO;
+import com.safa.enviovital.dto.TipoVehiculoResponseDTO;
+import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.servicios.TipoVehiculoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/tipovehiculo")
+@RequestMapping("/tiposVehiculo")
+@AllArgsConstructor
 public class TipoVehiculoControlador {
-    @Autowired
-    private TipoVehiculoService tipoVehiculoService;
 
+    private final TipoVehiculoService tipoVehiculoService;
+
+    /**
+     * Endpoint para obtener todos los tipos de vehículos.
+     * @return Lista de tipos de vehículos
+     */
     @GetMapping("/lista")
-    public List<TipoVehiculo> getAllAlmacenes() {
-        List<TipoVehiculo> tipoVehiculos = tipoVehiculoService.getAll();
-
-        return tipoVehiculos;
-    }
-    @GetMapping()
-    public TipoVehiculo getById(@RequestParam Integer id) {
-        TipoVehiculo tipoVehiculo = tipoVehiculoService.getAlmacenPorId(id);
-        return tipoVehiculo;
-    }
-    @PostMapping("/new")
-    public TipoVehiculo guardar(@RequestBody TipoVehiculo tipoVehiculo) {
-        TipoVehiculo tipoVehiculoGuardado = tipoVehiculoService.guardar(tipoVehiculo);
-        return tipoVehiculoGuardado;
+    public ResponseEntity<List<TipoVehiculoResponseDTO>> listarTiposVehiculo() {
+        return ResponseEntity.ok(tipoVehiculoService.getAll());
     }
 
+    /**
+     * Endpoint para obtener un tipo de vehículo por su ID.
+     * @param id ID del tipo de vehículo
+     * @return TipoVehiculoResponseDTO
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<TipoVehiculoResponseDTO> obtenerTipoVehiculoPorId(@PathVariable Integer id) {
+        return ResponseEntity.ok(tipoVehiculoService.getTipoVehiculoPorId(id));
+    }
 
+    /**
+     * Endpoint para guardar un nuevo tipo de vehículo.
+     * @param requestDTO Datos del tipo de vehículo a guardar
+     * @return TipoVehiculoResponseDTO con los datos del tipo de vehículo guardado
+     */
+    @PostMapping("/guardar")
+    public ResponseEntity<TipoVehiculoResponseDTO> guardarTipoVehiculo(@RequestBody TipoVehiculoRequestDTO requestDTO) {
+        return ResponseEntity.ok(tipoVehiculoService.guardar(requestDTO));
+    }
+
+    /**
+     * Endpoint para editar un tipo de vehículo.
+     * @param id ID del tipo de vehículo a editar
+     * @param requestDTO Datos del tipo de vehículo a editar
+     * @return TipoVehiculoResponseDTO con los datos del tipo de vehículo editado
+     */
+    @PutMapping("/editar/{id}")
+    public ResponseEntity<TipoVehiculoResponseDTO> editarTipoVehiculo(@PathVariable Integer id, @RequestBody TipoVehiculoRequestDTO requestDTO) {
+        return ResponseEntity.ok(tipoVehiculoService.editar(id, requestDTO));
+    }
+
+    /**
+     * Endpoint para eliminar un tipo de vehículo.
+     * @param id ID del tipo de vehículo a eliminar
+     */
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<Response> eliminarTipoVehiculo(@PathVariable Integer id) {
+        Response respuesta = tipoVehiculoService.eliminar(id);
+        return ResponseEntity.status(respuesta.getStatusCode()).body(respuesta);
+    }
 }
