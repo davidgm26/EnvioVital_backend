@@ -2,6 +2,7 @@ package com.safa.enviovital.servicios;
 
 import com.safa.enviovital.dto.AlmacenRequestDTO;
 import com.safa.enviovital.dto.AlmacenResponseDTO;
+import com.safa.enviovital.dto.EventoAlmacenDtoResponse;
 import com.safa.enviovital.dto.UsuarioRequestDTO;
 import com.safa.enviovital.enumerados.Rol;
 import com.safa.enviovital.excepciones.NotFoundException.AlmacenNotFoundException;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -28,6 +30,8 @@ public class AlmacenService {
     private final ProvinciaRepositorio provinciaRepositorio;
     private final UsuarioRepositorio usuarioRepositorio;
     private final EventoRepository eventoRepositorio;
+
+    @Autowired
     private final EventoAlmacenRepositorio eventoAlmacenRepositorio;
 
     /**
@@ -178,6 +182,18 @@ public class AlmacenService {
 
         return ResponseEntity.ok(response);
     }
+
+    /**
+     * Método para obtener los almacenes registrados en un evento.
+     * @param idEvento ID del evento
+     * @return Lista de AlmacenResponseDTO
+     */
+
+    public List<EventoAlmacenDtoResponse> obtenerEventoAlmacenPorEvento(Integer idEvento) {
+        // Llamar al repositorio para obtener la lista de relaciones entre eventos y almacenes
+        return eventoAlmacenRepositorio.findEventoAlmacenByEventoId(idEvento);
+    }
+
 
 
 

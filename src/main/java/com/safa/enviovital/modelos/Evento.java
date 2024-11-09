@@ -1,5 +1,6 @@
 package com.safa.enviovital.modelos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,11 +11,12 @@ import java.util.Set;
 @Table(name = "evento", schema = "enviovital", catalog = "postgres")
 @Getter
 @Setter
-@ToString(exclude = {"almacenes", "provincia"})
+@ToString(exclude = {"eventoAlmacenes", "provincia"})
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"almacenes", "provincia"})
+@EqualsAndHashCode(exclude = {"eventoAlmacenes", "provincia"})
 public class Evento {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -33,19 +35,7 @@ public class Evento {
     @JoinColumn(name = "id_provincia", nullable = false)
     private Provincia provincia;
 
-    @ManyToMany
-    @JoinTable(
-            name = "eventoalmacen",
-            joinColumns = @JoinColumn(name = "id_evento"),
-            inverseJoinColumns = @JoinColumn(name = "id_almacen")
-    )
-    private Set<Almacen> almacenes = new HashSet<>();
-
-    @ManyToMany
-    @JoinTable(
-            name = "eventoalmacenconductor",
-            joinColumns = @JoinColumn(name = "id_eventoalmacen"),
-            inverseJoinColumns = @JoinColumn(name = "id_conductor")
-    )
-    private Set<Conductor> conductores = new HashSet<>();
+    @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<EventoAlmacen> eventoAlmacenes = new HashSet<>();
 }

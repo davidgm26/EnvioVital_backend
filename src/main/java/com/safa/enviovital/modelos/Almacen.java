@@ -10,10 +10,10 @@ import java.util.Set;
 @Table(name = "almacen", schema = "enviovital", catalog = "postgres")
 @Getter
 @Setter
-@ToString(exclude = {"eventos", "usuario", "provincia"})
+@ToString(exclude = {"eventoAlmacenes", "usuario", "provincia"})
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"eventos", "usuario", "provincia"})
+@EqualsAndHashCode(exclude = {"eventoAlmacenes", "usuario", "provincia"})
 public class Almacen {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +43,6 @@ public class Almacen {
     @JoinColumn(name = "id_usuario", referencedColumnName = "id")
     private Usuario usuario;
 
-    @ManyToMany(mappedBy = "almacenes")
-    private Set<Evento> eventos = new HashSet<>();
+    @OneToMany(mappedBy = "almacen", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<EventoAlmacen> eventoAlmacenes = new HashSet<>();
 }

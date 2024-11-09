@@ -22,4 +22,6 @@ public interface AlmacenRepositorio extends JpaRepository<Almacen, Integer> {
     Optional<AlmacenResponseDTO> findAlmacenByIdWithDTO(Integer id);
 
 
+
+
 }

@@ -141,18 +141,14 @@ public class ConductorService {
     }
 
     public ResponseEntity<Response> registrarConductorEnEventoAlmacen(Integer eventoAlmacenId, Integer conductorId) {
-        // Obtener el EventoAlmacen de la base de datos
         EventoAlmacen eventoAlmacen = eventoAlmacenRepositorio.findById(eventoAlmacenId)
                 .orElseThrow(() -> new EventoAlmacenNotFoundException("EventoAlmacen no encontrado"));
 
-        // Obtener el Conductor de la base de datos
         Conductor conductor = conductorRepositorio.findById(conductorId)
                 .orElseThrow(() -> new ConductorNotFoundException("Conductor no encontrado"));
 
-        // Verificar si ya existe la relación entre EventoAlmacen y Conductor
         Optional<EventoAlmacenConductor> existingEventoAlmacenConductor = eventoAlmacenConductorRepositorio.findByEventoAlmacenIdAndConductorId(eventoAlmacenId, conductorId);
         if (existingEventoAlmacenConductor.isPresent()) {
-            // Si ya existe la relación, retornar un mensaje de error
             Response response = new Response(
                     "El conductor con ID " + conductorId + " ya está registrado en el EventoAlmacen con ID " + eventoAlmacenId + ".",
                     HttpStatus.BAD_REQUEST.value(),
@@ -161,15 +157,14 @@ public class ConductorService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
-        // Crear la relación entre EventoAlmacen y Conductor
+
         EventoAlmacenConductor eventoAlmacenConductor = new EventoAlmacenConductor();
         eventoAlmacenConductor.setEventoAlmacen(eventoAlmacen);
         eventoAlmacenConductor.setConductor(conductor);
 
-        // Guardar la relación en la base de datos
+
         eventoAlmacenConductorRepositorio.save(eventoAlmacenConductor);
 
-        // Preparar la respuesta
         Response response = new Response(
                 "El conductor con ID " + conductorId + " ha sido registrado exitosamente en el EventoAlmacen con ID " + eventoAlmacenId + ".",
                 HttpStatus.OK.value(),
