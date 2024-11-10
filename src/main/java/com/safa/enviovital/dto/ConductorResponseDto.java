@@ -10,11 +10,18 @@ import lombok.Data;
 public class ConductorResponseDto {
 
     private String nombre;
-    private String apellido;
+    private String apellidos;
     private String dni;
     private String telefono;
 
-    public static ConductorResponseDto createConductorResponseDtoFromConductor(Conductor conductor) {}
+    public static ConductorResponseDto createConductorResponseDtoFromConductor(Conductor conductor) {
+        return ConductorResponseDto.builder()
+                .nombre(conductor.getNombre())
+                .apellidos(conductor.getApellidos())
+                .dni(conductor.getDni())
+                .telefono(conductor.getTelefono())
+                .build();
+    }
 
 
 

@@ -2,6 +2,7 @@ package com.safa.enviovital.servicios;
 
 import com.safa.enviovital.modelos.Provincia;
 import com.safa.enviovital.repositorios.ProvinciaRepositorio;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -57,11 +58,11 @@ public class ProvinciaService {
     }
 
     /**
-     * Metodo que retorna un almacen por su id
+     * Metodo que retorna una provincia por su id
      * @param id
      * @return
      */
-    public Provincia getAlmacenPorId(Integer id) {
-        return provinciaRepositorio.findById(id).orElse(null);
+    public Provincia getProvinciaById(Integer id) {
+        return provinciaRepositorio.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 }

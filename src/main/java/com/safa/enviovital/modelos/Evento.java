@@ -9,6 +9,7 @@ import java.util.Set;
 @Table(name = "evento",schema = "enviovital", catalog = "postgres")
 @Getter
 @Setter
+@Builder
 @ToString (exclude = {"almacenes","provincia"})
 @AllArgsConstructor
 @NoArgsConstructor
@@ -43,6 +44,7 @@ public class Evento {
             joinColumns = @JoinColumn(name = "id_evento"),
             inverseJoinColumns = @JoinColumn(name = "id_almacen")
     )
+    @JsonIgnore
     private Set<Almacen> almacenes;
 
 }

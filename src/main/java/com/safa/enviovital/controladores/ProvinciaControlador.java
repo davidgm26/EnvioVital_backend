@@ -21,7 +21,7 @@ public class ProvinciaControlador {
     }
     @GetMapping()
     public Provincia getById(@RequestParam Integer id) {
-        Provincia provincia = provinciaService.getAlmacenPorId(id);
+        Provincia provincia = provinciaService.getProvinciaById(id);
         return provincia;
     }
     @PostMapping("/new")

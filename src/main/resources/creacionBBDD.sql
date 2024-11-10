@@ -202,8 +202,8 @@ VALUES ('Almacén Central Madrid', 'Almacén principal de distribución en Madri
 
 
 INSERT INTO ENVIOVITAL.EVENTO (nombre, descripcion, es_activo, id_provincia)
-VALUES ('Catástrofe Madrid', 'Inundación por fuertes lluvias.', TRUE, 1),
-       ('Catástrofe Barcelona', 'Incendio forestal en las afueras.', FALSE, 2),
+VALUES ('Catástrofe Madrid', 'Inundación por fuertes lluvias.', TRUE, 30),
+       ('Catástrofe Barcelona', 'Incendio forestal en las afueras.', FALSE, 9),
        ('Catástrofe Valencia', 'Tornado en la zona urbana.', TRUE, 3),
        ('Catástrofe Sevilla', 'Severa ola de calor.', FALSE, 4),
        ('Catástrofe Málaga', 'Terremoto leve en el litoral.', TRUE, 5),
@@ -211,7 +211,7 @@ VALUES ('Catástrofe Madrid', 'Inundación por fuertes lluvias.', TRUE, 1),
        ('Catástrofe Bilbao', 'Desbordamiento del río Nervión.', TRUE, 7),
        ('Catástrofe Alicante', 'Tormenta eléctrica prolongada.', FALSE, 8),
        ('Catástrofe Murcia', 'Derrumbe de edificios por lluvias.', TRUE, 9),
-       ('Catástrofe Granada', 'Alud en Sierra Nevada.', FALSE, 10);
+       ('Catástrofe Granada', 'Alud en Sierra Nevada.', FALSE,15);
 
 
 INSERT INTO ENVIOVITAL.VEHICULO (marca, modelo, matricula, id_conductor, id_tipo_vehiculo)
@@ -238,7 +238,11 @@ VALUES (1, 1),
        (7, 7),
        (8, 8),
        (9, 9),
-       (10, 10);
+       (10, 10),
+       (1, 2),
+       (1, 3),
+       (2, 5),
+       (2, 3);
 
 INSERT INTO ENVIOVITAL.EVENTOALMACEN (id_evento, id_almacen)
 VALUES (1, 1),
@@ -250,5 +254,15 @@ VALUES (1, 1),
        (7, 7),
        (8, 8),
        (9, 9),
-       (10, 10);
+       (10, 10),
+       (2, 1),
+       (2, 2),
+       (2, 3),
+       (2, 4),
+       (2, 5),
+       (2, 6),
+       (4, 7),
+       (5, 8),
+       (6, 9),
+       (9, 10);
 

@@ -1,11 +1,13 @@
 package com.safa.enviovital.controladores;
 
+import com.safa.enviovital.dto.EventoRequestDto;
 import com.safa.enviovital.dto.EventoResponseDto;
 import com.safa.enviovital.modelos.Evento;
 import com.safa.enviovital.servicios.EventoService;
 import jakarta.persistence.NamedEntityGraph;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,17 +26,31 @@ public class EventoController {
      return ResponseEntity.ok(eventoService.getAllEventos());
     }
 
-    @GetMapping("/{id}<")
-    private ResponseEntity<Evento> getEventoById(@PathVariable int id){
+    @GetMapping("/{id}")
+    private ResponseEntity<EventoResponseDto> getEventoById(@PathVariable int id){
         return ResponseEntity.ok(eventoService.getEventoById(id));
     }
 
-    @PostMapping("/")
-    private ResponseEntity<Evento> createEvento(@RequestBody Evento evento){
-        return ResponseEntity.ok(eventoService.createEvento(evento));
+    @GetMapping("/provincia/{id}")
+    private ResponseEntity<List<EventoResponseDto>> getEventosByProvincia(@PathVariable int id){
+        return ResponseEntity.ok(eventoService.getEventoByProvincia(id));
     }
 
+    @PostMapping("/")
+    private ResponseEntity<Evento> createEvento(@RequestBody EventoRequestDto eventoRequest){
+        return ResponseEntity.status(HttpStatus.CREATED).body(eventoService.createEvento(eventoRequest));
+    }
 
+    @PutMapping("/{id}")
+    private ResponseEntity<EventoResponseDto> editarEvento(@PathVariable int id,@RequestBody EventoRequestDto eventoRequest){
+        return ResponseEntity.ok(eventoService.editarEvento(id,eventoRequest));
+    }
+
+    @DeleteMapping("/{id}")
+    private ResponseEntity<?> eliminarEvento(@PathVariable int id){
+        eventoService.eliminarEvento(id);
+        return ResponseEntity.noContent().build();
+    }
 
 
 
