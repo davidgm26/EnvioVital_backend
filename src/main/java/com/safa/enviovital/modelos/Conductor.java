@@ -5,15 +5,16 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "conductor",schema = "enviovital", catalog = "postgres")
 @Getter
 @Setter
-@ToString
+@ToString (exclude = {"usuario","almacenes"})
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode (exclude = {"usuario","almacenes"})
 
 public class Conductor {
 
@@ -40,8 +41,19 @@ public class Conductor {
     @Column(name = "fecha_nacimiento")
     private LocalDate fechaNacimiento;
 
+    @Column(nullable = false,unique = true)
+    private String email;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id")
     private Usuario usuario;
+
+    @ManyToMany
+    @JoinTable(
+            name = "conductoralmacen",
+            joinColumns = @JoinColumn(name = "id_conductor"),
+            inverseJoinColumns = @JoinColumn(name = "id_almacen")
+    )
+    private Set<Almacen> almacenes;
 
 }
