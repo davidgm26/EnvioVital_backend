@@ -5,20 +5,18 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "conductor",schema = "enviovital", catalog = "postgres")
+@Table(name = "conductor", schema = "enviovital", catalog = "postgres")
 @Getter
 @Setter
-@ToString (exclude = {"usuario","almacenes"})
+@ToString(exclude = {"usuario", "eventoAlmacenConductores"})
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode (exclude = {"usuario","almacenes"})
-
+@EqualsAndHashCode(exclude = {"usuario", "eventoAlmacenConductores"})
 public class Conductor {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -42,20 +40,14 @@ public class Conductor {
     @Column(name = "fecha_nacimiento")
     private LocalDate fechaNacimiento;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id")
+    @JsonIgnore
     private Usuario usuario;
 
-    @ManyToMany
-    @JoinTable(
-            name = "conductoralmacen",
-            joinColumns = @JoinColumn(name = "id_conductor"),
-            inverseJoinColumns = @JoinColumn(name = "id_almacen")
-    )
-    private Set<Almacen> almacenes;
-
+    @OneToMany(mappedBy = "conductor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<EventoAlmacenConductor> eventoAlmacenConductores = new HashSet<>();
 }

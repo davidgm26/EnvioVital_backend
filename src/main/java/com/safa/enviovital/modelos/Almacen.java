@@ -1,23 +1,20 @@
 package com.safa.enviovital.modelos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "almacen", schema = "enviovital", catalog = "postgres")
 @Getter
 @Setter
-@ToString(exclude = {"conductores", "eventos", "usuario", "provincia"})
+@ToString(exclude = {"eventoAlmacenes", "usuario", "provincia"})
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"conductores", "eventos", "usuario", "provincia"})
+@EqualsAndHashCode(exclude = {"eventoAlmacenes", "usuario", "provincia"})
 public class Almacen {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -45,15 +42,8 @@ public class Almacen {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id")
-    @JsonIgnore
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Usuario usuario;
 
-    @ManyToMany(mappedBy = "almacenes")
-    @JsonIgnore
-    private Set<Conductor> conductores;
-
-    @ManyToMany(mappedBy = "almacenes")
-    @JsonIgnore
-    private Set<Evento> eventos;
+    @OneToMany(mappedBy = "almacen", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<EventoAlmacen> eventoAlmacenes = new HashSet<>();
 }

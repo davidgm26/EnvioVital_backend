@@ -1,5 +1,6 @@
 package com.safa.enviovital.modelos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.safa.enviovital.enumerados.Rol;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,4 +31,8 @@ public class Usuario {
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Rol rol;
+
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Conductor conductor;
 }
