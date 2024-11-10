@@ -54,7 +54,7 @@ public class ConductorService {
      */
     public ConductorResponseDTO getConductorPorId(Integer id) {
         return conductorRepositorio.findConductorByIdWithDTO(id)
-                .orElseThrow(() -> new ConductorNotFoundException("El conductor con ID " + id + " no existe"));
+                .orElseThrow(() -> new ConductorNotFoundException(id));
     }
 
     /**

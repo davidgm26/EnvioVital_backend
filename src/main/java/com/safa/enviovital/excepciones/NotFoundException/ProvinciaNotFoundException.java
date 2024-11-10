@@ -1,7 +1,13 @@
 package com.safa.enviovital.excepciones.NotFoundException;
 
-public class ProvinciaNotFoundException extends RuntimeException {
-    public ProvinciaNotFoundException(String mensaje) {
-        super(mensaje);
+import jakarta.persistence.EntityNotFoundException;
+
+public class ProvinciaNotFoundException extends EntityNotFoundException {
+
+    public ProvinciaNotFoundException(int id) {
+        super("No se ha encontrado la provincia con id " + id);
+    }
+    public ProvinciaNotFoundException() {
+        super("No se han encontrado provincias");
     }
 }

@@ -1,12 +1,10 @@
 package com.safa.enviovital.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.safa.enviovital.modelos.EventoAlmacen;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventoAlmacenDtoResponse {
@@ -14,4 +12,16 @@ public class EventoAlmacenDtoResponse {
     private Integer idAlmacen;
     private String nombreAlmacen;
     private String nombreEvento;
+    private AlmacenResponseDTO almacen;
+
+
+    public static EventoAlmacenDtoResponse toDto(EventoAlmacen eventoAlmacen) {
+        return EventoAlmacenDtoResponse.builder()
+                .idEvento(eventoAlmacen.getEvento().getId())
+                .idAlmacen(eventoAlmacen.getAlmacen().getId())
+                .nombreAlmacen(eventoAlmacen.getAlmacen().getNombre())
+                .nombreEvento(eventoAlmacen.getEvento().getNombre())
+                .almacen(AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(eventoAlmacen.getAlmacen()))
+                .build();
+    }
 }

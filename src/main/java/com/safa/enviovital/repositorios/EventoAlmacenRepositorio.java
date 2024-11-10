@@ -18,13 +18,7 @@ import java.util.Optional;
 public interface EventoAlmacenRepositorio extends JpaRepository<EventoAlmacen, Integer> {
     Optional<EventoAlmacen> findByEventoAndAlmacen(Evento evento, Almacen almacen);
 
-    @Query("SELECT new com.safa.enviovital.dto.EventoAlmacenDtoResponse(" +
-            "ea.evento.id, " +
-            "ea.almacen.id, " +
-            "ea.almacen.nombre, " +
-            "ea.evento.nombre) " +
-            "FROM EventoAlmacen ea " +
-            "WHERE ea.evento.id = :idEvento")
-    List<EventoAlmacenDtoResponse> findEventoAlmacenByEventoId(@Param("idEvento") Integer idEvento);
+
+    List<EventoAlmacen> findEventoAlmacenByEventoId(@Param("idEvento") Integer idEvento);
 }
 

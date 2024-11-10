@@ -1,7 +1,6 @@
 package com.safa.enviovital.servicios;
 
-import com.safa.enviovital.dto.ProvinciaRequestDTO;
-import com.safa.enviovital.dto.ProvinciaResponseDTO;
+import com.safa.enviovital.dto.ProvinciaDTO;
 import com.safa.enviovital.excepciones.NotFoundException.ProvinciaNotFoundException;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.modelos.Provincia;
@@ -22,48 +21,48 @@ public class ProvinciaService {
 
     /**
      * Método que retorna todos los tipos de provincia.
-     * @return Lista de ProvinciaResponseDTO
+     * @return Lista de ProvinciaDTO
      */
-    public List<ProvinciaResponseDTO> getAll() {
+    public List<ProvinciaDTO> getAll() {
         return provinciaRepositorio.findAllProvinciasDTO();
     }
 
     /**
      * Método que retorna una provincia por su ID.
      * @param id ID de la provincia
-     * @return ProvinciaResponseDTO
+     * @return ProvinciaDTO
      * @throws ProvinciaNotFoundException si no se encuentra la provincia
      */
-    public ProvinciaResponseDTO getProvinciaPorId(Integer id) {
+    public ProvinciaDTO getProvinciaPorId(Integer id) {
         return provinciaRepositorio.findProvinciaById(id)
-                .orElseThrow(() -> new ProvinciaNotFoundException("La provincia con ID " + id + " no existe"));
+                .orElseThrow(() -> new ProvinciaNotFoundException(id));
     }
 
     /**
      * Método que guarda una nueva provincia.
      * @param provinciaRequestDTO Datos de la nueva provincia
-     * @return ProvinciaResponseDTO
+     * @return ProvinciaDTO
      */
-    public ProvinciaResponseDTO guardar(ProvinciaRequestDTO provinciaRequestDTO) {
-        Provincia nuevaProvincia = new Provincia();
-        nuevaProvincia.setNombre(provinciaRequestDTO.getNombre());
-        nuevaProvincia = provinciaRepositorio.save(nuevaProvincia);
-        return new ProvinciaResponseDTO(nuevaProvincia.getId(), nuevaProvincia.getNombre());
+    public ProvinciaDTO guardar(ProvinciaDTO provinciaRequestDTO) {
+        Provincia nuevaProvincia = Provincia.builder()
+                .nombre(provinciaRequestDTO.getNombre())
+                .build();
+        return ProvinciaDTO.createProvinciaDTOFromProvincia(nuevaProvincia);
     }
 
     /**
      * Método que actualiza una provincia existente.
      * @param id ID de la provincia a actualizar
-     * @param provinciaRequestDTO Datos actualizados
-     * @return ProvinciaResponseDTO
+     * @param provinciatDTO Datos actualizados
+     * @return ProvinciaDTO
      * @throws ProvinciaNotFoundException si no se encuentra la provincia
      */
-    public ProvinciaResponseDTO actualizar(Integer id, ProvinciaRequestDTO provinciaRequestDTO) {
+    public ProvinciaDTO actualizar(Integer id, ProvinciaDTO provinciatDTO) {
         Provincia provinciaExistente = provinciaRepositorio.findById(id)
-                .orElseThrow(() -> new ProvinciaNotFoundException("La provincia con ID " + id + " no existe"));
-        provinciaExistente.setNombre(provinciaRequestDTO.getNombre());
-        provinciaExistente = provinciaRepositorio.save(provinciaExistente);
-        return new ProvinciaResponseDTO(provinciaExistente.getId(), provinciaExistente.getNombre());
+                .orElseThrow(() -> new ProvinciaNotFoundException(id));
+        provinciaExistente.setNombre(provinciatDTO.getNombre());
+        provinciaRepositorio.save(provinciaExistente);
+        return ProvinciaDTO.createProvinciaDTOFromProvincia(provinciaExistente);
     }
 
     /**
@@ -72,7 +71,7 @@ public class ProvinciaService {
      * @return
      */
     public Provincia getProvinciaById(Integer id) {
-        return provinciaRepositorio.findById(id).orElseThrow(EntityNotFoundException::new);
+        return provinciaRepositorio.findById(id).orElseThrow(() -> new ProvinciaNotFoundException(id));
     
     }
     /*
@@ -83,7 +82,7 @@ public class ProvinciaService {
 
     public Response eliminar(Integer id) {
         Provincia provincia = provinciaRepositorio.findById(id)
-                .orElseThrow(() -> new ProvinciaNotFoundException("La provincia con ID " + id + " no existe"));
+                .orElseThrow(() -> new ProvinciaNotFoundException(id));
         provinciaRepositorio.delete(provincia);
         return new Response(
                 "Provincia con ID " + id + " ha sido eliminada exitosamente",

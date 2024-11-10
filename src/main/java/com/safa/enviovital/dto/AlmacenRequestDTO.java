@@ -14,7 +14,6 @@ public class AlmacenRequestDTO {
     private String descripcion;
     private String direccion;
     private String email;
-    private Boolean esActivo;
     private Integer idProvincia;
     private UsuarioRequestDTO usuario;
 }

@@ -28,7 +28,7 @@ public class EventoController {
 
     @GetMapping("/{id}")
     private ResponseEntity<EventoResponseDto> getEventoById(@PathVariable int id){
-        return ResponseEntity.ok(eventoService.getEventoById(id));
+        return ResponseEntity.ok(EventoResponseDto.EventoResponseDtoFromEvento(eventoService.getEventoById(id)));
     }
 
     @GetMapping("/provincia/{id}")
@@ -46,12 +46,12 @@ public class EventoController {
         return ResponseEntity.ok(eventoService.editarEvento(id,eventoRequest));
     }
 
-    @DeleteMapping("/{id}")
-    private ResponseEntity<?> eliminarEvento(@PathVariable int id){
-        eventoService.eliminarEvento(id);
-        return ResponseEntity.noContent().build();
-    }
-
+//    @DeleteMapping("/{id}")
+//    private ResponseEntity<?> eliminarEvento(@PathVariable int id){
+//        eventoService.eliminarEvento(id);
+//        return ResponseEntity.noContent().build();
+//    }
+//
 
 
 

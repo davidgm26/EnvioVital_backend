@@ -17,9 +17,9 @@ import java.util.Set;
 @EqualsAndHashCode (exclude = {"almacenes","provincia"})
 @NamedEntityGraph(
         name = "Evento.almacenes",
-        attributeNodes =@NamedAttributeNode("almacenes")
+        attributeNodes =@NamedAttributeNode("eventoAlmacenes")
 )
-@AllArgsConstructor
+
 public class Evento {
 
     @Id

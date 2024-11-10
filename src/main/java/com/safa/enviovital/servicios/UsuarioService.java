@@ -2,6 +2,7 @@ package com.safa.enviovital.servicios;
 
 import com.safa.enviovital.dto.UsuarioRequestDTO;
 import com.safa.enviovital.dto.UsuarioResponseDTO;
+import com.safa.enviovital.enumerados.Rol;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.excepciones.NotFoundException.UsuarioNotFoundException;
 import com.safa.enviovital.modelos.Usuario;
@@ -29,6 +30,18 @@ public class UsuarioService {
     public Usuario getUsuarioPorId(Integer id) {
         return usuarioRepositorio.findById(id)
                 .orElseThrow(() -> new UsuarioNotFoundException("El usuario con ID " + id + " no existe"));
+    }
+    public Usuario crearUsuario(UsuarioRequestDTO usuarioRequestDTO) {
+        Usuario u = Usuario.builder()
+                .password(usuarioRequestDTO.getPassword())
+                .username(usuarioRequestDTO.getUsername())
+                .rol(Rol.USUARIO)
+                .build();
+        return guardarUsuario(u);
+    }
+
+    public Usuario guardarUsuario(Usuario usuario) {
+        return usuarioRepositorio.save(usuario);
     }
 
 //    public UsuarioResponseDTO guardar(UsuarioRequestDTO requestDTO) {

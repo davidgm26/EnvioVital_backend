@@ -10,6 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventoAlmacenDtoRequest {
-    private Integer idEvento;  // ID del evento
-    private Integer idAlmacen;  // ID del almacén
+    private Integer idEvento;
+    private Integer idAlmacen;
+    private AlmacenResponseDTO almacen;
 }

@@ -1,35 +1,35 @@
 package com.safa.enviovital.dto;
 
 import com.safa.enviovital.modelos.Almacen;
-import com.safa.enviovital.modelos.Conductor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-@Data
+@Getter
+@Setter
 @Builder
-public class AlmacenResponseDto {
+@AllArgsConstructor
+@NoArgsConstructor
+public class AlmacenResponseDTO {
 
+    private Integer id;
     private String nombre;
     private String descripcion;
+    private String direccion;
+    private String email;
+    private Boolean esActivo;
     private String provincia;
-    private boolean estado;
-    private List<ConductorResponseDto> conductores;
+    private Integer idUsuario;
 
-    public static AlmacenResponseDto createAlmacenResponseDtoFromAlmacen(Almacen almacen) {
-        return AlmacenResponseDto.builder()
+
+    public static AlmacenResponseDTO AlmacenResponseDtoFromAlmacen(Almacen almacen) {
+        return AlmacenResponseDTO.builder()
+                .id(almacen.getId())
                 .nombre(almacen.getNombre())
+                .direccion(almacen.getDireccion())
                 .descripcion(almacen.getDescripcion())
-                .estado(almacen.getEsActivo())
-                .conductores(almacen.getConductores().stream().map(ConductorResponseDto::createConductorResponseDtoFromConductor).collect(Collectors.toList()))
+                .email(almacen.getEmail())
                 .provincia(almacen.getProvincia().getNombre())
+                .esActivo(almacen.getEsActivo())
+                .idUsuario(almacen.getUsuario().getId())
                 .build();
     }
-
-
-
-
-
 }

@@ -3,10 +3,8 @@ package com.safa.enviovital.servicios;
 import com.safa.enviovital.dto.AlmacenRequestDTO;
 import com.safa.enviovital.dto.AlmacenResponseDTO;
 import com.safa.enviovital.dto.EventoAlmacenDtoResponse;
-import com.safa.enviovital.dto.UsuarioRequestDTO;
 import com.safa.enviovital.enumerados.Rol;
 import com.safa.enviovital.excepciones.NotFoundException.AlmacenNotFoundException;
-import com.safa.enviovital.excepciones.NotFoundException.EventoNotFoundException;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.modelos.*;
 import com.safa.enviovital.repositorios.*;
@@ -15,31 +13,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 
 @Service
 @AllArgsConstructor
 public class AlmacenService {
 
     @Autowired
-    private final AlmacenRepositorio almacenRepositorio;
-    private final ProvinciaRepositorio provinciaRepositorio;
-    private final UsuarioRepositorio usuarioRepositorio;
-    private final EventoRepository eventoRepositorio;
+    private  AlmacenRepositorio almacenRepositorio;
+    @Autowired
+    private  ProvinciaService provinciaService;
+    @Autowired
+    private  UsuarioService usuarioService;
 
     @Autowired
     private final EventoAlmacenRepositorio eventoAlmacenRepositorio;
+    @Autowired
+    private EventoService eventoService;
+
 
     /**
      * Método para obtener todos los almacenes.
      * @return Lista de AlmacenResponseDTO
      */
     public List<AlmacenResponseDTO> getAll() {
-        return almacenRepositorio.findAllAlmacenesWithDTO();
+        List<Almacen> almacenes = almacenRepositorio.findAll();
+    return almacenes.stream().map(AlmacenResponseDTO::AlmacenResponseDtoFromAlmacen).collect(Collectors.toList());
+
     }
 
     /**
@@ -48,8 +52,10 @@ public class AlmacenService {
      * @return AlmacenResponseDTO
      */
     public AlmacenResponseDTO getAlmacenPorId(Integer id) {
-        return almacenRepositorio.findAlmacenByIdWithDTO(id)
-                .orElseThrow(() -> new AlmacenNotFoundException("El almacén con ID " + id + " no existe"));
+        Almacen a = almacenRepositorio.findAlmacenById(id)
+                .orElseThrow(() -> new AlmacenNotFoundException(id));
+
+        return AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(a);
     }
 
     /**
@@ -58,40 +64,26 @@ public class AlmacenService {
      * @return AlmacenResponseDTO con los datos del almacén guardado
      */
     public AlmacenResponseDTO guardar(AlmacenRequestDTO requestDTO) {
+        Usuario u = usuarioService.crearUsuario(requestDTO.getUsuario());
 
-        UsuarioRequestDTO usuarioDTO = requestDTO.getUsuario();
-        Usuario usuario = new Usuario();
-        usuario.setUsername(usuarioDTO.getUsername());
-        usuario.setPassword(usuarioDTO.getPassword());
-        usuario.setRol(Rol.ALMACEN);
+        u.setRol(Rol.ALMACEN);
 
-        Usuario savedUsuario = usuarioRepositorio.save(usuario);
-        Provincia provincia = provinciaRepositorio.findById(requestDTO.getIdProvincia())
-                .orElseThrow(() -> new AlmacenNotFoundException("Provincia con ID " + requestDTO.getIdProvincia() + " no encontrada"));
+        usuarioService.guardarUsuario(u);
 
-        Almacen almacen = new Almacen();
-        almacen.setNombre(requestDTO.getNombre());
-        almacen.setDescripcion(requestDTO.getDescripcion());
-        almacen.setDireccion(requestDTO.getDireccion());
-        almacen.setEmail(requestDTO.getEmail());
-        almacen.setEsActivo(requestDTO.getEsActivo());
-        almacen.setProvincia(provincia);
-        almacen.setUsuario(savedUsuario);
+        Almacen almacen = Almacen.builder()
+                .nombre(requestDTO.getNombre())
+                .direccion(requestDTO.getDireccion())
+                .email(requestDTO.getEmail())
+                .provincia(provinciaService.getProvinciaById(requestDTO.getIdProvincia()))
+                .esActivo(Boolean.TRUE)
+                .descripcion(requestDTO.getDescripcion())
+                .usuario(u)
+                .build();
 
-        Almacen savedAlmacen = almacenRepositorio.save(almacen);
+        almacenRepositorio.save(almacen);
 
-        return new AlmacenResponseDTO(
-                savedAlmacen.getId(),
-                savedAlmacen.getNombre(),
-                savedAlmacen.getDescripcion(),
-                savedAlmacen.getDireccion(),
-                savedAlmacen.getEmail(),
-                savedAlmacen.getEsActivo(),
-                savedAlmacen.getProvincia().getId(),
-                savedAlmacen.getUsuario().getId()
-        );
+        return AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(almacen);
     }
-
     /**
      * Método para editar un almacén existente.
      * @param id ID del almacén a editar
@@ -99,39 +91,19 @@ public class AlmacenService {
      * @return AlmacenResponseDTO con los datos del almacén editado
      */
     public AlmacenResponseDTO editar(Integer id, AlmacenRequestDTO requestDTO) {
-        Almacen almacen = almacenRepositorio.findById(id)
-                .orElseThrow(() -> new AlmacenNotFoundException("El almacén con ID " + id + " no existe"));
 
+        Almacen almacen = almacenRepositorio.findById(id).orElseThrow( () -> new AlmacenNotFoundException(id));
         almacen.setNombre(requestDTO.getNombre());
         almacen.setDescripcion(requestDTO.getDescripcion());
         almacen.setDireccion(requestDTO.getDireccion());
         almacen.setEmail(requestDTO.getEmail());
-        almacen.setEsActivo(requestDTO.getEsActivo());
+        almacen.setProvincia(provinciaService.getProvinciaById(requestDTO.getIdProvincia()));
+        almacen.getUsuario().setUsername(requestDTO.getUsuario().getUsername());
+        almacen.getUsuario().setPassword(requestDTO.getUsuario().getPassword());
+        usuarioService.guardarUsuario(almacen.getUsuario());
+        almacenRepositorio.save(almacen);
 
-        Provincia provincia = provinciaRepositorio.findById(requestDTO.getIdProvincia())
-                .orElseThrow(() -> new AlmacenNotFoundException("Provincia con ID " + requestDTO.getIdProvincia() + " no encontrada"));
-        almacen.setProvincia(provincia);
-
-        UsuarioRequestDTO usuarioDTO = requestDTO.getUsuario();
-        Usuario usuario = almacen.getUsuario();
-        usuario.setUsername(usuarioDTO.getUsername());
-        usuario.setPassword(usuarioDTO.getPassword());
-        usuario.setRol(Rol.ALMACEN);
-        usuarioRepositorio.save(usuario);
-
-        almacen.setUsuario(usuario);
-        Almacen updatedAlmacen = almacenRepositorio.save(almacen);
-
-        return new AlmacenResponseDTO(
-                updatedAlmacen.getId(),
-                updatedAlmacen.getNombre(),
-                updatedAlmacen.getDescripcion(),
-                updatedAlmacen.getDireccion(),
-                updatedAlmacen.getEmail(),
-                updatedAlmacen.getEsActivo(),
-                updatedAlmacen.getProvincia().getId(),
-                updatedAlmacen.getUsuario().getId()
-        );
+        return AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(almacen);
     }
 
     /**
@@ -141,10 +113,8 @@ public class AlmacenService {
      */
     public Response eliminar(Integer id) {
         Almacen almacen = almacenRepositorio.findById(id)
-                .orElseThrow(() -> new AlmacenNotFoundException("El almacén con ID " + id + " no existe"));
-
+                .orElseThrow(() -> new AlmacenNotFoundException(id));
         almacenRepositorio.delete(almacen);
-
         return new Response(
                 "Almacén con ID " + id + " ha sido eliminado exitosamente",
                 HttpStatus.OK.value(),
@@ -153,10 +123,10 @@ public class AlmacenService {
     }
 
     public ResponseEntity<Response> registrarAlmacenEnEvento(Integer idEvento, Integer idAlmacen) {
-        Evento evento = eventoRepositorio.findById(idEvento)
-                .orElseThrow(() -> new EventoNotFoundException("Evento no encontrado"));
+        Evento evento = eventoService.getEventoById(idEvento);
+
         Almacen almacen = almacenRepositorio.findById(idAlmacen)
-                .orElseThrow(() -> new AlmacenNotFoundException("Almacén no encontrado"));
+                .orElseThrow(() -> new AlmacenNotFoundException(idAlmacen));
 
         Optional<EventoAlmacen> existingEventoAlmacen = eventoAlmacenRepositorio.findByEventoAndAlmacen(evento, almacen);
         if (existingEventoAlmacen.isPresent()) {
@@ -191,7 +161,8 @@ public class AlmacenService {
 
     public List<EventoAlmacenDtoResponse> obtenerEventoAlmacenPorEvento(Integer idEvento) {
         // Llamar al repositorio para obtener la lista de relaciones entre eventos y almacenes
-        return eventoAlmacenRepositorio.findEventoAlmacenByEventoId(idEvento);
+        List<EventoAlmacen> lista = eventoAlmacenRepositorio.findEventoAlmacenByEventoId(idEvento);
+        return lista.stream().map(EventoAlmacenDtoResponse::toDto).toList();
     }
 
 

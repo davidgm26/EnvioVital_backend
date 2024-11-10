@@ -7,6 +7,7 @@ import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.servicios.AlmacenService;
 import com.safa.enviovital.servicios.ConductorService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +18,9 @@ import java.util.List;
 @AllArgsConstructor
 public class AlmacenControlador {
 
+    @Autowired
     private final AlmacenService almacenService;
-
+    @Autowired
     private final ConductorService conductorService;
 
 

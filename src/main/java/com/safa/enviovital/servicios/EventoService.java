@@ -2,6 +2,7 @@ package com.safa.enviovital.servicios;
 
 import com.safa.enviovital.dto.EventoRequestDto;
 import com.safa.enviovital.dto.EventoResponseDto;
+import com.safa.enviovital.excepciones.NotFoundException.EventoNotFoundException;
 import com.safa.enviovital.modelos.Evento;
 import com.safa.enviovital.repositorios.EventoRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -27,8 +28,8 @@ public class EventoService {
         return eventos.stream().map(EventoResponseDto::EventoResponseDtoFromEvento).collect(Collectors.toList());
     }
 
-    public EventoResponseDto getEventoById(int id){
-        return EventoResponseDto.EventoResponseDtoFromEvento( eventoRepository.findById(id).orElse(null));
+    public Evento getEventoById(int id){
+        return eventoRepository.findById(id).orElseThrow( () -> new EventoNotFoundException(id));
     }
 
     public List<EventoResponseDto> getEventoByProvincia(int id){
@@ -56,11 +57,11 @@ public class EventoService {
         return EventoResponseDto.EventoResponseDtoFromEvento(eventoRepository.save(event));
     }
 
-
-    public void eliminarEvento(int id){
-        Evento e = eventoRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        e.getAlmacenes().remove(e);
-        eventoRepository.delete(e);
-    }
+//
+//    public void eliminarEvento(int id){
+//        Evento e = eventoRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+//        e.getAlmacenes().remove(e);
+//        eventoRepository.delete(e);
+//    }
 
 }
