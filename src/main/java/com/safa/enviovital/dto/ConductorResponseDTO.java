@@ -22,4 +22,7 @@ public class ConductorResponseDTO {
     private LocalDate fechaNacimiento;
     private String email;
     private Integer idUsuario;
+
+
+
 }

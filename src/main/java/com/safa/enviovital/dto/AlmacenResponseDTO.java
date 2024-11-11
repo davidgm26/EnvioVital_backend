@@ -1,25 +1,35 @@
 package com.safa.enviovital.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.safa.enviovital.modelos.Almacen;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class AlmacenResponseDTO {
+
     private Integer id;
     private String nombre;
     private String descripcion;
     private String direccion;
     private String email;
     private Boolean esActivo;
-    private Integer idProvincia;
+    private String provincia;
     private Integer idUsuario;
 
-    public AlmacenResponseDTO(Integer id) {
-        this.id = id;
+
+    public static AlmacenResponseDTO AlmacenResponseDtoFromAlmacen(Almacen almacen) {
+        return AlmacenResponseDTO.builder()
+                .id(almacen.getId())
+                .nombre(almacen.getNombre())
+                .direccion(almacen.getDireccion())
+                .descripcion(almacen.getDescripcion())
+                .email(almacen.getEmail())
+                .provincia(almacen.getProvincia().getNombre())
+                .esActivo(almacen.getEsActivo())
+                .idUsuario(almacen.getUsuario().getId())
+                .build();
     }
 }
