@@ -41,6 +41,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(ProvinciaDontHaveEventException.class)
+    public ResponseEntity<Response> handleProvinciaDontHaveEventException(ProvinciaDontHaveEventException ex){
+        Response errorResponse = new Response(
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(VehiculoNotFoundException.class)
     public ResponseEntity<Response> handleVehiculoNotFoundException(VehiculoNotFoundException ex) {
         Response errorResponse = new Response(
