@@ -1,4 +1,82 @@
 package com.safa.enviovital.controladores;
 
+import com.safa.enviovital.dto.ConductorRequestDTO;
+import com.safa.enviovital.dto.ConductorResponseDTO;
+import com.safa.enviovital.excepciones.Response;
+import com.safa.enviovital.servicios.ConductorService;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/conductores")
+@AllArgsConstructor
 public class ConductorControlador {
+
+    private final ConductorService conductorService;
+
+    /**
+     * Endpoint para obtener todos los conductores.
+     * @return Lista de conductores
+     */
+    @GetMapping("/lista")
+    public ResponseEntity<List<ConductorResponseDTO>> listarConductores() {
+        return ResponseEntity.ok(conductorService.getAll());
+    }
+
+    /**
+     * Endpoint para obtener un conductor por su ID.
+     * @param id ID del conductor
+     * @return ConductorResponseDTO
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<ConductorResponseDTO> obtenerConductorPorId(@PathVariable Integer id) {
+        return ResponseEntity.ok(conductorService.getConductorPorId(id));
+    }
+
+    /**
+     * Endpoint para guardar un nuevo conductor.
+     * @param requestDTO Datos del conductor a guardar
+     * @return ConductorResponseDTO con los datos del conductor guardado
+     */
+    @PostMapping("/guardar")
+    public ResponseEntity<ConductorResponseDTO> guardarConductor(@RequestBody ConductorRequestDTO requestDTO) {
+        return ResponseEntity.ok(conductorService.guardar(requestDTO));
+    }
+
+    /**
+     * Endpoint para editar un conductor.
+     * @param id ID del conductor a editar
+     * @param requestDTO Datos del conductor a editar
+     * @return ConductorResponseDTO con los datos del conductor editado
+     */
+    @PutMapping("/editar/{id}")
+    public ResponseEntity<ConductorResponseDTO> editarConductor(@PathVariable Integer id, @RequestBody ConductorRequestDTO requestDTO) {
+        return ResponseEntity.ok(conductorService.editar(id, requestDTO));
+    }
+
+    /**
+     * Endpoint para eliminar un conductor.
+     * @param id ID del conductor a eliminar
+     */
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<Response> eliminarConductor(@PathVariable Integer id) {
+        Response respuesta = conductorService.eliminar(id);
+        return ResponseEntity.status(respuesta.getStatusCode()).body(respuesta);
+    }
+
+    /**
+     * Endpoint para registrar un conductor en un EventoAlmacen.
+     * @param eventoAlmacenId ID del EventoAlmacen
+     * @param conductorId ID del conductor
+     * @return ResponseEntity con el mensaje de éxito o error
+     */
+    @PostMapping("/registrarse/{eventoAlmacenId}/{conductorId}")
+    public ResponseEntity<Response> registrarConductorEnEventoAlmacen(
+            @PathVariable Integer eventoAlmacenId,
+            @PathVariable Integer conductorId) {
+        return conductorService.registrarConductorEnEventoAlmacen(eventoAlmacenId, conductorId);
+    }
 }

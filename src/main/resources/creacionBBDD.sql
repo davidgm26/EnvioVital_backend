@@ -68,12 +68,7 @@ CREATE TABLE ENVIOVITAL.VEHICULO
     id_tipo_vehiculo INT    NOT NULL
 );
 
-CREATE TABLE ENVIOVITAL.CONDUCTORALMACEN
-(
-    id           SERIAL NOT NULL PRIMARY KEY,
-    id_almacen   INT    NOT NULL,
-    id_conductor INT    NOT NULL
-);
+
 CREATE TABLE ENVIOVITAL.EVENTOALMACEN
 (
     id           SERIAL NOT NULL PRIMARY KEY,
@@ -82,6 +77,18 @@ CREATE TABLE ENVIOVITAL.EVENTOALMACEN
     CONSTRAINT FK_EVENTOALMACEN_EVENTO FOREIGN KEY (id_evento) REFERENCES ENVIOVITAL.EVENTO (id),
     CONSTRAINT FK_EVENTOALMACEN_ALMACEN FOREIGN KEY (id_almacen) REFERENCES ENVIOVITAL.ALMACEN (id)
 );
+
+CREATE TABLE ENVIOVITAL.EVENTOALMACENCONDUCTOR
+(
+    id                 SERIAL NOT NULL PRIMARY KEY,
+    id_eventoalmacen   INT    NOT NULL,
+    id_conductor       INT    NOT NULL,
+    CONSTRAINT FK_EVENTOALMACENCONDUCTOR_EVENTOALMACEN FOREIGN KEY (id_eventoalmacen) REFERENCES ENVIOVITAL.EVENTOALMACEN (id),
+    CONSTRAINT FK_EVENTOALMACENCONDUCTOR_CONDUCTOR FOREIGN KEY (id_conductor) REFERENCES ENVIOVITAL.CONDUCTOR (id)
+);
+
+
+
 
 
 ALTER TABLE ENVIOVITAL.CONDUCTOR
@@ -96,10 +103,7 @@ ALTER TABLE ENVIOVITAL.VEHICULO
     ADD CONSTRAINT FK_VEHICULO_CONDUCTOR FOREIGN KEY (id_conductor) REFERENCES ENVIOVITAL.CONDUCTOR (id);
 ALTER TABLE ENVIOVITAL.VEHICULO
     ADD CONSTRAINT FK_VEHICULO_TIPOVEHICULO FOREIGN KEY (id_tipo_vehiculo) REFERENCES ENVIOVITAL.TIPOVEHICULO (id);
-ALTER TABLE ENVIOVITAL.CONDUCTORALMACEN
-    ADD CONSTRAINT FK_CONDUCTORALMACEN_CONDUCTOR FOREIGN KEY (id_conductor) REFERENCES ENVIOVITAL.CONDUCTOR (id);
-ALTER TABLE ENVIOVITAL.CONDUCTORALMACEN
-    ADD CONSTRAINT FK_CONDUCTORALMACEN_ALMACEN FOREIGN KEY (id_almacen) REFERENCES ENVIOVITAL.ALMACEN (id);
+
 
 
 INSERT INTO ENVIOVITAL.PROVINCIA (nombre)
@@ -202,8 +206,8 @@ VALUES ('Almacén Central Madrid', 'Almacén principal de distribución en Madri
 
 
 INSERT INTO ENVIOVITAL.EVENTO (nombre, descripcion, es_activo, id_provincia)
-VALUES ('Catástrofe Madrid', 'Inundación por fuertes lluvias.', TRUE, 1),
-       ('Catástrofe Barcelona', 'Incendio forestal en las afueras.', FALSE, 2),
+VALUES ('Catástrofe Madrid', 'Inundación por fuertes lluvias.', TRUE, 30),
+       ('Catástrofe Barcelona', 'Incendio forestal en las afueras.', FALSE, 9),
        ('Catástrofe Valencia', 'Tornado en la zona urbana.', TRUE, 3),
        ('Catástrofe Sevilla', 'Severa ola de calor.', FALSE, 4),
        ('Catástrofe Málaga', 'Terremoto leve en el litoral.', TRUE, 5),
@@ -211,7 +215,7 @@ VALUES ('Catástrofe Madrid', 'Inundación por fuertes lluvias.', TRUE, 1),
        ('Catástrofe Bilbao', 'Desbordamiento del río Nervión.', TRUE, 7),
        ('Catástrofe Alicante', 'Tormenta eléctrica prolongada.', FALSE, 8),
        ('Catástrofe Murcia', 'Derrumbe de edificios por lluvias.', TRUE, 9),
-       ('Catástrofe Granada', 'Alud en Sierra Nevada.', FALSE, 10);
+       ('Catástrofe Granada', 'Alud en Sierra Nevada.', FALSE,15);
 
 
 INSERT INTO ENVIOVITAL.VEHICULO (marca, modelo, matricula, id_conductor, id_tipo_vehiculo)
@@ -228,18 +232,6 @@ VALUES ('Ford', 'Transit', 'ABC123A', 1, 1),
 
 
 
-INSERT INTO ENVIOVITAL.CONDUCTORALMACEN (id_almacen, id_conductor)
-VALUES (1, 1),
-       (2, 2),
-       (3, 3),
-       (4, 4),
-       (5, 5),
-       (6, 6),
-       (7, 7),
-       (8, 8),
-       (9, 9),
-       (10, 10);
-
 INSERT INTO ENVIOVITAL.EVENTOALMACEN (id_evento, id_almacen)
 VALUES (1, 1),
        (2, 2),
@@ -250,5 +242,28 @@ VALUES (1, 1),
        (7, 7),
        (8, 8),
        (9, 9),
-       (10, 10);
+       (10, 10),
+       (2, 1),
+       (2, 2),
+       (2, 3),
+       (2, 4),
+       (2, 5),
+       (2, 6),
+       (4, 7),
+       (5, 8),
+       (6, 9),
+       (9, 10);
+
+INSERT INTO ENVIOVITAL.EVENTOALMACENCONDUCTOR (id_eventoalmacen, id_conductor)
+VALUES (1, 1),
+       (1, 2),
+       (1, 3),
+       (1, 1),
+       (1, 2),
+       (1, 3),
+       (2, 1),
+       (2, 2),
+       (2, 3),
+       (2, 1);
+
 

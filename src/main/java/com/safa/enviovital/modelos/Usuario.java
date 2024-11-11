@@ -1,5 +1,6 @@
 package com.safa.enviovital.modelos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.safa.enviovital.enumerados.Rol;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-
+@Builder
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +31,5 @@ public class Usuario {
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Rol rol;
+
 }

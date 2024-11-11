@@ -14,8 +14,8 @@ import java.util.List;
 @ToString (exclude = {"eventos"})
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @EqualsAndHashCode (exclude = {"eventos"})
-
 public class Provincia {
 
     @Id
