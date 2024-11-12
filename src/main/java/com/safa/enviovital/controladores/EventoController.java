@@ -53,6 +53,14 @@ public class EventoController {
 //    }
 //
 
+    @GetMapping("/evento-inicio/{id}")
+    private ResponseEntity<EventoRequestDto> getEventoRequestById(@PathVariable int id) {
+        Evento evento = eventoService.getEventoById(id);
+        EventoRequestDto requestDto = EventoRequestDto.TarjetaEventoInicio(evento);
+        return ResponseEntity.ok(requestDto);
+    }
+
+
 
 
 
