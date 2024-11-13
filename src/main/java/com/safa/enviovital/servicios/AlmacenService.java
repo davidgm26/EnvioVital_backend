@@ -1,5 +1,6 @@
 package com.safa.enviovital.servicios;
 
+import com.safa.enviovital.dto.AlmacenEditarDTO;
 import com.safa.enviovital.dto.AlmacenRequestDTO;
 import com.safa.enviovital.dto.AlmacenResponseDTO;
 import com.safa.enviovital.dto.EventoAlmacenDtoResponse;
@@ -90,7 +91,7 @@ public class AlmacenService {
      * @param requestDTO Datos del almacén a editar
      * @return AlmacenResponseDTO con los datos del almacén editado
      */
-    public AlmacenResponseDTO editar(Integer id, AlmacenRequestDTO requestDTO) {
+    public AlmacenResponseDTO editar(Integer id, AlmacenEditarDTO requestDTO) {
 
         Almacen almacen = almacenRepositorio.findById(id).orElseThrow( () -> new AlmacenNotFoundException(id));
         almacen.setNombre(requestDTO.getNombre());
@@ -98,8 +99,6 @@ public class AlmacenService {
         almacen.setDireccion(requestDTO.getDireccion());
         almacen.setEmail(requestDTO.getEmail());
         almacen.setProvincia(provinciaService.getProvinciaById(requestDTO.getIdProvincia()));
-        almacen.getUsuario().setUsername(requestDTO.getUsuario().getUsername());
-        almacen.getUsuario().setPassword(requestDTO.getUsuario().getPassword());
         usuarioService.guardarUsuario(almacen.getUsuario());
         almacenRepositorio.save(almacen);
 
