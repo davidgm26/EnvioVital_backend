@@ -1,5 +1,6 @@
 package com.safa.enviovital.controladores;
 
+import com.safa.enviovital.dto.AlmacenEditarDTO;
 import com.safa.enviovital.dto.AlmacenRequestDTO;
 import com.safa.enviovital.dto.AlmacenResponseDTO;
 import com.safa.enviovital.dto.EventoAlmacenDtoResponse;
@@ -61,7 +62,7 @@ public class AlmacenControlador {
      * @return AlmacenResponseDTO con los datos del almacén editado
      */
     @PutMapping("/editar/{id}")
-    public ResponseEntity<AlmacenResponseDTO> editarAlmacen(@PathVariable Integer id, @RequestBody AlmacenRequestDTO requestDTO) {
+    public ResponseEntity<AlmacenResponseDTO> editarAlmacen(@PathVariable Integer id, @RequestBody AlmacenEditarDTO requestDTO) {
         return ResponseEntity.ok(almacenService.editar(id, requestDTO));
     }
 

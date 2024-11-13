@@ -31,13 +31,15 @@ public class ConductorService {
 
     private final UsuarioRepositorio usuarioRepositorio;
 
-    private final EventoRepository eventoRepository;
 
     private final EventoAlmacenRepositorio eventoAlmacenRepositorio;
 
     private final EventoAlmacenConductorRepositorio eventoAlmacenConductorRepositorio;
 
     private final AlmacenRepositorio almacenRepositorio;
+
+    @Autowired
+    private  UsuarioService usuarioService;
 
     /**
      * Método para obtener todos los conductores.
@@ -111,15 +113,10 @@ public class ConductorService {
         conductor.setTelefono(requestDTO.getTelefono());
         conductor.setFechaNacimiento(requestDTO.getFechaNacimiento());
         conductor.setEmail(requestDTO.getEmail());
+        usuarioService.guardarUsuario(conductor.getUsuario());
+        conductorRepositorio.save(conductor);
 
-        Conductor updatedConductor = conductorRepositorio.save(conductor);
-
-        return new ConductorResponseDTO(
-                updatedConductor.getId(), updatedConductor.getNombre(),
-                updatedConductor.getApellidos(), updatedConductor.getDni(), updatedConductor.getDireccion(),
-                updatedConductor.getTelefono(), updatedConductor.getFechaNacimiento(), updatedConductor.getEmail(),
-                updatedConductor.getUsuario().getId()
-        );
+        return ConductorResponseDTO.ConductorResponseDtoFromConductor(conductor);
     }
 
     /**
