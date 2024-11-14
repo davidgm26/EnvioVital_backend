@@ -32,12 +32,11 @@ public class UsuarioService {
                 .orElseThrow(() -> new UsuarioNotFoundException("El usuario con ID " + id + " no existe"));
     }
     public Usuario crearUsuario(UsuarioRequestDTO usuarioRequestDTO) {
-        Usuario u = Usuario.builder()
+        return Usuario.builder()
                 .password(usuarioRequestDTO.getPassword())
                 .username(usuarioRequestDTO.getUsername())
-                .rol(Rol.USUARIO)
+                .rol(Rol.USUARIO)  // No guarda aquí
                 .build();
-        return guardarUsuario(u);
     }
 
     public Usuario guardarUsuario(Usuario usuario) {
