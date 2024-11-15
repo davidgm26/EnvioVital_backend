@@ -1,14 +1,9 @@
 package com.safa.enviovital.servicios;
 
-import com.safa.enviovital.dto.ConductorRequestDTO;
-import com.safa.enviovital.dto.ConductorResponseDTO;
-import com.safa.enviovital.dto.UsuarioRequestDTO;
-import com.safa.enviovital.dto.UsuarioResponseDTO;
+import com.safa.enviovital.dto.*;
 import com.safa.enviovital.enumerados.Rol;
-import com.safa.enviovital.excepciones.NotFoundException.AlmacenNotFoundException;
 import com.safa.enviovital.excepciones.NotFoundException.ConductorNotFoundException;
 import com.safa.enviovital.excepciones.NotFoundException.EventoAlmacenNotFoundException;
-import com.safa.enviovital.excepciones.NotFoundException.EventoNotFoundException;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.modelos.*;
 import com.safa.enviovital.repositorios.*;
@@ -179,6 +174,11 @@ public class ConductorService {
         );
 
         return ResponseEntity.ok(response);
+    }
+
+    public List<ListaAlmacenesRegistradosByConductorDTO> obtenerEventoAlmacenPorConductor(Integer idConductor) {
+        List<EventoAlmacenConductor> lista = eventoAlmacenConductorRepositorio.findEventoAlmacenConductorByConductorId(idConductor);
+        return lista.stream().map(ListaAlmacenesRegistradosByConductorDTO::toDto).toList();
     }
 
 }
