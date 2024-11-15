@@ -18,10 +18,13 @@ public class AuthenticationService {
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
 
+    @Autowired
     private AuthenticationManager authenticationManager;
+
     @Autowired
     private JwtService jwtService;
 
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
 
@@ -50,8 +53,6 @@ public class AuthenticationService {
                 .build();
 
         usuarioRepositorio.save(usuario);
-
-        var token = jwtService.generateToken(usuario);
 
         return usuario;
 
