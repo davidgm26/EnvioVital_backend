@@ -16,7 +16,7 @@ public class ListaEventosByAlmacenDTO {
     private Integer idEvento;
     private String nombreEvento;
     private String descripcionEvento;
-    private Integer idProvincia;
+    private String nombreProvincia;
 
 
     public static ListaEventosByAlmacenDTO toDto(EventoAlmacen evento) {
@@ -24,7 +24,7 @@ public class ListaEventosByAlmacenDTO {
                 .idEvento(evento.getEvento().getId())
                 .nombreEvento(evento.getEvento().getNombre())
                 .descripcionEvento(evento.getEvento().getDescripcion())
-                .idProvincia(evento.getEvento().getProvincia().getId())
+                .nombreProvincia(evento.getEvento().getProvincia().getNombre())
                 .build();
     }
 }
