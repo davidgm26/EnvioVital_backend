@@ -86,4 +86,9 @@ public class ConductorControlador {
         return ResponseEntity.ok(conductorService.obtenerEventoAlmacenPorConductor(conductorId));
     }
 
+    @DeleteMapping("/eliminarRegistro/{eventoAlmacenConductorId}")
+    public ResponseEntity<Response> eliminarRegistro(@PathVariable Integer eventoAlmacenConductorId) {
+        return ResponseEntity.ok(conductorService.eliminarRegistroConductorEnEventoAlmacen(eventoAlmacenConductorId));
+    }
+
 }

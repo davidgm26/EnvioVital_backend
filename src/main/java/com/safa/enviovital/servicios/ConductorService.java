@@ -181,14 +181,14 @@ public class ConductorService {
         return lista.stream().map(ListaAlmacenesRegistradosByConductorDTO::toDto).toList();
     }
 
-    public Response eliminarRegistroConductorEnEventoAlmacen(Integer eventoAlmacenId, Integer conductorId) {
-        EventoAlmacenConductor eventoAlmacenConductor = eventoAlmacenConductorRepositorio.findByEventoAlmacenIdAndConductorId(eventoAlmacenId, conductorId)
+    public Response eliminarRegistroConductorEnEventoAlmacen(Integer eventoAlmanceConductorId) {
+        EventoAlmacenConductor eventoAlmacenConductor = eventoAlmacenConductorRepositorio.findById(eventoAlmanceConductorId)
                 .orElseThrow(() -> new EventoAlmacenNotFoundException("EventoAlmacenConductor no encontrado"));
 
         eventoAlmacenConductorRepositorio.delete(eventoAlmacenConductor);
 
         return new Response(
-                "El conductor con ID " + conductorId + " ha sido eliminado exitosamente del EventoAlmacen con ID " + eventoAlmacenId + ".",
+                "Se ha eliminado correctamente el registro " + eventoAlmanceConductorId + ".",
                 HttpStatus.OK.value(),
                 LocalDateTime.now()
         );

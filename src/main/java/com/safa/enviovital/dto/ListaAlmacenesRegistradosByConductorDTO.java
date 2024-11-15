@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ListaAlmacenesRegistradosByConductorDTO {
+    private Integer id;
     private Integer idAlmacen;
     private String nombreAlmacen;
     private String direccionAlmacen;
@@ -21,6 +22,7 @@ public class ListaAlmacenesRegistradosByConductorDTO {
     private Boolean estado;
     public static ListaAlmacenesRegistradosByConductorDTO toDto(EventoAlmacenConductor eventoAlmacenConductor) {
         return ListaAlmacenesRegistradosByConductorDTO.builder()
+                .id(eventoAlmacenConductor.getId())
                 .idAlmacen(eventoAlmacenConductor.getEventoAlmacen().getAlmacen().getId())
                 .nombreAlmacen(eventoAlmacenConductor.getEventoAlmacen().getAlmacen().getNombre())
                 .direccionAlmacen(eventoAlmacenConductor.getEventoAlmacen().getAlmacen().getDireccion())
