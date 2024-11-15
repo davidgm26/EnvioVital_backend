@@ -12,8 +12,10 @@ import com.safa.enviovital.excepciones.NotFoundException.EventoNotFoundException
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.modelos.*;
 import com.safa.enviovital.repositorios.*;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -64,35 +66,43 @@ public class ConductorService {
      * @param requestDTO Datos del conductor a guardar
      * @return ConductorResponseDTO con los datos del conductor guardado
      */
+    @Transactional
     public ConductorResponseDTO guardar(ConductorRequestDTO requestDTO) {
-        // Creamos un nuevo Usuario basado en el UsuarioRequestDTO incluido en ConductorRequestDTO
-        UsuarioRequestDTO usuarioDTO = requestDTO.getUsuario();
-        Usuario usuario = new Usuario();
-        usuario.setUsername(usuarioDTO.getUsername());
-        usuario.setPassword(usuarioDTO.getPassword());
-        usuario.setRol(Rol.CONDUCTOR); // Asignamos automáticamente el rol de CONDUCTOR
+        try {
+            UsuarioRequestDTO usuarioDTO = requestDTO.getUsuario();
+            Usuario usuario = new Usuario();
+            usuario.setUsername(usuarioDTO.getUsername());
+            usuario.setPassword(usuarioDTO.getPassword());
+            usuario.setRol(Rol.CONDUCTOR);
 
-        // Guardamos el usuario primero
-        Usuario savedUsuario = usuarioRepositorio.save(usuario);
+            Conductor conductor = new Conductor();
+            conductor.setNombre(requestDTO.getNombre());
+            conductor.setApellidos(requestDTO.getApellidos());
+            conductor.setDni(requestDTO.getDni());
+            conductor.setDireccion(requestDTO.getDireccion());
+            conductor.setTelefono(requestDTO.getTelefono());
+            conductor.setFechaNacimiento(requestDTO.getFechaNacimiento());
+            conductor.setEmail(requestDTO.getEmail());
+            conductor.setUsuario(usuario);
 
-        // Creamos el Conductor asociado al usuario creado
-        Conductor conductor = new Conductor();
-        conductor.setNombre(requestDTO.getNombre());
-        conductor.setApellidos(requestDTO.getApellidos());
-        conductor.setDni(requestDTO.getDni());
-        conductor.setDireccion(requestDTO.getDireccion());
-        conductor.setTelefono(requestDTO.getTelefono());
-        conductor.setFechaNacimiento(requestDTO.getFechaNacimiento());
-        conductor.setEmail(requestDTO.getEmail());
-        conductor.setUsuario(savedUsuario); // Asignamos el usuario recién creado
+            usuarioRepositorio.save(usuario);
+            Conductor savedConductor = conductorRepositorio.save(conductor);
 
-        // Guardamos el conductor
-        Conductor savedConductor = conductorRepositorio.save(conductor);
+            return new ConductorResponseDTO(
+                    savedConductor.getId(),
+                    savedConductor.getNombre(),
+                    savedConductor.getApellidos(),
+                    savedConductor.getDni(),
+                    savedConductor.getDireccion(),
+                    savedConductor.getTelefono(),
+                    savedConductor.getFechaNacimiento(),
+                    savedConductor.getEmail(),
+                    savedConductor.getUsuario().getId()
+            );
 
-        // Retornamos el ConductorResponseDTO con los datos guardados
-        return new ConductorResponseDTO(savedConductor.getId(), savedConductor.getNombre(), savedConductor.getApellidos(),
-                savedConductor.getDni(), savedConductor.getDireccion(), savedConductor.getTelefono(),
-                savedConductor.getFechaNacimiento(), savedConductor.getEmail(), savedConductor.getUsuario().getId());
+        } catch (DataIntegrityViolationException e) {
+            throw new RuntimeException("Error de validación al guardar el conductor y usuario", e);
+        }
     }
 
 

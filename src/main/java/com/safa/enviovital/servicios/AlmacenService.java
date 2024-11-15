@@ -6,8 +6,10 @@ import com.safa.enviovital.excepciones.NotFoundException.AlmacenNotFoundExceptio
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.modelos.*;
 import com.safa.enviovital.repositorios.*;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -61,26 +63,34 @@ public class AlmacenService {
      * @param requestDTO Datos del almacén a guardar
      * @return AlmacenResponseDTO con los datos del almacén guardado
      */
+
+    @Transactional
     public AlmacenResponseDTO guardar(AlmacenRequestDTO requestDTO) {
-        Usuario u = usuarioService.crearUsuario(requestDTO.getUsuario());
+        try {
 
-        u.setRol(Rol.ALMACEN);
+            Usuario u = usuarioService.crearUsuario(requestDTO.getUsuario());
+            u.setRol(Rol.ALMACEN);
 
-        usuarioService.guardarUsuario(u);
+            // Crear el objeto Almacen sin guardarlo aún
+            Almacen almacen = Almacen.builder()
+                    .nombre(requestDTO.getNombre())
+                    .direccion(requestDTO.getDireccion())
+                    .email(requestDTO.getEmail())
+                    .provincia(provinciaService.getProvinciaById(requestDTO.getIdProvincia()))
+                    .esActivo(Boolean.TRUE)
+                    .descripcion(requestDTO.getDescripcion())
+                    .usuario(u)
+                    .build();
 
-        Almacen almacen = Almacen.builder()
-                .nombre(requestDTO.getNombre())
-                .direccion(requestDTO.getDireccion())
-                .email(requestDTO.getEmail())
-                .provincia(provinciaService.getProvinciaById(requestDTO.getIdProvincia()))
-                .esActivo(Boolean.TRUE)
-                .descripcion(requestDTO.getDescripcion())
-                .usuario(u)
-                .build();
 
-        almacenRepositorio.save(almacen);
+            usuarioService.guardarUsuario(u);  // Guarda el usuario
+            almacenRepositorio.save(almacen);  // Guarda el almacén
 
-        return AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(almacen);
+            return AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(almacen);
+
+        } catch (DataIntegrityViolationException e) {
+            throw new RuntimeException("Error de validación al guardar el almacén y usuario", e);
+        }
     }
     /**
      * Método para editar un almacén existente.
