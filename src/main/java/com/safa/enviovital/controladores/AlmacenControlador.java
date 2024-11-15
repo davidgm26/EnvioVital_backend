@@ -1,9 +1,6 @@
 package com.safa.enviovital.controladores;
 
-import com.safa.enviovital.dto.AlmacenEditarDTO;
-import com.safa.enviovital.dto.AlmacenRequestDTO;
-import com.safa.enviovital.dto.AlmacenResponseDTO;
-import com.safa.enviovital.dto.EventoAlmacenDtoResponse;
+import com.safa.enviovital.dto.*;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.servicios.AlmacenService;
 import com.safa.enviovital.servicios.ConductorService;
@@ -91,6 +88,12 @@ public class AlmacenControlador {
     @GetMapping("/listaregistrados/{idEvento}")
     public ResponseEntity<List<EventoAlmacenDtoResponse>> obtenerAlmacenesPorEvento(@PathVariable Integer idEvento) {
         List<EventoAlmacenDtoResponse> eventoAlmacenes = almacenService.obtenerEventoAlmacenPorEvento(idEvento);
+        return ResponseEntity.ok(eventoAlmacenes);
+    }
+
+    @GetMapping("/listaEventos/{idAlmacen}")
+    public ResponseEntity<List<ListaEventosByAlmacenDTO>> obtenerEventosPorAlmacen(@PathVariable Integer idAlmacen){
+        List<ListaEventosByAlmacenDTO> eventoAlmacenes = almacenService.obtenerEventoAlmacenPorAlmacen(idAlmacen);
         return ResponseEntity.ok(eventoAlmacenes);
     }
 

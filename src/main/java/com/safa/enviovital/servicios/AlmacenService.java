@@ -1,9 +1,6 @@
 package com.safa.enviovital.servicios;
 
-import com.safa.enviovital.dto.AlmacenEditarDTO;
-import com.safa.enviovital.dto.AlmacenRequestDTO;
-import com.safa.enviovital.dto.AlmacenResponseDTO;
-import com.safa.enviovital.dto.EventoAlmacenDtoResponse;
+import com.safa.enviovital.dto.*;
 import com.safa.enviovital.enumerados.Rol;
 import com.safa.enviovital.excepciones.NotFoundException.AlmacenNotFoundException;
 import com.safa.enviovital.excepciones.Response;
@@ -162,6 +159,11 @@ public class AlmacenService {
         // Llamar al repositorio para obtener la lista de relaciones entre eventos y almacenes
         List<EventoAlmacen> lista = eventoAlmacenRepositorio.findEventoAlmacenByEventoId(idEvento);
         return lista.stream().map(EventoAlmacenDtoResponse::toDto).toList();
+    }
+
+    public List<ListaEventosByAlmacenDTO> obtenerEventoAlmacenPorAlmacen(Integer idAlmacen) {
+        List<EventoAlmacen> lista = eventoAlmacenRepositorio.findEventoAlmacenByAlmacenId(idAlmacen);
+        return lista.stream().map(ListaEventosByAlmacenDTO::toDto).toList();
     }
 
 

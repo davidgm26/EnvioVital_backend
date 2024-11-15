@@ -20,5 +20,7 @@ public interface EventoAlmacenRepositorio extends JpaRepository<EventoAlmacen, I
 
 
     List<EventoAlmacen> findEventoAlmacenByEventoId(@Param("idEvento") Integer idEvento);
+
+    List<EventoAlmacen> findEventoAlmacenByAlmacenId(@Param("idAlmacen") Integer idAlmacen);
 }
 
