@@ -13,12 +13,14 @@ public class EventoRequestDto {
     private String nombre;
     private String descripcion;
     private int idProvincia;
+    private String nombreProvincia;
 
     public static EventoRequestDto TarjetaEventoInicio (Evento evento) {
         return EventoRequestDto.builder()
                 .nombre(evento.getNombre())
                 .descripcion(evento.getDescripcion())
                 .idProvincia(evento.getId())
+                .nombreProvincia(evento.getProvincia().getNombre())
                 .build();
 
     }
