@@ -1,8 +1,8 @@
 package com.safa.enviovital.security.config;
 
 import com.safa.enviovital.repositorios.UsuarioRepositorio;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,7 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final UsuarioRepositorio usuarioRepositorio;
+    @Autowired
+    private  UsuarioRepositorio usuarioRepositorio;
 
     @Bean
     public UserDetailsService userDetailsService() {
