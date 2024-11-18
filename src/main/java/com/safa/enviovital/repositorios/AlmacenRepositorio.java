@@ -16,5 +16,4 @@ public interface AlmacenRepositorio extends JpaRepository<Almacen, Integer> {
 
 
 
-
 }
