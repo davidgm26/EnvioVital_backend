@@ -97,6 +97,13 @@ public class AlmacenControlador {
         return ResponseEntity.ok(eventoAlmacenes);
     }
 
+    @DeleteMapping("/eliminarRegistro/{eventoAlmacenId}")
+    public ResponseEntity<Response> eliminarRegistro(@PathVariable Integer eventoAlmacenId) {
+        return ResponseEntity.ok(almacenService.eliminarRegistroAlmacenEnEvento(eventoAlmacenId));
+    }
+
+
+
 
 
 }
