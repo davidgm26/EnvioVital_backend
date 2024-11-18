@@ -3,6 +3,7 @@ package com.safa.enviovital.servicios;
 import com.safa.enviovital.dto.*;
 import com.safa.enviovital.enumerados.Rol;
 import com.safa.enviovital.excepciones.NotFoundException.AlmacenNotFoundException;
+import com.safa.enviovital.excepciones.NotFoundException.EventoAlmacenNotFoundException;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.modelos.*;
 import com.safa.enviovital.repositorios.*;
@@ -175,6 +176,21 @@ public class AlmacenService {
         List<EventoAlmacen> lista = eventoAlmacenRepositorio.findEventoAlmacenByAlmacenId(idAlmacen);
         return lista.stream().map(ListaEventosByAlmacenDTO::toDto).toList();
     }
+
+
+    public Response eliminarRegistroAlmacenEnEvento(Integer EventoAlmacenId){
+        EventoAlmacen eventoAlmacen = eventoAlmacenRepositorio.findById(EventoAlmacenId)
+                .orElseThrow(() -> new EventoAlmacenNotFoundException("EventoAlmacen no encontrado"));
+
+        eventoAlmacenRepositorio.delete(eventoAlmacen);
+
+        return new Response(
+                "Se ha eliminado correctamente el registro " + EventoAlmacenId + ".",
+                HttpStatus.OK.value(),
+                LocalDateTime.now()
+        );
+    }
+
 
 
 
