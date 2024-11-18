@@ -43,7 +43,7 @@ public class Conductor {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id")
     @JsonIgnore
     private Usuario usuario;
