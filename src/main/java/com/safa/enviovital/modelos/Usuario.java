@@ -1,11 +1,11 @@
 package com.safa.enviovital.modelos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.safa.enviovital.enumerados.Rol;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDate;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Builder
-public class Usuario {
+public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -31,5 +31,20 @@ public class Usuario {
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private Rol rol;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
 
 }

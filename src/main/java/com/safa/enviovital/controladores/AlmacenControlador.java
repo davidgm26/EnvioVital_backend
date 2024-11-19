@@ -1,8 +1,6 @@
 package com.safa.enviovital.controladores;
 
-import com.safa.enviovital.dto.AlmacenRequestDTO;
-import com.safa.enviovital.dto.AlmacenResponseDTO;
-import com.safa.enviovital.dto.EventoAlmacenDtoResponse;
+import com.safa.enviovital.dto.*;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.servicios.AlmacenService;
 import com.safa.enviovital.servicios.ConductorService;
@@ -61,7 +59,7 @@ public class AlmacenControlador {
      * @return AlmacenResponseDTO con los datos del almacén editado
      */
     @PutMapping("/editar/{id}")
-    public ResponseEntity<AlmacenResponseDTO> editarAlmacen(@PathVariable Integer id, @RequestBody AlmacenRequestDTO requestDTO) {
+    public ResponseEntity<AlmacenResponseDTO> editarAlmacen(@PathVariable Integer id, @RequestBody AlmacenEditarDTO requestDTO) {
         return ResponseEntity.ok(almacenService.editar(id, requestDTO));
     }
 
@@ -92,6 +90,19 @@ public class AlmacenControlador {
         List<EventoAlmacenDtoResponse> eventoAlmacenes = almacenService.obtenerEventoAlmacenPorEvento(idEvento);
         return ResponseEntity.ok(eventoAlmacenes);
     }
+
+    @GetMapping("/listaEventos/{idAlmacen}")
+    public ResponseEntity<List<ListaEventosByAlmacenDTO>> obtenerEventosPorAlmacen(@PathVariable Integer idAlmacen){
+        List<ListaEventosByAlmacenDTO> eventoAlmacenes = almacenService.obtenerEventoAlmacenPorAlmacen(idAlmacen);
+        return ResponseEntity.ok(eventoAlmacenes);
+    }
+
+    @DeleteMapping("/eliminarRegistro/{eventoAlmacenId}")
+    public ResponseEntity<Response> eliminarRegistro(@PathVariable Integer eventoAlmacenId) {
+        return ResponseEntity.ok(almacenService.eliminarRegistroAlmacenEnEvento(eventoAlmacenId));
+    }
+
+
 
 
 

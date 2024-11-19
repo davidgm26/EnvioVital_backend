@@ -1,15 +1,16 @@
 package com.safa.enviovital.servicios;
 
-import com.safa.enviovital.dto.AlmacenRequestDTO;
-import com.safa.enviovital.dto.AlmacenResponseDTO;
-import com.safa.enviovital.dto.EventoAlmacenDtoResponse;
+import com.safa.enviovital.dto.*;
 import com.safa.enviovital.enumerados.Rol;
 import com.safa.enviovital.excepciones.NotFoundException.AlmacenNotFoundException;
+import com.safa.enviovital.excepciones.NotFoundException.EventoAlmacenNotFoundException;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.modelos.*;
 import com.safa.enviovital.repositorios.*;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -63,26 +64,34 @@ public class AlmacenService {
      * @param requestDTO Datos del almacén a guardar
      * @return AlmacenResponseDTO con los datos del almacén guardado
      */
+
+    @Transactional
     public AlmacenResponseDTO guardar(AlmacenRequestDTO requestDTO) {
-        Usuario u = usuarioService.crearUsuario(requestDTO.getUsuario());
+        try {
 
-        u.setRol(Rol.ALMACEN);
+            Usuario u = usuarioService.crearUsuario(requestDTO.getUsuario());
+            u.setRol(Rol.ALMACEN);
 
-        usuarioService.guardarUsuario(u);
+            // Crear el objeto Almacen sin guardarlo aún
+            Almacen almacen = Almacen.builder()
+                    .nombre(requestDTO.getNombre())
+                    .direccion(requestDTO.getDireccion())
+                    .email(requestDTO.getEmail())
+                    .provincia(provinciaService.getProvinciaById(requestDTO.getIdProvincia()))
+                    .esActivo(Boolean.TRUE)
+                    .descripcion(requestDTO.getDescripcion())
+                    .usuario(u)
+                    .build();
 
-        Almacen almacen = Almacen.builder()
-                .nombre(requestDTO.getNombre())
-                .direccion(requestDTO.getDireccion())
-                .email(requestDTO.getEmail())
-                .provincia(provinciaService.getProvinciaById(requestDTO.getIdProvincia()))
-                .esActivo(Boolean.TRUE)
-                .descripcion(requestDTO.getDescripcion())
-                .usuario(u)
-                .build();
 
-        almacenRepositorio.save(almacen);
+            usuarioService.guardarUsuario(u);  // Guarda el usuario
+            almacenRepositorio.save(almacen);  // Guarda el almacén
 
-        return AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(almacen);
+            return AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(almacen);
+
+        } catch (DataIntegrityViolationException e) {
+            throw new RuntimeException("Error de validación al guardar el almacén y usuario", e);
+        }
     }
     /**
      * Método para editar un almacén existente.
@@ -90,7 +99,7 @@ public class AlmacenService {
      * @param requestDTO Datos del almacén a editar
      * @return AlmacenResponseDTO con los datos del almacén editado
      */
-    public AlmacenResponseDTO editar(Integer id, AlmacenRequestDTO requestDTO) {
+    public AlmacenResponseDTO editar(Integer id, AlmacenEditarDTO requestDTO) {
 
         Almacen almacen = almacenRepositorio.findById(id).orElseThrow( () -> new AlmacenNotFoundException(id));
         almacen.setNombre(requestDTO.getNombre());
@@ -98,8 +107,6 @@ public class AlmacenService {
         almacen.setDireccion(requestDTO.getDireccion());
         almacen.setEmail(requestDTO.getEmail());
         almacen.setProvincia(provinciaService.getProvinciaById(requestDTO.getIdProvincia()));
-        almacen.getUsuario().setUsername(requestDTO.getUsuario().getUsername());
-        almacen.getUsuario().setPassword(requestDTO.getUsuario().getPassword());
         usuarioService.guardarUsuario(almacen.getUsuario());
         almacenRepositorio.save(almacen);
 
@@ -164,6 +171,26 @@ public class AlmacenService {
         List<EventoAlmacen> lista = eventoAlmacenRepositorio.findEventoAlmacenByEventoId(idEvento);
         return lista.stream().map(EventoAlmacenDtoResponse::toDto).toList();
     }
+
+    public List<ListaEventosByAlmacenDTO> obtenerEventoAlmacenPorAlmacen(Integer idAlmacen) {
+        List<EventoAlmacen> lista = eventoAlmacenRepositorio.findEventoAlmacenByAlmacenId(idAlmacen);
+        return lista.stream().map(ListaEventosByAlmacenDTO::toDto).toList();
+    }
+
+
+    public Response eliminarRegistroAlmacenEnEvento(Integer EventoAlmacenId){
+        EventoAlmacen eventoAlmacen = eventoAlmacenRepositorio.findById(EventoAlmacenId)
+                .orElseThrow(() -> new EventoAlmacenNotFoundException("EventoAlmacen no encontrado"));
+
+        eventoAlmacenRepositorio.delete(eventoAlmacen);
+
+        return new Response(
+                "Se ha eliminado correctamente el registro " + EventoAlmacenId + ".",
+                HttpStatus.OK.value(),
+                LocalDateTime.now()
+        );
+    }
+
 
 
 

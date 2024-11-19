@@ -2,6 +2,7 @@ package com.safa.enviovital.controladores;
 
 import com.safa.enviovital.dto.ConductorRequestDTO;
 import com.safa.enviovital.dto.ConductorResponseDTO;
+import com.safa.enviovital.dto.ListaAlmacenesRegistradosByConductorDTO;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.servicios.ConductorService;
 import lombok.AllArgsConstructor;
@@ -79,4 +80,15 @@ public class ConductorControlador {
             @PathVariable Integer conductorId) {
         return conductorService.registrarConductorEnEventoAlmacen(eventoAlmacenId, conductorId);
     }
+
+    @GetMapping("/almacenesRegistrados/{conductorId}")
+    public ResponseEntity<List<ListaAlmacenesRegistradosByConductorDTO>> listarAlmacenesRegistradosByConductor(@PathVariable Integer conductorId) {
+        return ResponseEntity.ok(conductorService.obtenerEventoAlmacenPorConductor(conductorId));
+    }
+
+    @DeleteMapping("/eliminarRegistro/{eventoAlmacenConductorId}")
+    public ResponseEntity<Response> eliminarRegistro(@PathVariable Integer eventoAlmacenConductorId) {
+        return ResponseEntity.ok(conductorService.eliminarRegistroConductorEnEventoAlmacen(eventoAlmacenConductorId));
+    }
+
 }

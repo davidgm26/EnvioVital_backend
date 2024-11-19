@@ -16,7 +16,7 @@ public class AlmacenResponseDTO {
     private String direccion;
     private String email;
     private Boolean esActivo;
-    private String provincia;
+    private Integer idProvincia;
     private Integer idUsuario;
 
 
@@ -27,7 +27,7 @@ public class AlmacenResponseDTO {
                 .direccion(almacen.getDireccion())
                 .descripcion(almacen.getDescripcion())
                 .email(almacen.getEmail())
-                .provincia(almacen.getProvincia().getNombre())
+                .idProvincia(almacen.getProvincia().getId())
                 .esActivo(almacen.getEsActivo())
                 .idUsuario(almacen.getUsuario().getId())
                 .build();
