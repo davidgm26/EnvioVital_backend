@@ -26,38 +26,22 @@ public class SecurityConfiguration {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-        @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-         http
-
-                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/almacenes/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/evento/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/almacenes/**","/conductores/").permitAll()
-                        .requestMatchers("/conductores/**").hasRole("CONDUCTOR")
-                        .requestMatchers("/evento/**", "/almacenes/**",
-                                "/conductores/**", "/vehiculo/**").hasRole("ADMIN")
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .anyRequest().authenticated()
-
-                )
-                .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-              return   http.build();
-    }
-}
-//    @Bean
+    //        @Bean
 //    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http
+//         http
 //
 //                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-//                        .requestMatchers("/conductores/**","/almacenes/**","/auth/**","/evento/**").permitAll()
+//                        .requestMatchers("/auth/**").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/almacenes/**").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/provincias/**").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/evento/**").permitAll()
+//                        .requestMatchers(HttpMethod.POST, "/almacenes/**","/conductores/").permitAll()
+//                        .requestMatchers("/conductores/**").hasRole("CONDUCTOR")
+//                        .requestMatchers("/evento/**", "/almacenes/**",
+//                                "/conductores/**", "/vehiculo/**").hasRole("ADMIN")
+//                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 //                        .anyRequest().authenticated()
+//
 //                )
 //                .csrf(AbstractHttpConfigurer::disable)
 //                .sessionManagement(session -> session
@@ -65,6 +49,24 @@ public class SecurityConfiguration {
 //                )
 //                .authenticationProvider(authenticationProvider)
 //                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-//        return http.build();
+//              return   http.build();
 //    }
+//}
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
 
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers("/conductores/**", "/almacenes/**", "/auth/**", "/evento/**",
+                                "/provincias/**","/usuarios/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
+}
