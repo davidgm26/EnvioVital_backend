@@ -3,6 +3,7 @@ package com.safa.enviovital.security.service;
 import com.safa.enviovital.enumerados.Rol;
 import com.safa.enviovital.modelos.Usuario;
 import com.safa.enviovital.repositorios.UsuarioRepositorio;
+import com.safa.enviovital.security.dto.ChangePasswordRequest;
 import com.safa.enviovital.security.dto.LoginRequest;
 import com.safa.enviovital.security.dto.LoginResponse;
 import jakarta.persistence.EntityNotFoundException;
@@ -11,6 +12,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AuthenticationService {
@@ -57,5 +60,32 @@ public class AuthenticationService {
         return usuario;
 
     }
+    public boolean changePassword(Integer usuarioId, ChangePasswordRequest changePasswordRequest) {
+
+
+        Optional<Usuario> usuarioOptional = usuarioRepositorio.findById(usuarioId);
+
+        if (usuarioOptional.isEmpty()) {
+            return false;
+        }
+
+        Usuario usuario = usuarioOptional.get();
+
+
+        if (!passwordEncoder.matches(changePasswordRequest.getOldPassword(), usuario.getPassword())) {
+            return false; // Si las contraseñas no coinciden, retornamos false
+        }
+
+
+        String newPasswordEncoded = passwordEncoder.encode(changePasswordRequest.getNewPassword());
+
+        usuario.setPassword(newPasswordEncoded);
+
+
+        usuarioRepositorio.save(usuario);
+
+        return true;
+    }
+
 
 }
