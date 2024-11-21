@@ -38,7 +38,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/almacenes/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/provincias/**").permitAll()
-        //                .requestMatchers(HttpMethod.GET, "/evento/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/evento/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/almacenes/**","/conductores/**").permitAll()
                         .requestMatchers("/conductores/**").hasRole("CONDUCTOR")
                         .requestMatchers("/almacenes/**",

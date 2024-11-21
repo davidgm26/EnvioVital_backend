@@ -1,5 +1,7 @@
 package com.safa.enviovital.security.controller;
 
+import com.safa.enviovital.dto.UsuarioRequestDTO;
+import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.modelos.Usuario;
 import com.safa.enviovital.security.dto.LoginRequest;
 import com.safa.enviovital.security.dto.LoginResponse;
@@ -26,8 +28,8 @@ public class AuthenticationControlador {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Usuario> register(@RequestBody LoginRequest loginRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.register(loginRequest));
+    public ResponseEntity<Usuario> register(@RequestBody UsuarioRequestDTO usuarioRequestDTO) throws UsernameAlredyExistsException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.register(usuarioRequestDTO));
     }
 
 
