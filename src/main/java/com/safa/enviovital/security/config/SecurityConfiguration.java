@@ -58,7 +58,7 @@ public class SecurityConfiguration {
 
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/conductores/**", "/almacenes/**", "/auth/**", "/evento/**",
-                                "/provincias/**","/usuarios/**").permitAll()
+                                "/provincias/**","/usuarios/**","/tiposVehiculo/**","/vehiculo").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
