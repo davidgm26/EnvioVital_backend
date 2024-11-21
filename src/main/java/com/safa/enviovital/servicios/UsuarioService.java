@@ -3,12 +3,15 @@ package com.safa.enviovital.servicios;
 import com.safa.enviovital.dto.UsuarioRequestDTO;
 import com.safa.enviovital.dto.UsuarioResponseDTO;
 import com.safa.enviovital.enumerados.Rol;
+import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.excepciones.NotFoundException.UsuarioNotFoundException;
 import com.safa.enviovital.modelos.Usuario;
 import com.safa.enviovital.repositorios.UsuarioRepositorio;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -31,36 +34,24 @@ public class UsuarioService {
         return usuarioRepositorio.findById(id)
                 .orElseThrow(() -> new UsuarioNotFoundException("El usuario con ID " + id + " no existe"));
     }
-    public Usuario crearUsuario(UsuarioRequestDTO usuarioRequestDTO) {
-        return Usuario.builder()
+
+    public Usuario getUsuarioPorUsername(String username) {
+        return usuarioRepositorio.findTopByUsername(username).orElseThrow(() -> new UsernameNotFoundException("No se ha encontrado ningun usuario con el nombre " +username));
+    }
+    public Usuario crearUsuario(UsuarioRequestDTO usuarioRequestDTO) throws UsernameAlredyExistsException {
+        if(usuarioRepositorio.findTopByUsername(usuarioRequestDTO.getUsername()).isPresent()) {
+            throw new UsernameAlredyExistsException(usuarioRequestDTO.getUsername());
+        }
+    return Usuario.builder()
                 .password(usuarioRequestDTO.getPassword())
                 .username(usuarioRequestDTO.getUsername())
-                .rol(Rol.USUARIO)  // No guarda aquí
+                .rol(Rol.USUARIO)
                 .build();
     }
 
     public Usuario guardarUsuario(Usuario usuario) {
         return usuarioRepositorio.save(usuario);
     }
-
-//    public UsuarioResponseDTO guardar(UsuarioRequestDTO requestDTO) {
-//        Usuario usuario = new Usuario();
-//        usuario.setUsername(requestDTO.getUsername());
-//        usuario.setPassword(requestDTO.getPassword());
-//        usuario.setRol(requestDTO.getRol());
-//        Usuario usuarioGuardado = usuarioRepositorio.save(usuario);
-//        return new UsuarioResponseDTO(usuarioGuardado.getId(), usuarioGuardado.getUsername(), usuarioGuardado.getRol());
-//    }
-//
-//    public UsuarioResponseDTO editar(Integer id, UsuarioRequestDTO requestDTO) {
-//        Usuario usuario = usuarioRepositorio.findById(id)
-//                .orElseThrow(() -> new RuntimeException("El usuario con ID " + id + " no existe"));
-//        usuario.setUsername(requestDTO.getUsername());
-//        usuario.setPassword(requestDTO.getPassword());
-//        usuario.setRol(requestDTO.getRol());
-//        Usuario usuarioActualizado = usuarioRepositorio.save(usuario);
-//        return new UsuarioResponseDTO(usuarioActualizado.getId(), usuarioActualizado.getUsername(), usuarioActualizado.getRol());
-//    }
 
     public Response eliminar(Integer id) {
         Usuario usuario = usuarioRepositorio.findById(id)

@@ -3,6 +3,7 @@ package com.safa.enviovital.excepciones;
 import com.safa.enviovital.excepciones.NotFoundException.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -100,4 +101,35 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(UsernameAlredyExistsException.class)
+    public ResponseEntity<Response>handleUsernameAlredyExistsException(UsernameAlredyExistsException ex) {
+        Response errorResponse = new Response(
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<Response>handleUsernameNotFoundException(UsernameNotFoundException ex) {
+        Response errorResponse = new Response(
+                ex.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(PasswordNotCorrectException.class)
+    public ResponseEntity<Response>handlePasswordNotCorrectException(PasswordNotCorrectException ex) {
+        Response errorResponse = new Response(
+                ex.getMessage(),
+                HttpStatus.UNAUTHORIZED.value(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
 }

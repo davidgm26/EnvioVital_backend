@@ -4,6 +4,7 @@ import com.safa.enviovital.dto.*;
 import com.safa.enviovital.enumerados.Rol;
 import com.safa.enviovital.excepciones.NotFoundException.AlmacenNotFoundException;
 import com.safa.enviovital.excepciones.NotFoundException.EventoAlmacenNotFoundException;
+import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.modelos.*;
 import com.safa.enviovital.repositorios.*;
@@ -66,7 +67,7 @@ public class AlmacenService {
      */
 
     @Transactional
-    public AlmacenResponseDTO guardar(AlmacenRequestDTO requestDTO) {
+    public AlmacenResponseDTO guardar(AlmacenRequestDTO requestDTO) throws UsernameAlredyExistsException {
         try {
 
             Usuario u = usuarioService.crearUsuario(requestDTO.getUsuario());
