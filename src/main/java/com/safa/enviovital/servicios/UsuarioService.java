@@ -20,6 +20,8 @@ public class UsuarioService {
 
     private final UsuarioRepositorio usuarioRepositorio;
 
+    private final EmailService emailService;
+
     public List<UsuarioResponseDTO> getAll() {
         List<Usuario> usuarios = usuarioRepositorio.findAll();
         return usuarios.stream()

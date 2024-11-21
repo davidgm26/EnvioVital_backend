@@ -35,6 +35,8 @@ public class ConductorService {
 
     private final AlmacenRepositorio almacenRepositorio;
 
+    private final EmailService emailService;
+
     @Autowired
     private  UsuarioService usuarioService;
 
@@ -82,7 +84,11 @@ public class ConductorService {
 
             usuarioRepositorio.save(usuario);
             Conductor savedConductor = conductorRepositorio.save(conductor);
-
+            try {
+                emailService.sendRegistrationEmail(conductor.getEmail(), conductor.getNombre());
+            } catch (Exception e) {
+                System.err.println("Error al enviar el correo: " + e.getMessage());
+            }
             return new ConductorResponseDTO(
                     savedConductor.getId(),
                     savedConductor.getNombre(),

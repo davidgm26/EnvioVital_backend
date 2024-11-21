@@ -35,6 +35,8 @@ public class AlmacenService {
     private final EventoAlmacenRepositorio eventoAlmacenRepositorio;
     @Autowired
     private EventoService eventoService;
+    @Autowired
+    private EmailService emailService;
 
 
     /**
@@ -87,6 +89,11 @@ public class AlmacenService {
             usuarioService.guardarUsuario(u);  // Guarda el usuario
             almacenRepositorio.save(almacen);  // Guarda el almacén
 
+            try {
+                emailService.sendRegistrationEmail(almacen.getEmail(), almacen.getNombre());
+            } catch (Exception e) {
+                System.err.println("Error al enviar el correo: " + e.getMessage());
+            }
             return AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(almacen);
 
         } catch (DataIntegrityViolationException e) {
