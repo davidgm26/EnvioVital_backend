@@ -2,8 +2,7 @@ package com.safa.enviovital.servicios;
 
 import com.safa.enviovital.dto.*;
 import com.safa.enviovital.enumerados.Rol;
-import com.safa.enviovital.excepciones.NotFoundException.AlmacenNotFoundException;
-import com.safa.enviovital.excepciones.NotFoundException.EventoAlmacenNotFoundException;
+import com.safa.enviovital.excepciones.NotFoundException.*;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.modelos.*;
 import com.safa.enviovital.repositorios.*;
@@ -68,13 +67,22 @@ public class AlmacenService {
      */
 
     @Transactional
-    public AlmacenResponseDTO guardar(AlmacenRequestDTO requestDTO) {
-        try {
+    public AlmacenResponseDTO guardar(AlmacenRequestDTO requestDTO) throws AlmacenNameAlredyExistsException {
+
 
             Usuario u = usuarioService.crearUsuario(requestDTO.getUsuario());
             u.setRol(Rol.ALMACEN);
 
-            // Crear el objeto Almacen sin guardarlo aún
+            if(almacenRepositorio.findTopAlmacenByNombre(requestDTO.getNombre()).isPresent()) {
+                throw new AlmacenNameAlredyExistsException(requestDTO.getNombre());
+            }
+            if (almacenRepositorio.findTopAlmacenByEmail(requestDTO.getEmail()).isPresent()) {
+                throw new AlmacenEmailAlredyExistsException(requestDTO.getEmail());
+            }
+            if (almacenRepositorio.findByUsuarioId(u.getId()).isPresent()) {
+            throw new AlmacenUsuarioAlredyExistsException(requestDTO.getUsuario().getUsername());
+            }
+
             Almacen almacen = Almacen.builder()
                     .nombre(requestDTO.getNombre())
                     .direccion(requestDTO.getDireccion())
@@ -86,8 +94,8 @@ public class AlmacenService {
                     .build();
 
 
-            usuarioService.guardarUsuario(u);  // Guarda el usuario
-            almacenRepositorio.save(almacen);  // Guarda el almacén
+            usuarioService.guardarUsuario(u);
+            almacenRepositorio.save(almacen);
 
             try {
                 emailService.sendRegistrationEmail(almacen.getEmail(), almacen.getNombre());
@@ -96,9 +104,6 @@ public class AlmacenService {
             }
             return AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(almacen);
 
-        } catch (DataIntegrityViolationException e) {
-            throw new RuntimeException("Error de validación al guardar el almacén y usuario", e);
-        }
     }
     /**
      * Método para editar un almacén existente.

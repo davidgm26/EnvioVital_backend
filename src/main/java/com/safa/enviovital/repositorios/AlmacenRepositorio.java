@@ -15,5 +15,8 @@ public interface AlmacenRepositorio extends JpaRepository<Almacen, Integer> {
    Optional<Almacen> findAlmacenById(Integer id);
 
 
+    Optional<Almacen> findTopAlmacenByNombre(String nombre);
 
-}
+    Optional<Almacen> findTopAlmacenByEmail(String email);
+
+    Optional<Almacen> findByUsuarioId(Integer usuarioId);}
