@@ -42,11 +42,13 @@ public class UsuarioService {
         if(usuarioRepositorio.findTopByUsername(usuarioRequestDTO.getUsername()).isPresent()) {
             throw new UsernameAlredyExistsException(usuarioRequestDTO.getUsername());
         }
-    return Usuario.builder()
+    Usuario u = Usuario.builder()
                 .password(usuarioRequestDTO.getPassword())
                 .username(usuarioRequestDTO.getUsername())
                 .rol(Rol.USUARIO)
                 .build();
+
+        return guardarUsuario(u);
     }
 
     public Usuario guardarUsuario(Usuario usuario) {
