@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode (exclude = {"conductor","tipoVehiculo"})
+@Builder
 public class Vehiculo {
 
     @Id

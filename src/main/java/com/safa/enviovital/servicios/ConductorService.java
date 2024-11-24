@@ -48,6 +48,7 @@ public class ConductorService {
 
     /**
      * Método para obtener un conductor por su ID.
+     *
      * @param id ID del conductor
      * @return ConductorResponseDTO
      */
@@ -192,6 +193,18 @@ public class ConductorService {
                 HttpStatus.OK.value(),
                 LocalDateTime.now()
         );
+    }
+    public Conductor fromDTO(ConductorResponseDTO dto) {
+        return Conductor.builder()
+                .id(dto.getId())
+                .nombre(dto.getNombre())
+                .apellidos(dto.getApellidos())
+                .dni(dto.getDni())
+                .direccion(dto.getDireccion())
+                .telefono(dto.getTelefono())
+                .fechaNacimiento(dto.getFechaNacimiento())
+                .email(dto.getEmail())
+                .build();
     }
 
 }

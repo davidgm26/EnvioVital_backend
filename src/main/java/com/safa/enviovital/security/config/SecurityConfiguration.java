@@ -14,6 +14,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 @Configuration
 @RequiredArgsConstructor
@@ -53,12 +55,25 @@ public class SecurityConfiguration {
 //    }
 //}
     @Bean
+    public HttpFirewall allowMaliciousCharactersFirewall() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        firewall.setAllowUrlEncodedPercent(true); // Allow encoded characters
+        firewall.setAllowUrlEncodedSlash(true);  // Allow %2F (optional)
+        firewall.setAllowBackSlash(true);        // Allow \
+        firewall.setAllowSemicolon(true);        // Allow ; in URLs
+        firewall.setAllowUrlEncodedPeriod(true); // Allow %2E for periods
+        firewall.setAllowUrlEncodedDoubleSlash(true); // Allow %2F%2F
+        return firewall;
+    }
+
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
 
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/conductores/**", "/almacenes/**", "/auth/**", "/evento/**",
-                                "/provincias/**","/usuarios/**","/tiposVehiculo/**","/vehiculo").permitAll()
+                                "/provincias/**","/usuarios/**","/tiposVehiculo/**","/vehiculos/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
