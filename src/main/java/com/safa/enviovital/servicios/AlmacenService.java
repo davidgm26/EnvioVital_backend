@@ -45,8 +45,8 @@ public class AlmacenService {
     public List<AlmacenResponseDTO> getAll() {
         List<Almacen> almacenes = almacenRepositorio.findAll();
     return almacenes.stream().map(AlmacenResponseDTO::AlmacenResponseDtoFromAlmacen).collect(Collectors.toList());
-
     }
+
 
     /**
      * Método para obtener un almacén por su ID.
