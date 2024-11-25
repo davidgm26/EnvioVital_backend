@@ -44,4 +44,10 @@ public class Evento {
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Set<EventoAlmacen> eventoAlmacenes = new HashSet<>();
+
+
+    @Column(name = "foto_url")
+    private String fotoUrl;
+
+
 }
