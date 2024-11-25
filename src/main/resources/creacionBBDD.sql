@@ -159,16 +159,18 @@ VALUES ('Álava'),
 
 
 INSERT INTO ENVIOVITAL.USUARIO (username, password, rol)
-VALUES ('admin', 'Contrasena1', 1),
-       ('user2', 'Contrasena1', 2),
-       ('user3', 'Contrasena1', 2),
-       ('user4', 'Contrasena1', 2),
-       ('user5', 'Contrasena1', 2),
-       ('user6', 'Contrasena1', 2),
-       ('user7', 'Contrasena1', 2),
-       ('user8', 'Contrasena1', 2),
-       ('user9', 'Contrasena1', 2),
-       ('user10', 'Contrasena1', 2);
+VALUES
+    ('admin', '$2a$10$E56/1.I3FWwYoTpSyFryiegHeep/axIfF95mejyOBHiKBwEKUmFT', 0),
+    ('conductor1', '$2a$10$E56/1.I3FWwYoTpSyFryiegHeep/axIfF95mejyOBHiKBwEKUmFT', 1),
+    ('conductor2', '$2a$10$E56/1.I3FWwYoTpSyFryiegHeep/axIfF95mejyOBHiKBwEKUmFT', 1),
+    ('conductor3', '$2a$10$E56/1.I3FWwYoTpSyFryiegHeep/axIfF95mejyOBHiKBwEKUmFT', 1),
+    ('conductor4', '$2a$10$E56/1.I3FWwYoTpSyFryiegHeep/axIfF95mejyOBHiKBwEKUmFT', 1),
+    ('conductor5', '$2a$10$E56/1.I3FWwYoTpSyFryiegHeep/axIfF95mejyOBHiKBwEKUmFT', 1),
+    ('almacen1', '$2a$10$E56/1.I3FWwYoTpSyFryiegHeep/axIfF95mejyOBHiKBwEKUmFT', 2),
+    ('almacen2', '$2a$10$E56/1.I3FWwYoTpSyFryiegHeep/axIfF95mejyOBHiKBwEKUmFT', 2),
+    ('almacen3', '$2a$10$E56/1.I3FWwYoTpSyFryiegHeep/axIfF95mejyOBHiKBwEKUmFT', 2),
+    ('almacen4', '$2a$10$E56/1.I3FWwYoTpSyFryiegHeep/axIfF95mejyOBHiKBwEKUmFT', 2),
+    ('almacen5', '$2a$10$E56/1.I3FWwYoTpSyFryiegHeep/axIfF95mejyOBHiKBwEKUmFT', 2);
 
 
 INSERT INTO ENVIOVITAL.TIPOVEHICULO (nombre)
@@ -179,29 +181,24 @@ VALUES ('Camion'),
        ('Caravana');
 
 
+
 INSERT INTO ENVIOVITAL.CONDUCTOR (nombre, apellidos, dni, direccion, telefono, id_usuario, fecha_nacimiento, email)
-VALUES ('Antonio', 'García López', '12345678A', 'Calle Gran Vía, Madrid', '612345678', 1, '1980-05-15', 'antonio.garcia@example.es'),
-       ('María', 'Martínez Sánchez', '12345679B', 'Calle Alcalá, Madrid', '622345678', 2, '1985-08-22', 'maria.martinez@example.es'),
-       ('Carlos', 'Rodríguez Gómez', '12345680C', 'Avenida Diagonal, Barcelona', '632345678', 3, '1990-01-30', 'carlos.rodriguez@example.es'),
-       ('Laura', 'Hernández Ruiz', '12345681D', 'Calle Serrano, Madrid', '642345678', 4, '1987-03-12', 'laura.hernandez@example.es'),
-       ('Pedro', 'López Fernández', '12345682E', 'Paseo de Gracia, Barcelona', '652345678', 5, '1982-11-25', 'pedro.lopez@example.es'),
-       ('Sara', 'González Pérez', '12345683F', 'Calle Larios, Málaga', '662345678', 6, '1993-07-19', 'sara.gonzalez@example.es'),
-       ('Javier', 'Gómez Torres', '12345684G', 'Calle Mayor, Valencia', '672345678', 7, '1981-04-09', 'javier.gomez@example.es'),
-       ('Ana', 'Díaz Jiménez', '12345685H', 'Avenida de la Constitución, Sevilla', '682345678', 8, '1986-10-17', 'ana.diaz@example.es'),
-       ('Luis', 'Martín Romero', '12345686J', 'Calle San Fernando, Sevilla', '692345678', 9, '1995-06-02', 'luis.martin@example.es'),
-       ('Elena', 'Ruiz Sánchez', '12345687K', 'Avenida América, Madrid', '602345678', 10, '1988-09-14', 'elena.ruiz@example.es');
+VALUES
+    ('Antonio', 'García López', '12345678A', 'Calle Gran Vía, Madrid', '612345678', 2, '1980-05-15', 'antonio.garcia@example.es'),
+    ('María', 'Martínez Sánchez', '12345679B', 'Calle Alcalá, Madrid', '622345678', 3, '1985-08-22', 'maria.martinez@example.es'),
+    ('Carlos', 'Rodríguez Gómez', '12345680C', 'Avenida Diagonal, Barcelona', '632345678', 4, '1990-01-30', 'carlos.rodriguez@example.es'),
+    ('Laura', 'Hernández Ruiz', '12345681D', 'Calle Serrano, Madrid', '642345678', 5, '1987-03-12', 'laura.hernandez@example.es'),
+    ('Pedro', 'López Fernández', '12345682E', 'Paseo de Gracia, Barcelona', '652345678', 6, '1982-11-25', 'pedro.lopez@example.es');
+
 
 INSERT INTO ENVIOVITAL.ALMACEN (nombre, descripcion, direccion, es_activo, id_provincia, id_usuario, email)
-VALUES ('Almacén Central Madrid', 'Almacén principal de distribución en Madrid', 'Calle Mayor, 10, 28013 Madrid', TRUE, 1, 1, 'central.madrid@example.es'),
-       ('Almacén Norte Barcelona', 'Almacén regional para Cataluña', 'Avenida Diagonal, 250, 08013 Barcelona', FALSE, 2, 2, 'norte.barcelona@example.es'),
-       ('Centro Logístico Valencia', 'Centro de operaciones en Valencia', 'Calle Colón, 45, 46004 Valencia', TRUE, 3, 3, 'logistico.valencia@example.es'),
-       ('Depósito Sevilla', 'Depósito regional para Andalucía', 'Avenida de la Constitución, 1, 41001 Sevilla', FALSE, 4, 4, 'deposito.sevilla@example.es'),
-       ('Almacén Sur Málaga', 'Almacén de productos del sur', 'Calle Larios, 12, 29015 Málaga', TRUE, 5, 5, 'sur.malaga@example.es'),
-       ('Centro de Distribución Zaragoza', 'Centro de distribución para Aragón', 'Paseo de la Independencia, 5, 50001 Zaragoza', FALSE, 6, 6, 'distribucion.zaragoza@example.es'),
-       ('Almacén Bilbao', 'Almacén de logística en el País Vasco', 'Calle Gran Vía, 25, 48001 Bilbao', TRUE, 7, 7, 'logistica.bilbao@example.es'),
-       ('Almacén Levante Alicante', 'Almacén en Alicante para la zona de Levante', 'Avenida de la Estación, 22, 03005 Alicante', FALSE, 8, 8, 'levante.alicante@example.es'),
-       ('Centro Logístico Murcia', 'Centro logístico en Murcia', 'Calle de la Libertad, 18, 30003 Murcia', TRUE, 9, 9, 'logistico.murcia@example.es'),
-       ('Almacén Granada', 'Almacén para la zona de Granada y alrededores', 'Calle Recogidas, 7, 18010 Granada', FALSE, 10, 10, 'almacen.granada@example.es');
+VALUES
+    ('Almacén Central Madrid', 'Almacén principal de distribución en Madrid', 'Calle Mayor, 10, 28013 Madrid', TRUE, 1, 7, 'central.madrid@example.es'),
+    ('Almacén Norte Barcelona', 'Almacén regional para Cataluña', 'Avenida Diagonal, 250, 08013 Barcelona', FALSE, 2, 8, 'norte.barcelona@example.es'),
+    ('Centro Logístico Valencia', 'Centro de operaciones en Valencia', 'Calle Colón, 45, 46004 Valencia', TRUE, 3, 9, 'logistico.valencia@example.es'),
+    ('Depósito Sevilla', 'Depósito regional para Andalucía', 'Avenida de la Constitución, 1, 41001 Sevilla', FALSE, 4, 10, 'deposito.sevilla@example.es'),
+    ('Almacén Sur Málaga', 'Almacén de productos del sur', 'Calle Larios, 12, 29015 Málaga', TRUE, 5, 11, 'sur.malaga@example.es');
+
 
 
 
@@ -224,11 +221,11 @@ VALUES ('Ford', 'Transit', 'ABC123A', 1, 1),
        ('Opel', 'Astra', 'ABC123C', 3, 2),
        ('Volkswagen', 'Golf', 'ABC123D', 4, 2),
        ('Peugeot', '308', 'ABC123E', 5, 2),
-       ('Renault', 'Trafic', 'ABC123F', 6, 1),
-       ('Citroën', 'Jumpy', 'ABC123G', 7, 1),
-       ('Fiat', 'Doblo', 'ABC123H', 8, 1),
-       ('Toyota', 'Corolla', 'ABC123J', 9, 2),
-       ('Nissan', 'NV200', 'ABC123K', 10, 1);
+       ('Renault', 'Trafic', 'ABC123F', 1, 1),
+       ('Citroën', 'Jumpy', 'ABC123G', 2, 1),
+       ('Fiat', 'Doblo', 'ABC123H', 3, 1),
+       ('Toyota', 'Corolla', 'ABC123J', 4, 2),
+       ('Nissan', 'NV200', 'ABC123K', 5, 1);
 
 
 
@@ -238,21 +235,21 @@ VALUES (1, 1),
        (3, 3),
        (4, 4),
        (5, 5),
-       (6, 6),
-       (7, 7),
-       (8, 8),
-       (9, 9),
-       (10, 10),
+       (6, 1),
+       (7, 2),
+       (8, 3),
+       (9, 4),
+       (10, 5),
        (2, 1),
        (2, 2),
        (2, 3),
        (2, 4),
        (2, 5),
-       (2, 6),
-       (4, 7),
-       (5, 8),
-       (6, 9),
-       (9, 10);
+       (2, 1),
+       (4, 2),
+       (5, 3),
+       (6, 4),
+       (9, 5);
 
 INSERT INTO ENVIOVITAL.EVENTOALMACENCONDUCTOR (id_eventoalmacen, id_conductor)
 VALUES (1, 1),

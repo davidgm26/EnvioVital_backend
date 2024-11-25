@@ -16,4 +16,5 @@ public interface TipoVehiculoRepositorio extends JpaRepository<TipoVehiculo, Int
 
     @Query("SELECT new com.safa.enviovital.dto.TipoVehiculoResponseDTO(tv.id, tv.nombre) FROM TipoVehiculo tv WHERE tv.id = :id")
     Optional<TipoVehiculoResponseDTO> findTipoVehiculoById(Integer id);
+
 }
