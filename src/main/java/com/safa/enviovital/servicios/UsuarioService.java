@@ -12,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ import java.util.List;
 public class UsuarioService {
 
     private final UsuarioRepositorio usuarioRepositorio;
+    private final PasswordEncoder passwordEncoder;
 
     public List<UsuarioResponseDTO> getAll() {
         List<Usuario> usuarios = usuarioRepositorio.findAll();
@@ -34,6 +36,11 @@ public class UsuarioService {
         return usuarioRepositorio.findById(id)
                 .orElseThrow(() -> new UsuarioNotFoundException("El usuario con ID " + id + " no existe"));
     }
+    public Usuario crearUsuarioAdmin(UsuarioRequestDTO usuarioRequestDTO) throws UsernameAlredyExistsException {
+        Usuario u = crearUsuario(usuarioRequestDTO);
+        u.setRol(Rol.ADMIN);
+        return guardarUsuario(u);
+    }
 
     public Usuario getUsuarioPorUsername(String username) {
         return usuarioRepositorio.findTopByUsername(username).orElseThrow(() -> new UsernameNotFoundException("No se ha encontrado ningun usuario con el nombre " +username));
@@ -43,7 +50,7 @@ public class UsuarioService {
             throw new UsernameAlredyExistsException(usuarioRequestDTO.getUsername());
         }
     Usuario u = Usuario.builder()
-                .password(usuarioRequestDTO.getPassword())
+                .password(passwordEncoder.encode(usuarioRequestDTO.getPassword()))
                 .username(usuarioRequestDTO.getUsername())
                 .rol(Rol.USUARIO)
                 .build();

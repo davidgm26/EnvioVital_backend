@@ -2,6 +2,7 @@ package com.safa.enviovital.controladores;
 
 import com.safa.enviovital.dto.UsuarioRequestDTO;
 import com.safa.enviovital.dto.UsuarioResponseDTO;
+import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.modelos.Usuario;
 import com.safa.enviovital.servicios.UsuarioService;
@@ -29,10 +30,10 @@ public class UsuarioControlador {
         return ResponseEntity.ok(usuario);
     }
 
-//    @PostMapping("/guardar")
-//    public ResponseEntity<UsuarioResponseDTO> guardarUsuario(@RequestBody UsuarioRequestDTO requestDTO) {
-//        return ResponseEntity.ok(usuarioService.guardar(requestDTO));
-//    }
+    @PostMapping("/registrar/admin")
+    public ResponseEntity<Usuario> guardarUsuario(@RequestBody UsuarioRequestDTO requestDTO) throws UsernameAlredyExistsException {
+        return ResponseEntity.ok(usuarioService.crearUsuarioAdmin(requestDTO));
+    }
 //
 //    @PutMapping("/editar/{id}")
 //    public ResponseEntity<UsuarioResponseDTO> editarUsuario(@PathVariable Integer id, @RequestBody UsuarioRequestDTO requestDTO) {
