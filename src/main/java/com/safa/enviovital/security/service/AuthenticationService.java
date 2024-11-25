@@ -56,5 +56,32 @@ public class AuthenticationService {
 
 
     }
+    public boolean changePassword(Integer usuarioId, ChangePasswordRequest changePasswordRequest) {
+
+
+        Optional<Usuario> usuarioOptional = usuarioRepositorio.findById(usuarioId);
+
+        if (usuarioOptional.isEmpty()) {
+            return false;
+        }
+
+        Usuario usuario = usuarioOptional.get();
+
+
+        if (!passwordEncoder.matches(changePasswordRequest.getOldPassword(), usuario.getPassword())) {
+            return false; // Si las contraseñas no coinciden, retornamos false
+        }
+
+
+        String newPasswordEncoded = passwordEncoder.encode(changePasswordRequest.getNewPassword());
+
+        usuario.setPassword(newPasswordEncoded);
+
+
+        usuarioRepositorio.save(usuario);
+
+        return true;
+    }
+
 
 }
