@@ -53,5 +53,8 @@ public class Conductor {
     @OneToMany(mappedBy = "conductor", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<EventoAlmacenConductor> eventoAlmacenConductores = new HashSet<>();
 
+    @OneToMany(mappedBy = "conductor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Vehiculo> vehiculos = new HashSet<>();
+
 
 }

@@ -70,10 +70,10 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-
+                .cors(Customizer.withDefaults()) // Enable CORS with default settings
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/conductores/**", "/almacenes/**", "/auth/**", "/evento/**",
-                                "/provincias/**","/usuarios/**","/tiposVehiculo/**","/vehiculos/**").permitAll()
+                                "/provincias/**", "/usuarios/**", "/tiposVehiculo/**", "/vehiculos/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)

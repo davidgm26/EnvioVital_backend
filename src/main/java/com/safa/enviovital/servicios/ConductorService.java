@@ -35,6 +35,8 @@ public class ConductorService {
 
     private final AlmacenRepositorio almacenRepositorio;
 
+    private final VehiculoRepositorio vehiculoRepositorio;
+
     @Autowired
     private  UsuarioService usuarioService;
 
@@ -205,6 +207,11 @@ public class ConductorService {
                 .fechaNacimiento(dto.getFechaNacimiento())
                 .email(dto.getEmail())
                 .build();
+    }
+
+    public List<VehiculoResponseDTO> getVehiculosByConductorId(Integer id){
+        List<Vehiculo> vehiculos = vehiculoRepositorio.findVehiculosByConductorId(id);
+        return vehiculos.stream().map(VehiculoResponseDTO::VehiculoResponseDTOfromVehiculo).toList();
     }
 
 }
