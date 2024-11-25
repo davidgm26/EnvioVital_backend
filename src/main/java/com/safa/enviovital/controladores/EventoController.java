@@ -26,6 +26,11 @@ public class EventoController {
      return ResponseEntity.ok(eventoService.getAllEventos());
     }
 
+    @GetMapping("/activos")
+    private ResponseEntity<List<EventoResponseDto>> getAllEventosActivos(){
+        return ResponseEntity.ok(eventoService.getAllActivos());
+    }
+
     @GetMapping("/{id}")
     private ResponseEntity<EventoResponseDto> getEventoById(@PathVariable int id){
         return ResponseEntity.ok(EventoResponseDto.EventoResponseDtoFromEvento(eventoService.getEventoById(id)));

@@ -1,9 +1,11 @@
 package com.safa.enviovital.servicios;
 
+import com.safa.enviovital.dto.AlmacenResponseDTO;
 import com.safa.enviovital.dto.EventoRequestDto;
 import com.safa.enviovital.dto.EventoResponseDto;
 import com.safa.enviovital.excepciones.NotFoundException.EventoNotFoundException;
 import com.safa.enviovital.excepciones.NotFoundException.ProvinciaDontHaveEventException;
+import com.safa.enviovital.modelos.Almacen;
 import com.safa.enviovital.modelos.Evento;
 import com.safa.enviovital.repositorios.EventoRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,6 +30,13 @@ public class EventoService {
     public List<EventoResponseDto> getAllEventos() {
         List<Evento> eventos = eventoRepository.findAll();
         return eventos.stream().map(EventoResponseDto::EventoResponseDtoFromEvento).collect(Collectors.toList());
+    }
+
+
+    public List<EventoResponseDto>getAllActivos(){
+        List<Evento> eventos = eventoRepository.findAllActives();
+        return eventos.stream().map(EventoResponseDto::EventoResponseDtoFromEvento).collect(Collectors.toList());
+
     }
 
     public Evento getEventoById(int id){
