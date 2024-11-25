@@ -35,6 +35,8 @@ public class ConductorService {
 
     private final AlmacenRepositorio almacenRepositorio;
 
+    private final VehiculoRepositorio vehiculoRepositorio;
+
     @Autowired
     private  UsuarioService usuarioService;
 
@@ -48,6 +50,7 @@ public class ConductorService {
 
     /**
      * Método para obtener un conductor por su ID.
+     *
      * @param id ID del conductor
      * @return ConductorResponseDTO
      */
@@ -192,6 +195,23 @@ public class ConductorService {
                 HttpStatus.OK.value(),
                 LocalDateTime.now()
         );
+    }
+    public Conductor fromDTO(ConductorResponseDTO dto) {
+        return Conductor.builder()
+                .id(dto.getId())
+                .nombre(dto.getNombre())
+                .apellidos(dto.getApellidos())
+                .dni(dto.getDni())
+                .direccion(dto.getDireccion())
+                .telefono(dto.getTelefono())
+                .fechaNacimiento(dto.getFechaNacimiento())
+                .email(dto.getEmail())
+                .build();
+    }
+
+    public List<VehiculoResponseDTO> getVehiculosByConductorId(Integer id){
+        List<Vehiculo> vehiculos = vehiculoRepositorio.findVehiculosByConductorId(id);
+        return vehiculos.stream().map(VehiculoResponseDTO::VehiculoResponseDTOfromVehiculo).toList();
     }
 
 }

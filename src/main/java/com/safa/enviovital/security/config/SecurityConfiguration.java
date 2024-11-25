@@ -16,8 +16,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import java.util.List;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 @Configuration
 @RequiredArgsConstructor
@@ -89,3 +90,38 @@ public class SecurityConfiguration {
 //        return http.build();
 //    }
 //}
+//}
+
+/*
+
+  @Bean
+    public HttpFirewall allowMaliciousCharactersFirewall() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        firewall.setAllowUrlEncodedPercent(true); // Allow encoded characters
+        firewall.setAllowUrlEncodedSlash(true);  // Allow %2F (optional)
+        firewall.setAllowBackSlash(true);        // Allow \
+        firewall.setAllowSemicolon(true);        // Allow ; in URLs
+        firewall.setAllowUrlEncodedPeriod(true); // Allow %2E for periods
+        firewall.setAllowUrlEncodedDoubleSlash(true); // Allow %2F%2F
+        return firewall;
+    }
+
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .cors(Customizer.withDefaults()) // Enable CORS with default settings
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers("/conductores/**", "/almacenes/**", "/auth/**", "/evento/**",
+                                "/provincias/**", "/usuarios/**", "/tiposVehiculo/**", "/vehiculos/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
+*/

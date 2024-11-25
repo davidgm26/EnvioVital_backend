@@ -5,10 +5,12 @@ import com.safa.enviovital.dto.TipoVehiculoResponseDTO;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.servicios.TipoVehiculoService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/tiposVehiculo")
@@ -28,12 +30,19 @@ public class TipoVehiculoControlador {
 
     /**
      * Endpoint para obtener un tipo de vehículo por su ID.
+     *
      * @param id ID del tipo de vehículo
      * @return TipoVehiculoResponseDTO
      */
     @GetMapping("/{id}")
-    public ResponseEntity<TipoVehiculoResponseDTO> obtenerTipoVehiculoPorId(@PathVariable Integer id) {
-        return ResponseEntity.ok(tipoVehiculoService.getTipoVehiculoPorId(id));
+    public ResponseEntity<?> obtenerTipoVehiculoPorId(@PathVariable Integer id) {
+        try {
+            TipoVehiculoResponseDTO tipoVehiculo = tipoVehiculoService.getTipoVehiculoPorId(id);
+            return ResponseEntity.ok(tipoVehiculo);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No se encontró el Tipo de Vehículo para el ID: " + id);
+        }
     }
 
     /**

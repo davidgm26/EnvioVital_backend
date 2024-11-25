@@ -3,6 +3,7 @@ package com.safa.enviovital.controladores;
 import com.safa.enviovital.dto.ConductorRequestDTO;
 import com.safa.enviovital.dto.ConductorResponseDTO;
 import com.safa.enviovital.dto.ListaAlmacenesRegistradosByConductorDTO;
+import com.safa.enviovital.dto.VehiculoResponseDTO;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.servicios.ConductorService;
 import lombok.AllArgsConstructor;
@@ -90,5 +91,14 @@ public class ConductorControlador {
     public ResponseEntity<Response> eliminarRegistro(@PathVariable Integer eventoAlmacenConductorId) {
         return ResponseEntity.ok(conductorService.eliminarRegistroConductorEnEventoAlmacen(eventoAlmacenConductorId));
     }
+
+    // endpoint para obtener los vehiculos registrados de un conductor
+
+    @GetMapping("/vehiculosRegistrados/{conductorId}")
+    public ResponseEntity<List<VehiculoResponseDTO>> listarVehiculosRegistradosByConductor(@PathVariable Integer conductorId) {
+        return ResponseEntity.ok(conductorService.getVehiculosByConductorId(conductorId));
+    }
+
+
 
 }

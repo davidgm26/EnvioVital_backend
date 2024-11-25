@@ -26,9 +26,6 @@ public class AuthenticationService {
     @Autowired
     private JwtService jwtService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
 
     public LoginResponse login(LoginRequest loginRequest) {
         var nombreUsuario = usuarioService.getUsuarioPorUsername(loginRequest.getUsername());
