@@ -90,7 +90,6 @@ public class AlmacenService {
                     .esActivo(Boolean.TRUE)
                     .descripcion(requestDTO.getDescripcion())
                     .usuario(u)
-                    .fotoUrl(requestDTO.getFotoUrl())
                     .build();
 
 
