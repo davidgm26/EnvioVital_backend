@@ -22,7 +22,6 @@ public class EventoRequestDto {
                 .descripcion(evento.getDescripcion())
                 .idProvincia(evento.getId())
                 .nombreProvincia(evento.getProvincia().getNombre())
-                .fotoUrl(evento.getFotoUrl())
                 .build();
 
     }

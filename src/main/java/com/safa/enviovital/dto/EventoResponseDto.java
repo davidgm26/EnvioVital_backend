@@ -20,7 +20,7 @@ public class EventoResponseDto {
     private boolean activo;
     private String provincia;
     private Set<EventoAlmacenDtoResponse> almacenes;
-    private String fotoUrl;
+
 
 
     public static EventoResponseDto EventoResponseDtoFromEvento(Evento evento) {
@@ -30,12 +30,12 @@ public class EventoResponseDto {
                 .nombre(evento.getNombre())
                 .activo(evento.getEsActivo())
                 .provincia(evento.getProvincia().getNombre())
-                .fotoUrl(evento.getFotoUrl())
                 .almacenes(
                         evento.getEventoAlmacenes().stream()
                                 .map(EventoAlmacenDtoResponse::toDto)
                                 .collect(Collectors.toSet())
                 )
+
 
                 .build();
     }

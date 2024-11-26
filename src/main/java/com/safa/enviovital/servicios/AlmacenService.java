@@ -117,7 +117,6 @@ public class AlmacenService {
         almacen.setDireccion(requestDTO.getDireccion());
         almacen.setEmail(requestDTO.getEmail());
         almacen.setProvincia(provinciaService.getProvinciaById(requestDTO.getIdProvincia()));
-        almacen.setFotoUrl(requestDTO.getFotoUrl());
         usuarioService.guardarUsuario(almacen.getUsuario());
         almacenRepositorio.save(almacen);
 

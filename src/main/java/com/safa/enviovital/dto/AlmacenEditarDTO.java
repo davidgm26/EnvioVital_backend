@@ -15,7 +15,6 @@ public class AlmacenEditarDTO {
     private String direccion;
     private String email;
     private Integer idProvincia;
-    private String fotoUrl;
 }
 
 
