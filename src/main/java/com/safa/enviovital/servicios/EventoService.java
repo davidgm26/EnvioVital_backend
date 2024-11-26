@@ -12,6 +12,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+
 
 import java.util.List;
 import java.util.Optional;
@@ -27,9 +30,13 @@ public class EventoService {
     @Autowired
     private ProvinciaService provinciaService;
 
+
+
     public List<EventoResponseDto> getAllEventos() {
         List<Evento> eventos = eventoRepository.findAll();
-        return eventos.stream().map(EventoResponseDto::EventoResponseDtoFromEvento).collect(Collectors.toList());
+        return eventos.stream()
+                .map(EventoResponseDto::EventoResponseDtoFromEvento)
+                .collect(Collectors.toList());
     }
 
 

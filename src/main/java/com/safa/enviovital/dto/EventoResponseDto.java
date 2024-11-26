@@ -22,6 +22,7 @@ public class EventoResponseDto {
     private Set<EventoAlmacenDtoResponse> almacenes;
 
 
+
     public static EventoResponseDto EventoResponseDtoFromEvento(Evento evento) {
         return EventoResponseDto.builder()
                 .id(evento.getId())
@@ -34,6 +35,8 @@ public class EventoResponseDto {
                                 .map(EventoAlmacenDtoResponse::toDto)
                                 .collect(Collectors.toSet())
                 )
+
+
                 .build();
     }
 

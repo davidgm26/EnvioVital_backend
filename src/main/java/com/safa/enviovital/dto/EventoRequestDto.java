@@ -14,6 +14,7 @@ public class EventoRequestDto {
     private String descripcion;
     private int idProvincia;
     private String nombreProvincia;
+    private String fotoUrl;
 
     public static EventoRequestDto TarjetaEventoInicio (Evento evento) {
         return EventoRequestDto.builder()
