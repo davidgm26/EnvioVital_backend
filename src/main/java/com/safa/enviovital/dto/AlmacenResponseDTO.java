@@ -18,6 +18,7 @@ public class AlmacenResponseDTO {
     private Boolean esActivo;
     private String provincia;
     private Integer idUsuario;
+    private String fotoUrl;
 
 
     public static AlmacenResponseDTO AlmacenResponseDtoFromAlmacen(Almacen almacen) {
@@ -30,6 +31,7 @@ public class AlmacenResponseDTO {
                 .provincia(almacen.getProvincia().getNombre())
                 .esActivo(almacen.getEsActivo())
                 .idUsuario(almacen.getUsuario().getId())
+                .fotoUrl(almacen.getFotoUrl())
                 .build();
     }
 }
