@@ -21,5 +21,11 @@ public interface ConductorRepositorio extends JpaRepository<Conductor, Integer> 
             "FROM Conductor c")
     List<ConductorResponseDTO> findAllConductoresWithDTO();
 
+    //GET /conductores/usuario/{idUsuario}  hazlo sin dto
+    @Query("SELECT c FROM Conductor c WHERE c.usuario.id = :idUsuario")
+    Optional<Conductor> findConductorByUsuarioId(Integer idUsuario);
+
+
+
 
 }

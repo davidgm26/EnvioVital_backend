@@ -37,6 +37,10 @@ public class ConductorControlador {
     public ResponseEntity<ConductorResponseDTO> obtenerConductorPorId(@PathVariable Integer id) {
         return ResponseEntity.ok(conductorService.getConductorPorId(id));
     }
+    @GetMapping("/usuario/{idUsuario}")
+    public ResponseEntity<ConductorResponseDTO> getConductorByUsuarioId(@PathVariable Integer idUsuario) {
+        return ResponseEntity.ok(conductorService.getConductorByUsuarioId(idUsuario));
+    }
 
     /**
      * Endpoint para guardar un nuevo conductor.

@@ -31,32 +31,28 @@ public class SecurityConfiguration {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-            @Bean
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-         http
-
+        http
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/almacenes/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/provincias/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/evento/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/almacenes/**","/conductores/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/almacenes/**", "/conductores/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/almacenes/**", "conductores/**").permitAll()
                         .requestMatchers("/conductores/editar/").permitAll()
-                                .requestMatchers("/usuarios/**").permitAll()
-//                        .requestMatchers("/almacenes/**",
-//                                "/conductores/**", "/vehiculo/**").hasRole("ADMIN")
+                        .requestMatchers("/usuarios/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
-
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-              return   http.build();
+        return http.build();
     }
 
     @Bean

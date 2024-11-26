@@ -59,6 +59,15 @@ public class ConductorService {
                 .orElseThrow(() -> new ConductorNotFoundException(id));
     }
 
+    // GET /conductores/usuario/{idUsuario} hazlo sin dto, usar el builder de ConductorResponse
+    public ConductorResponseDTO getConductorByUsuarioId(Integer idUsuario) {
+        Conductor conductor = conductorRepositorio.findConductorByUsuarioId(idUsuario)
+                .orElseThrow(() -> new ConductorNotFoundException("No se ha encontrado ningún conductor con el usuario ID " + idUsuario));
+        return ConductorResponseDTO.ConductorResponseDtoFromConductor(conductor);
+    }
+
+
+
     /**
      * Método para guardar un nuevo conductor.
      * @param requestDTO Datos del conductor a guardar
