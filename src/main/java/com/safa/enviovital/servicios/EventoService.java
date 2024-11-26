@@ -63,7 +63,6 @@ public class EventoService {
                 .descripcion(eventoRequest.getDescripcion())
                 .provincia(provinciaService.getProvinciaById(eventoRequest.getIdProvincia()))
                 .esActivo(true)
-                .fotoUrl(eventoRequest.getFotoUrl())
                 .build();
         return eventoRepository.save(e);
     }
@@ -73,7 +72,6 @@ public class EventoService {
         event.setNombre(eventoRequestDto.getNombre());
         event.setDescripcion(eventoRequestDto.getDescripcion());
         event.setProvincia(provinciaService.getProvinciaById(eventoRequestDto.getIdProvincia()));
-        event.setFotoUrl(eventoRequestDto.getFotoUrl());
         return EventoResponseDto.EventoResponseDtoFromEvento(eventoRepository.save(event));
     }
 

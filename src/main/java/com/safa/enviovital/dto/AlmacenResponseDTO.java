@@ -18,6 +18,7 @@ public class AlmacenResponseDTO {
     private Boolean esActivo;
     private Integer idProvincia;
     private Integer idUsuario;
+    private String fotoUrl;
 
 
     public static AlmacenResponseDTO AlmacenResponseDtoFromAlmacen(Almacen almacen) {
