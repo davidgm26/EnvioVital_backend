@@ -3,6 +3,7 @@ package com.safa.enviovital.servicios;
 import com.safa.enviovital.dto.*;
 import com.safa.enviovital.enumerados.Rol;
 import com.safa.enviovital.excepciones.NotFoundException.AlmacenNotFoundException;
+import com.safa.enviovital.excepciones.NotFoundException.ConductorNotFoundException;
 import com.safa.enviovital.excepciones.NotFoundException.EventoAlmacenNotFoundException;
 import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.excepciones.Response;
@@ -56,6 +57,13 @@ public class AlmacenService {
     public AlmacenResponseDTO getAlmacenPorId(Integer id) {
         Almacen a = almacenRepositorio.findAlmacenById(id)
                 .orElseThrow(() -> new AlmacenNotFoundException(id));
+
+        return AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(a);
+    }
+
+    public AlmacenResponseDTO getAlmacenByUsuarioId(Integer idUsuario) {
+        Almacen a = almacenRepositorio.findAlmacenByUsuarioId(idUsuario)
+                .orElseThrow(() -> new AlmacenNotFoundException(idUsuario));
 
         return AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(a);
     }
