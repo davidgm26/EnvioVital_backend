@@ -3,6 +3,8 @@ package com.safa.enviovital.controladores;
 import com.safa.enviovital.dto.ConductorRequestDTO;
 import com.safa.enviovital.dto.ConductorResponseDTO;
 import com.safa.enviovital.dto.ListaAlmacenesRegistradosByConductorDTO;
+import com.safa.enviovital.dto.VehiculoResponseDTO;
+import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.servicios.ConductorService;
 import lombok.AllArgsConstructor;
@@ -36,6 +38,10 @@ public class ConductorControlador {
     public ResponseEntity<ConductorResponseDTO> obtenerConductorPorId(@PathVariable Integer id) {
         return ResponseEntity.ok(conductorService.getConductorPorId(id));
     }
+    @GetMapping("/usuario/{idUsuario}")
+    public ResponseEntity<ConductorResponseDTO> getConductorByUsuarioId(@PathVariable Integer idUsuario) {
+        return ResponseEntity.ok(conductorService.getConductorByUsuarioId(idUsuario));
+    }
 
     /**
      * Endpoint para guardar un nuevo conductor.
@@ -43,7 +49,7 @@ public class ConductorControlador {
      * @return ConductorResponseDTO con los datos del conductor guardado
      */
     @PostMapping("/guardar")
-    public ResponseEntity<ConductorResponseDTO> guardarConductor(@RequestBody ConductorRequestDTO requestDTO) {
+    public ResponseEntity<ConductorResponseDTO> guardarConductor(@RequestBody ConductorRequestDTO requestDTO) throws UsernameAlredyExistsException {
         return ResponseEntity.ok(conductorService.guardar(requestDTO));
     }
 
@@ -90,5 +96,14 @@ public class ConductorControlador {
     public ResponseEntity<Response> eliminarRegistro(@PathVariable Integer eventoAlmacenConductorId) {
         return ResponseEntity.ok(conductorService.eliminarRegistroConductorEnEventoAlmacen(eventoAlmacenConductorId));
     }
+
+    // endpoint para obtener los vehiculos registrados de un conductor
+
+    @GetMapping("/vehiculosRegistrados/{conductorId}")
+    public ResponseEntity<List<VehiculoResponseDTO>> listarVehiculosRegistradosByConductor(@PathVariable Integer conductorId) {
+        return ResponseEntity.ok(conductorService.getVehiculosByConductorId(conductorId));
+    }
+
+
 
 }

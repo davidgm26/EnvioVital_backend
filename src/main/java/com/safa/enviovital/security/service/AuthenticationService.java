@@ -4,6 +4,8 @@ import com.safa.enviovital.dto.UsuarioRequestDTO;
 import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.excepciones.PasswordNotCorrectException;
 import com.safa.enviovital.modelos.Usuario;
+import com.safa.enviovital.repositorios.UsuarioRepositorio;
+import com.safa.enviovital.security.dto.ChangePasswordRequest;
 import com.safa.enviovital.security.dto.LoginRequest;
 import com.safa.enviovital.security.dto.LoginResponse;
 import com.safa.enviovital.servicios.UsuarioService;
@@ -13,6 +15,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AuthenticationService {
@@ -25,6 +29,9 @@ public class AuthenticationService {
 
     @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private UsuarioRepositorio usuarioRepositorio;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -48,6 +55,7 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         return LoginResponse.builder()
                 .username(user.getUsername())
+                .id(user.getId())
                 .token(jwtToken)
                 .rol(nombreUsuario.getRol().toString())
                 .build();
@@ -59,5 +67,32 @@ public class AuthenticationService {
 
 
     }
+    public boolean changePassword(Integer usuarioId, ChangePasswordRequest changePasswordRequest) {
+
+
+        Optional<Usuario> usuarioOptional = usuarioRepositorio.findById(usuarioId);
+
+        if (usuarioOptional.isEmpty()) {
+            return false;
+        }
+
+        Usuario usuario = usuarioOptional.get();
+
+
+        if (!passwordEncoder.matches(changePasswordRequest.getOldPassword(), usuario.getPassword())) {
+            return false;
+        }
+
+
+        String newPasswordEncoded = passwordEncoder.encode(changePasswordRequest.getNewPassword());
+
+        usuario.setPassword(newPasswordEncoded);
+
+
+        usuarioRepositorio.save(usuario);
+
+        return true;
+    }
+
 
 }

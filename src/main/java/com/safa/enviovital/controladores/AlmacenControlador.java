@@ -42,6 +42,10 @@ public class AlmacenControlador {
     public ResponseEntity<AlmacenResponseDTO> obtenerAlmacenPorId(@PathVariable Integer id) {
         return ResponseEntity.ok(almacenService.getAlmacenPorId(id));
     }
+    @GetMapping("/usuario/{idUsuario}")
+    public ResponseEntity<AlmacenResponseDTO> getAlmacenByUsuarioId(@PathVariable Integer idUsuario) {
+        return ResponseEntity.ok(almacenService.getAlmacenByUsuarioId(idUsuario));
+    }
 
     /**
      * Endpoint para guardar un nuevo almacén.

@@ -4,6 +4,7 @@ import com.safa.enviovital.dto.*;
 import com.safa.enviovital.enumerados.Rol;
 import com.safa.enviovital.excepciones.NotFoundException.ConductorNotFoundException;
 import com.safa.enviovital.excepciones.NotFoundException.EventoAlmacenNotFoundException;
+import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.modelos.*;
 import com.safa.enviovital.repositorios.*;
@@ -35,6 +36,8 @@ public class ConductorService {
 
     private final AlmacenRepositorio almacenRepositorio;
 
+    private final VehiculoRepositorio vehiculoRepositorio;
+
     @Autowired
     private  UsuarioService usuarioService;
 
@@ -48,6 +51,7 @@ public class ConductorService {
 
     /**
      * Método para obtener un conductor por su ID.
+     *
      * @param id ID del conductor
      * @return ConductorResponseDTO
      */
@@ -56,50 +60,41 @@ public class ConductorService {
                 .orElseThrow(() -> new ConductorNotFoundException(id));
     }
 
+    // GET /conductores/usuario/{idUsuario} hazlo sin dto, usar el builder de ConductorResponse
+    public ConductorResponseDTO getConductorByUsuarioId(Integer idUsuario) {
+        Conductor conductor = conductorRepositorio.findConductorByUsuarioId(idUsuario)
+                .orElseThrow(() -> new ConductorNotFoundException("No se ha encontrado ningún conductor con el usuario ID " + idUsuario));
+        return ConductorResponseDTO.ConductorResponseDtoFromConductor(conductor);
+    }
+
+
+
     /**
      * Método para guardar un nuevo conductor.
      * @param requestDTO Datos del conductor a guardar
      * @return ConductorResponseDTO con los datos del conductor guardado
      */
     @Transactional
-    public ConductorResponseDTO guardar(ConductorRequestDTO requestDTO) {
-        try {
-            UsuarioRequestDTO usuarioDTO = requestDTO.getUsuario();
-            Usuario usuario = new Usuario();
-            usuario.setUsername(usuarioDTO.getUsername());
-            usuario.setPassword(usuarioDTO.getPassword());
-            usuario.setRol(Rol.CONDUCTOR);
-
-            Conductor conductor = new Conductor();
-            conductor.setNombre(requestDTO.getNombre());
-            conductor.setApellidos(requestDTO.getApellidos());
-            conductor.setDni(requestDTO.getDni());
-            conductor.setDireccion(requestDTO.getDireccion());
-            conductor.setTelefono(requestDTO.getTelefono());
-            conductor.setFechaNacimiento(requestDTO.getFechaNacimiento());
-            conductor.setEmail(requestDTO.getEmail());
-            conductor.setUsuario(usuario);
-
-            usuarioRepositorio.save(usuario);
-            Conductor savedConductor = conductorRepositorio.save(conductor);
-
-            return new ConductorResponseDTO(
-                    savedConductor.getId(),
-                    savedConductor.getNombre(),
-                    savedConductor.getApellidos(),
-                    savedConductor.getDni(),
-                    savedConductor.getDireccion(),
-                    savedConductor.getTelefono(),
-                    savedConductor.getFechaNacimiento(),
-                    savedConductor.getEmail(),
-                    savedConductor.getUsuario().getId()
-            );
-
-        } catch (DataIntegrityViolationException e) {
-            throw new RuntimeException("Error de validación al guardar el conductor y usuario", e);
+    public ConductorResponseDTO guardar(ConductorRequestDTO requestDTO) throws UsernameAlredyExistsException {
+        if(usuarioRepositorio.findTopByUsername(requestDTO.getUsuario().getUsername()).isPresent()){
+            throw new UsernameAlredyExistsException(requestDTO.getUsuario().getUsername());
         }
-    }
+        Usuario u = usuarioService.crearUsuario(requestDTO.getUsuario());
+        Conductor c = Conductor.builder()
+                .nombre(requestDTO.getNombre())
+                .apellidos(requestDTO.getApellidos())
+                .dni(requestDTO.getDni())
+                .direccion(requestDTO.getDireccion())
+                .telefono(requestDTO.getTelefono())
+                .fechaNacimiento(requestDTO.getFechaNacimiento())
+                .email(requestDTO.getEmail())
+                .usuario(u)
+                .build();
 
+        u.setRol(Rol.CONDUCTOR);
+        conductorRepositorio.save(c);
+        return ConductorResponseDTO.ConductorResponseDtoFromConductor(c);
+    }
 
     /**
      * Método para editar un conductor existente.
@@ -192,6 +187,23 @@ public class ConductorService {
                 HttpStatus.OK.value(),
                 LocalDateTime.now()
         );
+    }
+    public Conductor fromDTO(ConductorResponseDTO dto) {
+        return Conductor.builder()
+                .id(dto.getId())
+                .nombre(dto.getNombre())
+                .apellidos(dto.getApellidos())
+                .dni(dto.getDni())
+                .direccion(dto.getDireccion())
+                .telefono(dto.getTelefono())
+                .fechaNacimiento(dto.getFechaNacimiento())
+                .email(dto.getEmail())
+                .build();
+    }
+
+    public List<VehiculoResponseDTO> getVehiculosByConductorId(Integer id){
+        List<Vehiculo> vehiculos = vehiculoRepositorio.findVehiculosByConductorId(id);
+        return vehiculos.stream().map(VehiculoResponseDTO::VehiculoResponseDTOfromVehiculo).toList();
     }
 
 }
