@@ -49,8 +49,6 @@ public class Almacen {
     @OneToMany(mappedBy = "almacen", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<EventoAlmacen> eventoAlmacenes = new HashSet<>();
 
-    @Column(name = "foto_url")
-    private String fotoUrl;
 
 
 }
