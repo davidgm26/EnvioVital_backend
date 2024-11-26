@@ -4,6 +4,7 @@ import com.safa.enviovital.dto.*;
 import com.safa.enviovital.enumerados.Rol;
 import com.safa.enviovital.excepciones.NotFoundException.ConductorNotFoundException;
 import com.safa.enviovital.excepciones.NotFoundException.EventoAlmacenNotFoundException;
+import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.modelos.*;
 import com.safa.enviovital.repositorios.*;
@@ -74,44 +75,26 @@ public class ConductorService {
      * @return ConductorResponseDTO con los datos del conductor guardado
      */
     @Transactional
-    public ConductorResponseDTO guardar(ConductorRequestDTO requestDTO) {
-        try {
-            UsuarioRequestDTO usuarioDTO = requestDTO.getUsuario();
-            Usuario usuario = new Usuario();
-            usuario.setUsername(usuarioDTO.getUsername());
-            usuario.setPassword(usuarioDTO.getPassword());
-            usuario.setRol(Rol.CONDUCTOR);
-
-            Conductor conductor = new Conductor();
-            conductor.setNombre(requestDTO.getNombre());
-            conductor.setApellidos(requestDTO.getApellidos());
-            conductor.setDni(requestDTO.getDni());
-            conductor.setDireccion(requestDTO.getDireccion());
-            conductor.setTelefono(requestDTO.getTelefono());
-            conductor.setFechaNacimiento(requestDTO.getFechaNacimiento());
-            conductor.setEmail(requestDTO.getEmail());
-            conductor.setUsuario(usuario);
-
-            usuarioRepositorio.save(usuario);
-            Conductor savedConductor = conductorRepositorio.save(conductor);
-
-            return new ConductorResponseDTO(
-                    savedConductor.getId(),
-                    savedConductor.getNombre(),
-                    savedConductor.getApellidos(),
-                    savedConductor.getDni(),
-                    savedConductor.getDireccion(),
-                    savedConductor.getTelefono(),
-                    savedConductor.getFechaNacimiento(),
-                    savedConductor.getEmail(),
-                    savedConductor.getUsuario().getId()
-            );
-
-        } catch (DataIntegrityViolationException e) {
-            throw new RuntimeException("Error de validación al guardar el conductor y usuario", e);
+    public ConductorResponseDTO guardar(ConductorRequestDTO requestDTO) throws UsernameAlredyExistsException {
+        if(usuarioRepositorio.findTopByUsername(requestDTO.getUsuario().getUsername()).isPresent()){
+            throw new UsernameAlredyExistsException(requestDTO.getUsuario().getUsername());
         }
-    }
+        Usuario u = usuarioService.crearUsuario(requestDTO.getUsuario());
+        Conductor c = Conductor.builder()
+                .nombre(requestDTO.getNombre())
+                .apellidos(requestDTO.getApellidos())
+                .dni(requestDTO.getDni())
+                .direccion(requestDTO.getDireccion())
+                .telefono(requestDTO.getTelefono())
+                .fechaNacimiento(requestDTO.getFechaNacimiento())
+                .email(requestDTO.getEmail())
+                .usuario(u)
+                .build();
 
+        u.setRol(Rol.CONDUCTOR);
+        conductorRepositorio.save(c);
+        return ConductorResponseDTO.ConductorResponseDtoFromConductor(c);
+    }
 
     /**
      * Método para editar un conductor existente.

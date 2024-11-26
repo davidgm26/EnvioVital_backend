@@ -4,6 +4,7 @@ import com.safa.enviovital.dto.ConductorRequestDTO;
 import com.safa.enviovital.dto.ConductorResponseDTO;
 import com.safa.enviovital.dto.ListaAlmacenesRegistradosByConductorDTO;
 import com.safa.enviovital.dto.VehiculoResponseDTO;
+import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.servicios.ConductorService;
 import lombok.AllArgsConstructor;
@@ -48,7 +49,7 @@ public class ConductorControlador {
      * @return ConductorResponseDTO con los datos del conductor guardado
      */
     @PostMapping("/guardar")
-    public ResponseEntity<ConductorResponseDTO> guardarConductor(@RequestBody ConductorRequestDTO requestDTO) {
+    public ResponseEntity<ConductorResponseDTO> guardarConductor(@RequestBody ConductorRequestDTO requestDTO) throws UsernameAlredyExistsException {
         return ResponseEntity.ok(conductorService.guardar(requestDTO));
     }
 

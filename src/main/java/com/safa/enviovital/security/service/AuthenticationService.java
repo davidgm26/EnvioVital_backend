@@ -80,7 +80,7 @@ public class AuthenticationService {
 
 
         if (!passwordEncoder.matches(changePasswordRequest.getOldPassword(), usuario.getPassword())) {
-            return false; // Si las contraseñas no coinciden, retornamos false
+            return false;
         }
 
 
