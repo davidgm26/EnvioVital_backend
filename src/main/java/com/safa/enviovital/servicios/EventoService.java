@@ -68,6 +68,12 @@ public class EventoService {
         return EventoResponseDto.EventoResponseDtoFromEvento(eventoRepository.save(event));
     }
 
+    public Evento cambiarEstadoEvento(int id){
+        Evento e = getEventoById(id);
+        e.setEsActivo(!e.getEsActivo());
+        return eventoRepository.save(e);
+    }
+
 //
 //    public void eliminarEvento(int id){
 //        Evento e = eventoRepository.findById(id).orElseThrow(EntityNotFoundException::new);

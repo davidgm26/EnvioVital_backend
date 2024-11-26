@@ -8,7 +8,6 @@ import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.excepciones.NotFoundException.UsuarioNotFoundException;
 import com.safa.enviovital.modelos.Usuario;
 import com.safa.enviovital.repositorios.UsuarioRepositorio;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

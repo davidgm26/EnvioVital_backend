@@ -56,8 +56,6 @@ public class EventoController {
 //        eventoService.eliminarEvento(id);
 //        return ResponseEntity.noContent().build();
 //    }
-//
-
     @GetMapping("/evento-inicio/{id}")
     private ResponseEntity<EventoRequestDto> getEventoRequestById(@PathVariable int id) {
         Evento evento = eventoService.getEventoById(id);
@@ -65,7 +63,10 @@ public class EventoController {
         return ResponseEntity.ok(requestDto);
     }
 
-
+    @PutMapping("/estado/{id}")
+    private ResponseEntity<EventoResponseDto> changeEventoStatus(@PathVariable int id){
+        return ResponseEntity.ok(EventoResponseDto.EventoResponseDtoFromEvento(eventoService.cambiarEstadoEvento(id)));
+    }
 
 
 

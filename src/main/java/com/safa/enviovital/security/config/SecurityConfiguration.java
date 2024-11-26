@@ -1,5 +1,6 @@
 package com.safa.enviovital.security.config;
 
+import com.safa.enviovital.enumerados.Rol;
 import com.safa.enviovital.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +40,11 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/almacenes/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/provincias/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/evento/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/almacenes/**", "/conductores/**").permitAll()
+                        .requestMatchers("/almacenes/**", "/conductores/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/almacenes/**", "conductores/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/evento/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/evento/**").hasAuthority(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/evento/**").hasRole("ADMIN")
                         .requestMatchers("/conductores/editar/").permitAll()
                         .requestMatchers("/usuarios/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
