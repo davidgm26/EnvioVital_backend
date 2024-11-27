@@ -2,6 +2,7 @@ package com.safa.enviovital.controladores;
 
 import com.safa.enviovital.dto.EventoRequestDto;
 import com.safa.enviovital.dto.EventoResponseDto;
+import com.safa.enviovital.dto.ProvinciaEventoDto;
 import com.safa.enviovital.modelos.Evento;
 import com.safa.enviovital.servicios.EventoService;
 import jakarta.persistence.NamedEntityGraph;
@@ -37,7 +38,7 @@ public class EventoController {
     }
 
     @GetMapping("/provincia/{id}")
-    private ResponseEntity<List<EventoResponseDto>> getEventosByProvincia(@PathVariable int id){
+    private ResponseEntity<List<ProvinciaEventoDto>> getEventosByProvincia(@PathVariable int id){
         return ResponseEntity.ok(eventoService.getEventoByProvincia(id));
     }
 
@@ -64,6 +65,11 @@ public class EventoController {
         EventoRequestDto requestDto = EventoRequestDto.TarjetaEventoInicio(evento);
         return ResponseEntity.ok(requestDto);
     }
+
+
+
+
+
 
 
 
