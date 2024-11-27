@@ -54,11 +54,9 @@ public class AlmacenService {
      * @param id ID del almacén
      * @return AlmacenResponseDTO
      */
-    public AlmacenResponseDTO getAlmacenPorId(Integer id) {
-        Almacen a = almacenRepositorio.findAlmacenById(id)
+    public Almacen getAlmacenPorId(Integer id) {
+        return almacenRepositorio.findAlmacenById(id)
                 .orElseThrow(() -> new AlmacenNotFoundException(id));
-
-        return AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(a);
     }
 
     public AlmacenResponseDTO getAlmacenByUsuarioId(Integer idUsuario) {
@@ -128,8 +126,7 @@ public class AlmacenService {
      * @return Respuesta con el mensaje de eliminación
      */
     public Response eliminar(Integer id) {
-        Almacen almacen = almacenRepositorio.findById(id)
-                .orElseThrow(() -> new AlmacenNotFoundException(id));
+        Almacen almacen = getAlmacenPorId(id);;
         almacenRepositorio.delete(almacen);
         return new Response(
                 "Almacén con ID " + id + " ha sido eliminado exitosamente",

@@ -3,6 +3,7 @@ package com.safa.enviovital.controladores;
 import com.safa.enviovital.dto.*;
 import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.excepciones.Response;
+import com.safa.enviovital.modelos.Almacen;
 import com.safa.enviovital.servicios.AlmacenService;
 import com.safa.enviovital.servicios.ConductorService;
 import lombok.AllArgsConstructor;
@@ -40,7 +41,8 @@ public class AlmacenControlador {
      */
     @GetMapping("/{id}")
     public ResponseEntity<AlmacenResponseDTO> obtenerAlmacenPorId(@PathVariable Integer id) {
-        return ResponseEntity.ok(almacenService.getAlmacenPorId(id));
+        Almacen a = almacenService.getAlmacenPorId(id);
+        return ResponseEntity.ok(AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(a));
     }
     @GetMapping("/usuario/{idUsuario}")
     public ResponseEntity<AlmacenResponseDTO> getAlmacenByUsuarioId(@PathVariable Integer idUsuario) {

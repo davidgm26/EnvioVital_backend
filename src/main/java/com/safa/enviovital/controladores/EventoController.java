@@ -51,17 +51,12 @@ public class EventoController {
         return ResponseEntity.ok(eventoService.editarEvento(id,eventoRequest));
     }
 
-//    @DeleteMapping("/{id}")
-//    private ResponseEntity<?> eliminarEvento(@PathVariable int id){
-//        eventoService.eliminarEvento(id);
-//        return ResponseEntity.noContent().build();
-//    }
-    @GetMapping("/evento-inicio/{id}")
-    private ResponseEntity<EventoRequestDto> getEventoRequestById(@PathVariable int id) {
-        Evento evento = eventoService.getEventoById(id);
-        EventoRequestDto requestDto = EventoRequestDto.TarjetaEventoInicio(evento);
-        return ResponseEntity.ok(requestDto);
+    @DeleteMapping("/{id}")
+    private ResponseEntity<?> eliminarEvento(@PathVariable int id){
+        eventoService.eliminarEvento(id);
+        return ResponseEntity.noContent().build();
     }
+
 
     @PutMapping("/estado/{id}")
     private ResponseEntity<EventoResponseDto> changeEventoStatus(@PathVariable int id){
