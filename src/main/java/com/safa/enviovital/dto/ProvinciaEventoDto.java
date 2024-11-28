@@ -13,6 +13,7 @@ public class ProvinciaEventoDto {
     private String nombre;
     private boolean activo;
     private String provincia;
+    private String descripcion;
 
     public static ProvinciaEventoDto filtroprovinciaevento (Evento evento) {
         return ProvinciaEventoDto.builder()
@@ -20,6 +21,7 @@ public class ProvinciaEventoDto {
                 .nombre(evento.getNombre())
                 .activo(evento.getEsActivo())
                 .provincia(evento.getProvincia().getNombre())
+                .descripcion(evento.getDescripcion())
                 .build();
 
     }
