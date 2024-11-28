@@ -181,6 +181,39 @@ public class AlmacenService {
         return lista.stream().map(EventoAlmacenDtoResponse::toDto).toList();
     }
 
+    public List<EventoAlmacenDtoResponse> obtenerAlmacenesPorEventoYProvincia(Integer idEvento, Integer idProvincia) {
+        // Obtener la provincia por su ID
+        Provincia provincia = provinciaService.getProvinciaById(idProvincia);
+
+        // Obtener todos los almacenes asociados a la provincia
+        List<Almacen> almacenesPorProvincia = almacenRepositorio.findByProvincia(provincia);
+
+        // Obtener todas las relaciones entre eventos y almacenes para el evento indicado
+        List<EventoAlmacen> lista = eventoAlmacenRepositorio.findEventoAlmacenByEventoId(idEvento);
+
+        // Filtrar las relaciones para incluir solo las que corresponden a almacenes de la provincia especificada
+        List<EventoAlmacen> filteredList = lista.stream()
+                .filter(eventoAlmacen -> almacenesPorProvincia.contains(eventoAlmacen.getAlmacen()))
+                .toList();
+
+        // Mapear las relaciones filtradas a DTOs y devolverlas
+        return filteredList.stream().map(EventoAlmacenDtoResponse::toDto).toList();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public List<ListaEventosByAlmacenDTO> obtenerEventoAlmacenPorAlmacen(Integer idAlmacen) {
         List<EventoAlmacen> lista = eventoAlmacenRepositorio.findEventoAlmacenByAlmacenId(idAlmacen);
         return lista.stream().map(ListaEventosByAlmacenDTO::toDto).toList();

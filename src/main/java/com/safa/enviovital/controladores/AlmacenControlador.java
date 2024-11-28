@@ -107,6 +107,17 @@ public class AlmacenControlador {
         return ResponseEntity.ok(almacenService.eliminarRegistroAlmacenEnEvento(eventoAlmacenId));
     }
 
+    // Endpoint para obtener almacenes por evento y provincia
+    @GetMapping
+    public ResponseEntity<List<EventoAlmacenDtoResponse>> obtenerAlmacenesPorEventoYProvincia(
+            @RequestParam("idEvento") Integer idEvento,
+            @RequestParam("idProvincia") Integer idProvincia) {
+        // Llamar al servicio para obtener los datos
+        List<EventoAlmacenDtoResponse> almacenes = almacenService.obtenerAlmacenesPorEventoYProvincia(idEvento, idProvincia);
+        // Retornar la respuesta
+        return ResponseEntity.ok(almacenes);
+    }
+
 
 
 
