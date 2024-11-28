@@ -21,7 +21,7 @@ public interface AlmacenRepositorio extends JpaRepository<Almacen, Integer> {
     @Query("SELECT c FROM Almacen c WHERE c.usuario.id = :idUsuario")
     Optional<Almacen> findAlmacenByUsuarioId(Integer idUsuario);
 
-    List<Evento> findByProvincia(Provincia provincia);
+    List<Almacen> findByProvincia(Provincia provincia);
 
 
 
