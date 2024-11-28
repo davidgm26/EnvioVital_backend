@@ -119,23 +119,6 @@ public class ConductorService {
         return ConductorResponseDTO.ConductorResponseDtoFromConductor(conductor);
     }
 
-    /**
-     * Método para eliminar un conductor.
-     * @param id ID del conductor a eliminar
-     * @return Respuesta con el mensaje de eliminación
-     */
-    public Response eliminar(Integer id) {
-        Conductor conductor = conductorRepositorio.findById(id)
-                .orElseThrow(() -> new ConductorNotFoundException("El conductor con ID " + id + " no existe"));
-
-        conductorRepositorio.delete(conductor);
-
-        return new Response(
-                "Conductor con ID " + id + " ha sido eliminado exitosamente",
-                HttpStatus.OK.value(),
-                LocalDateTime.now()
-        );
-    }
 
     public ResponseEntity<Response> registrarConductorEnEventoAlmacen(Integer eventoAlmacenId, Integer conductorId) {
         EventoAlmacen eventoAlmacen = eventoAlmacenRepositorio.findById(eventoAlmacenId)
@@ -200,6 +183,25 @@ public class ConductorService {
                 .email(dto.getEmail())
                 .build();
     }
+
+    public Conductor cambiarEstadoConductor(int id) {
+        Conductor c = conductorRepositorio.findById(id).get();
+        c.setEsActivo(!c.getEsActivo());
+        return conductorRepositorio.save(c);
+    }
+
+    /**
+     * Método para eliminar un conductor.
+     * @param id ID del conductor a eliminar
+     * @return Respuesta con el mensaje de eliminación
+     */
+    public void borrarConductor(int id) {
+        Conductor c = conductorRepositorio.findById(id).orElseThrow(() -> new ConductorNotFoundException("Conductor no encontrado"));
+        c.getVehiculos().remove(c);
+        c.getEventoAlmacenConductores().remove(c);
+        conductorRepositorio.delete(c);
+    }
+
 
     public List<VehiculoResponseDTO> getVehiculosByConductorId(Integer id){
         List<Vehiculo> vehiculos = vehiculoRepositorio.findVehiculosByConductorId(id);

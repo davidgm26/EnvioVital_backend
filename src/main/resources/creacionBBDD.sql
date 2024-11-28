@@ -33,7 +33,8 @@ CREATE TABLE ENVIOVITAL.CONDUCTOR
     telefono         VARCHAR(15),
     fecha_nacimiento DATE,
     email    		 VARCHAR(50) UNIQUE,
-    id_usuario       INT    NOT NULL
+    id_usuario       INT    NOT NULL,
+    es_activo        BOOLEAN default TRUE
 
 );
 
@@ -181,13 +182,13 @@ VALUES ('Camion'),
 
 
 
-INSERT INTO ENVIOVITAL.CONDUCTOR (nombre, apellidos, dni, direccion, telefono, id_usuario, fecha_nacimiento, email)
+INSERT INTO ENVIOVITAL.CONDUCTOR (nombre, apellidos, dni, direccion, telefono, id_usuario, fecha_nacimiento, email, es_activo)
 VALUES
-    ('Antonio', 'García López', '12345678A', 'Calle Gran Vía, Madrid', '612345678', 2, '1980-05-15', 'antonio.garcia@example.es'),
-    ('María', 'Martínez Sánchez', '12345679B', 'Calle Alcalá, Madrid', '622345678', 3, '1985-08-22', 'maria.martinez@example.es'),
-    ('Carlos', 'Rodríguez Gómez', '12345680C', 'Avenida Diagonal, Barcelona', '632345678', 4, '1990-01-30', 'carlos.rodriguez@example.es'),
-    ('Laura', 'Hernández Ruiz', '12345681D', 'Calle Serrano, Madrid', '642345678', 5, '1987-03-12', 'laura.hernandez@example.es'),
-    ('Pedro', 'López Fernández', '12345682E', 'Paseo de Gracia, Barcelona', '652345678', 6, '1982-11-25', 'pedro.lopez@example.es');
+    ('Antonio', 'García López', '12345678A', 'Calle Gran Vía, Madrid', '612345678', 2, '1980-05-15', 'antonio.garcia@example.es',FALSE),
+    ('María', 'Martínez Sánchez', '12345679B', 'Calle Alcalá, Madrid', '622345678', 3, '1985-08-22', 'maria.martinez@example.es',TRUE),
+    ('Carlos', 'Rodríguez Gómez', '12345680C', 'Avenida Diagonal, Barcelona', '632345678', 4, '1990-01-30', 'carlos.rodriguez@example.es',TRUE),
+    ('Laura', 'Hernández Ruiz', '12345681D', 'Calle Serrano, Madrid', '642345678', 5, '1987-03-12', 'laura.hernandez@example.es',TRUE),
+    ('Pedro', 'López Fernández', '12345682E', 'Paseo de Gracia, Barcelona', '652345678', 6, '1982-11-25', 'pedro.lopez@example.es',TRUE);
 
 
 INSERT INTO ENVIOVITAL.ALMACEN (nombre, descripcion, direccion, es_activo, id_provincia, id_usuario, email)

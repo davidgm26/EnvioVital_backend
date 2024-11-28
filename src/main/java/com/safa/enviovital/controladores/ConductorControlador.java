@@ -1,9 +1,6 @@
 package com.safa.enviovital.controladores;
 
-import com.safa.enviovital.dto.ConductorRequestDTO;
-import com.safa.enviovital.dto.ConductorResponseDTO;
-import com.safa.enviovital.dto.ListaAlmacenesRegistradosByConductorDTO;
-import com.safa.enviovital.dto.VehiculoResponseDTO;
+import com.safa.enviovital.dto.*;
 import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.servicios.ConductorService;
@@ -69,10 +66,9 @@ public class ConductorControlador {
      * @param id ID del conductor a eliminar
      */
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<Response> eliminarConductor(@PathVariable Integer id) {
-        Response respuesta = conductorService.eliminar(id);
-        return ResponseEntity.status(respuesta.getStatusCode()).body(respuesta);
-    }
+    public ResponseEntity<?> eliminarConductor(@PathVariable Integer id) {
+        conductorService.borrarConductor(id);
+        return ResponseEntity.noContent().build();    }
 
     /**
      * Endpoint para registrar un conductor en un EventoAlmacen.
@@ -102,6 +98,11 @@ public class ConductorControlador {
     @GetMapping("/vehiculosRegistrados/{conductorId}")
     public ResponseEntity<List<VehiculoResponseDTO>> listarVehiculosRegistradosByConductor(@PathVariable Integer conductorId) {
         return ResponseEntity.ok(conductorService.getVehiculosByConductorId(conductorId));
+    }
+
+    @PutMapping("/estado/{id}")
+    private ResponseEntity<ConductorResponseDTO> changeConductorStatus(@PathVariable int id){
+        return ResponseEntity.ok(ConductorResponseDTO.ConductorResponseDtoFromConductor(conductorService.cambiarEstadoConductor(id)));
     }
 
 
