@@ -45,6 +45,9 @@ public class Evento {
     @JsonIgnore
     private Set<EventoAlmacen> eventoAlmacenes = new HashSet<>();
 
+    @Column(name = "foto_url")
+    private String fotoUrl;
+
 
 
 }

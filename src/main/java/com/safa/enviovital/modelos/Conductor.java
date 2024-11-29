@@ -56,5 +56,8 @@ public class Conductor {
     @OneToMany(mappedBy = "conductor", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Vehiculo> vehiculos = new HashSet<>();
 
+    @Column(name = "foto_url")
+    private String fotoUrl;
+
 
 }
