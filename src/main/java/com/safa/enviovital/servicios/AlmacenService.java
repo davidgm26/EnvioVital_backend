@@ -69,18 +69,20 @@ public class AlmacenService {
 
     /**
      * Método para guardar un nuevo almacén.
+     *
      * @param requestDTO Datos del almacén a guardar
      * @return AlmacenResponseDTO con los datos del almacén guardado
      */
 
     @Transactional
-    public AlmacenResponseDTO guardar(AlmacenRequestDTO requestDTO) throws UsernameAlredyExistsException {
+    public AlmacenResponseDTO guardar(AlmacenRequestDTO requestDTO ) throws UsernameAlredyExistsException {
         try {
 
             Usuario u = usuarioService.crearUsuario(requestDTO.getUsuario());
             u.setRol(Rol.ALMACEN);
 
             // Crear el objeto Almacen sin guardarlo aún
+
             Almacen almacen = Almacen.builder()
                     .nombre(requestDTO.getNombre())
                     .direccion(requestDTO.getDireccion())
@@ -89,7 +91,6 @@ public class AlmacenService {
                     .esActivo(Boolean.TRUE)
                     .descripcion(requestDTO.getDescripcion())
                     .usuario(u)
-                    .fotoUrl(url)
                     .build();
 
 
