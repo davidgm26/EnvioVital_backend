@@ -116,11 +116,13 @@ public class AlmacenControlador {
 
     //Comprobar que subirFoto funciona
 
+    @CrossOrigin(origins = "http://localhost:4200") // Permitir solicitudes desde Angular
     @PostMapping(value="/testUpload", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> testUpload(@RequestPart("file") MultipartFile file) {
         String urlFoto = null;
         if (!file.isEmpty()) {
             urlFoto = fileStorageService.saveFile(file);
+            urlFoto = "http://localhost:8081/testUpload" + urlFoto;
         }
         return ResponseEntity.ok("Archivo subido correctamente: " + urlFoto);
     }
