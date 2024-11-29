@@ -159,17 +159,17 @@ VALUES ('Álava'),
        ('Zaragoza');
 
 
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (1, 'admin', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 0);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (7, 'almacen1', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (8, 'almacen2', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (9, 'almacen3', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (10, 'almacen4', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (11, 'almacen5', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (2, 'conductor1', '$2a$10$AIjQb5I4z5Jfwdb/cP/kUelcGGCYs3TVkGxiOcNOJ9mrcuosOs4le', 1);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (3, 'conductor2', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 1);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (4, 'conductor3', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 1);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (5, 'conductor4', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 1);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (6, 'conductor5', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 1);
+INSERT INTO enviovital.usuario ( username, password, rol) VALUES ('admin', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 0);
+INSERT INTO enviovital.usuario ( username, password, rol) VALUES ( 'almacen1', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
+INSERT INTO enviovital.usuario ( username, password, rol) VALUES ( 'almacen2', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
+INSERT INTO enviovital.usuario ( username, password, rol) VALUES ( 'almacen3', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
+INSERT INTO enviovital.usuario ( username, password, rol) VALUES ( 'almacen4', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
+INSERT INTO enviovital.usuario ( username, password, rol) VALUES ( 'almacen5', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
+INSERT INTO enviovital.usuario ( username, password, rol) VALUES ( 'conductor1', '$2a$10$AIjQb5I4z5Jfwdb/cP/kUelcGGCYs3TVkGxiOcNOJ9mrcuosOs4le', 1);
+INSERT INTO enviovital.usuario ( username, password, rol) VALUES ( 'conductor2', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 1);
+INSERT INTO enviovital.usuario ( username, password, rol) VALUES ('conductor3', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 1);
+INSERT INTO enviovital.usuario ( username, password, rol) VALUES ( 'conductor4', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 1);
+INSERT INTO enviovital.usuario ( username, password, rol) VALUES ( 'conductor5', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 1);
 
 
 

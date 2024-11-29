@@ -108,13 +108,12 @@ public class AlmacenService {
      */
     public AlmacenResponseDTO editar(Integer id, AlmacenEditarDTO requestDTO) {
 
-        Almacen almacen = almacenRepositorio.findById(id).orElseThrow( () -> new AlmacenNotFoundException(id));
+        Almacen almacen = getAlmacenPorId(id);
         almacen.setNombre(requestDTO.getNombre());
         almacen.setDescripcion(requestDTO.getDescripcion());
         almacen.setDireccion(requestDTO.getDireccion());
         almacen.setEmail(requestDTO.getEmail());
         almacen.setProvincia(provinciaService.getProvinciaById(requestDTO.getIdProvincia()));
-        usuarioService.guardarUsuario(almacen.getUsuario());
         almacenRepositorio.save(almacen);
 
         return AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(almacen);
@@ -166,6 +165,10 @@ public class AlmacenService {
         return ResponseEntity.ok(response);
     }
 
+    public Almacen guardarAlmacen(Almacen a){
+        return almacenRepositorio.save(a);
+    }
+
     /**
      * Método para obtener los almacenes registrados en un evento.
      * @param idEvento ID del evento
@@ -196,6 +199,16 @@ public class AlmacenService {
                 LocalDateTime.now()
         );
     }
+
+
+    public Almacen changeAlmacenState(int id){
+        Almacen a =  getAlmacenPorId(id);
+        a.setEsActivo(!a.getEsActivo());
+        return guardarAlmacen(a);
+    }
+
+
+//    public AlmacenResponseDTO
 
 
 

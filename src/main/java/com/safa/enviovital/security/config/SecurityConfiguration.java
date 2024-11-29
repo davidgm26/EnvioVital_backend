@@ -37,10 +37,9 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/almacenes/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/almacenes/**","/conductores/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/provincias/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/evento/**").permitAll()
-                        .requestMatchers("/almacenes/**", "/conductores/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/almacenes/**", "conductores/**","/evento/**").hasAuthority(Rol.ADMIN.name())
                         .requestMatchers(HttpMethod.POST, "/evento/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/evento/**").hasAuthority(Rol.ADMIN.name())

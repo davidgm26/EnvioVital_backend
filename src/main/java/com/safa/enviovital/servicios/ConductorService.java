@@ -67,6 +67,9 @@ public class ConductorService {
         return ConductorResponseDTO.ConductorResponseDtoFromConductor(conductor);
     }
 
+    public Conductor guardarConductor(Conductor c){
+        return conductorRepositorio.save(c);
+    }
 
 
     /**
@@ -75,48 +78,34 @@ public class ConductorService {
      * @return ConductorResponseDTO con los datos del conductor guardado
      */
     @Transactional
-    public ConductorResponseDTO guardar(ConductorRequestDTO requestDTO) throws UsernameAlredyExistsException {
+    public Conductor guardar(ConductorRequestDTO requestDTO) throws UsernameAlredyExistsException {
         if(usuarioRepositorio.findTopByUsername(requestDTO.getUsuario().getUsername()).isPresent()){
             throw new UsernameAlredyExistsException(requestDTO.getUsuario().getUsername());
         }
         Usuario u = usuarioService.crearUsuario(requestDTO.getUsuario());
-        Conductor c = Conductor.builder()
-                .nombre(requestDTO.getNombre())
-                .apellidos(requestDTO.getApellidos())
-                .dni(requestDTO.getDni())
-                .direccion(requestDTO.getDireccion())
-                .telefono(requestDTO.getTelefono())
-                .fechaNacimiento(requestDTO.getFechaNacimiento())
-                .email(requestDTO.getEmail())
-                .usuario(u)
-                .build();
-
+        var c =ConductorRequestDTO.conductorFromRequest(requestDTO);
         u.setRol(Rol.CONDUCTOR);
-        conductorRepositorio.save(c);
-        return ConductorResponseDTO.ConductorResponseDtoFromConductor(c);
+        c.setUsuario(u);
+        return conductorRepositorio.save(c);
+
     }
 
     /**
      * Método para editar un conductor existente.
      * @param id ID del conductor a editar
-     * @param requestDTO Datos del conductor a editar
+     * @param dto Datos del conductor a editar
      * @return ConductorResponseDTO con los datos del conductor editado
      */
-    public ConductorResponseDTO editar(Integer id, ConductorRequestDTO requestDTO) {
-        Conductor conductor = conductorRepositorio.findById(id)
-                .orElseThrow(() -> new ConductorNotFoundException("El conductor con ID " + id + " no existe"));
-
-        conductor.setNombre(requestDTO.getNombre());
-        conductor.setApellidos(requestDTO.getApellidos());
-        conductor.setDni(requestDTO.getDni());
-        conductor.setDireccion(requestDTO.getDireccion());
-        conductor.setTelefono(requestDTO.getTelefono());
-        conductor.setFechaNacimiento(requestDTO.getFechaNacimiento());
-        conductor.setEmail(requestDTO.getEmail());
-        usuarioService.guardarUsuario(conductor.getUsuario());
-        conductorRepositorio.save(conductor);
-
-        return ConductorResponseDTO.ConductorResponseDtoFromConductor(conductor);
+    public Conductor editar(Integer id, ConductorRequestDTO dto) {
+        Conductor c  = conductorRepositorio.findById(id).orElseThrow(() -> new ConductorNotFoundException("Conductor no encontrado"));
+        c.setNombre(dto.getNombre());
+        c.setApellidos(dto.getApellidos());
+        c.setDni(dto.getDni());
+        c.setDireccion(dto.getDireccion());
+        c.setTelefono(dto.getTelefono());
+        c.setFechaNacimiento(dto.getFechaNacimiento());
+        c.setEmail(dto.getEmail());
+        return guardarConductor(c);
     }
 
 

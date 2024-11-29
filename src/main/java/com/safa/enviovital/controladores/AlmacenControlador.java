@@ -109,6 +109,11 @@ public class AlmacenControlador {
         return ResponseEntity.ok(almacenService.eliminarRegistroAlmacenEnEvento(eventoAlmacenId));
     }
 
+    @PutMapping("/estado/{id}")
+    public ResponseEntity<AlmacenResponseDTO> changeAlmacenState(@PathVariable Integer id) {
+        return ResponseEntity.ok(AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(almacenService.changeAlmacenState(id)));
+    }
+
 
 
 

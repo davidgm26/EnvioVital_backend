@@ -3,6 +3,7 @@ package com.safa.enviovital.controladores;
 import com.safa.enviovital.dto.*;
 import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.excepciones.Response;
+import com.safa.enviovital.modelos.Conductor;
 import com.safa.enviovital.servicios.ConductorService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +48,7 @@ public class ConductorControlador {
      */
     @PostMapping("/guardar")
     public ResponseEntity<ConductorResponseDTO> guardarConductor(@RequestBody ConductorRequestDTO requestDTO) throws UsernameAlredyExistsException {
-        return ResponseEntity.ok(conductorService.guardar(requestDTO));
+        return ResponseEntity.ok(ConductorResponseDTO.ConductorResponseDtoFromConductor(conductorService.guardar(requestDTO)));
     }
 
     /**
@@ -58,7 +59,7 @@ public class ConductorControlador {
      */
     @PutMapping("/editar/{id}")
     public ResponseEntity<ConductorResponseDTO> editarConductor(@PathVariable Integer id, @RequestBody ConductorRequestDTO requestDTO) {
-        return ResponseEntity.ok(conductorService.editar(id, requestDTO));
+        return ResponseEntity.ok(ConductorResponseDTO.ConductorResponseDtoFromConductor(conductorService.editar(id, requestDTO)));
     }
 
     /**
@@ -101,7 +102,7 @@ public class ConductorControlador {
     }
 
     @PutMapping("/estado/{id}")
-    private ResponseEntity<ConductorResponseDTO> changeConductorStatus(@PathVariable int id){
+    private ResponseEntity<ConductorResponseDTO> changeConductorState(@PathVariable int id){
         return ResponseEntity.ok(ConductorResponseDTO.ConductorResponseDtoFromConductor(conductorService.cambiarEstadoConductor(id)));
     }
 
