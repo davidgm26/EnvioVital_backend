@@ -6,12 +6,16 @@ import com.safa.enviovital.dto.ListaAlmacenesRegistradosByConductorDTO;
 import com.safa.enviovital.dto.VehiculoResponseDTO;
 import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.excepciones.Response;
+import com.safa.enviovital.modelos.Conductor;
+import com.safa.enviovital.repositorios.ConductorRepositorio;
 import com.safa.enviovital.servicios.ConductorService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/conductores")
@@ -19,6 +23,8 @@ import java.util.List;
 public class ConductorControlador {
 
     private final ConductorService conductorService;
+
+    private final ConductorRepositorio conductorRepository;
 
     /**
      * Endpoint para obtener todos los conductores.
@@ -103,7 +109,16 @@ public class ConductorControlador {
     public ResponseEntity<List<VehiculoResponseDTO>> listarVehiculosRegistradosByConductor(@PathVariable Integer conductorId) {
         return ResponseEntity.ok(conductorService.getVehiculosByConductorId(conductorId));
     }
+    @GetMapping("/conductor/{idUsuario}")
+    public ResponseEntity<Integer> obtenerIdConductorPorUsuario(@PathVariable Integer idUsuario) {
 
+        Optional<Conductor> conductor = conductorRepository.findByIdUsuario(idUsuario);
+        if (conductor.isPresent()) {
+            return ResponseEntity.ok(conductor.get().getId());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 
 
 }

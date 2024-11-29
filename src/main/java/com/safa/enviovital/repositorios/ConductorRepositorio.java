@@ -25,6 +25,10 @@ public interface ConductorRepositorio extends JpaRepository<Conductor, Integer> 
     @Query("SELECT c FROM Conductor c WHERE c.usuario.id = :idUsuario")
     Optional<Conductor> findConductorByUsuarioId(Integer idUsuario);
 
+    @Query("SELECT c FROM Conductor c WHERE c.usuario.id = :idUsuario")
+    Optional<Conductor> findByIdUsuario(Integer idUsuario);
+
+
 
 
 
