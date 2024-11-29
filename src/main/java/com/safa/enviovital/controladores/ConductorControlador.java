@@ -7,9 +7,14 @@ import com.safa.enviovital.dto.VehiculoResponseDTO;
 import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.servicios.ConductorService;
+import com.safa.enviovital.servicios.FileStorageService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 
 import java.util.List;
 
@@ -18,7 +23,10 @@ import java.util.List;
 @AllArgsConstructor
 public class ConductorControlador {
 
+    @Autowired
     private final ConductorService conductorService;
+    @Autowired
+    private final FileStorageService fileStorageService;
 
     /**
      * Endpoint para obtener todos los conductores.
@@ -48,8 +56,13 @@ public class ConductorControlador {
      * @param requestDTO Datos del conductor a guardar
      * @return ConductorResponseDTO con los datos del conductor guardado
      */
-    @PostMapping("/guardar")
-    public ResponseEntity<ConductorResponseDTO> guardarConductor(@RequestBody ConductorRequestDTO requestDTO) throws UsernameAlredyExistsException {
+    @PostMapping(value="/guardar", consumes= MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ConductorResponseDTO> guardarConductor(@RequestPart("nuevo") ConductorRequestDTO requestDTO, @RequestPart("file") MultipartFile file) throws UsernameAlredyExistsException {
+        String urlFoto = null;
+        if (!file.isEmpty()) {
+            urlFoto = fileStorageService.saveFile(file);
+        }
+        requestDTO.setFotoUrl(urlFoto);
         return ResponseEntity.ok(conductorService.guardar(requestDTO));
     }
 

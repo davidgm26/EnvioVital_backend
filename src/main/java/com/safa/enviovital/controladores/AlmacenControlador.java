@@ -5,10 +5,14 @@ import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsExc
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.servicios.AlmacenService;
 import com.safa.enviovital.servicios.ConductorService;
+import com.safa.enviovital.servicios.FileStorageService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 
 import java.util.List;
 
@@ -21,7 +25,8 @@ public class AlmacenControlador {
     private final AlmacenService almacenService;
     @Autowired
     private final ConductorService conductorService;
-
+    @Autowired
+    private FileStorageService fileStorageService;
 
 
     /**
@@ -105,6 +110,19 @@ public class AlmacenControlador {
     @DeleteMapping("/eliminarRegistro/{eventoAlmacenId}")
     public ResponseEntity<Response> eliminarRegistro(@PathVariable Integer eventoAlmacenId) {
         return ResponseEntity.ok(almacenService.eliminarRegistroAlmacenEnEvento(eventoAlmacenId));
+    }
+
+
+
+    //Comprobar que subirFoto funciona
+
+    @PostMapping(value="/testUpload", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> testUpload(@RequestPart("file") MultipartFile file) {
+        String urlFoto = null;
+        if (!file.isEmpty()) {
+            urlFoto = fileStorageService.saveFile(file);
+        }
+        return ResponseEntity.ok("Archivo subido correctamente: " + urlFoto);
     }
 
 

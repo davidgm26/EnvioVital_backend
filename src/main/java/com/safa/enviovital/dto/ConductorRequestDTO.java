@@ -21,4 +21,6 @@ public class ConductorRequestDTO {
     private LocalDate fechaNacimiento;
     private String email;
     private UsuarioRequestDTO usuario;
+    private String fotoUrl;
+
 }

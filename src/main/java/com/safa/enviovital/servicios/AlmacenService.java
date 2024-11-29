@@ -3,7 +3,6 @@ package com.safa.enviovital.servicios;
 import com.safa.enviovital.dto.*;
 import com.safa.enviovital.enumerados.Rol;
 import com.safa.enviovital.excepciones.NotFoundException.AlmacenNotFoundException;
-import com.safa.enviovital.excepciones.NotFoundException.ConductorNotFoundException;
 import com.safa.enviovital.excepciones.NotFoundException.EventoAlmacenNotFoundException;
 import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.excepciones.Response;
@@ -90,6 +89,7 @@ public class AlmacenService {
                     .esActivo(Boolean.TRUE)
                     .descripcion(requestDTO.getDescripcion())
                     .usuario(u)
+                    .fotoUrl(url)
                     .build();
 
 
@@ -116,6 +116,7 @@ public class AlmacenService {
         almacen.setDireccion(requestDTO.getDireccion());
         almacen.setEmail(requestDTO.getEmail());
         almacen.setProvincia(provinciaService.getProvinciaById(requestDTO.getIdProvincia()));
+        almacen.setFotoUrl(almacen.getFotoUrl());
         usuarioService.guardarUsuario(almacen.getUsuario());
         almacenRepositorio.save(almacen);
 

@@ -31,6 +31,7 @@ public class AlmacenResponseDTO {
                 .idProvincia(almacen.getProvincia().getId())
                 .esActivo(almacen.getEsActivo())
                 .idUsuario(almacen.getUsuario().getId())
+                .fotoUrl(almacen.getFotoUrl())
                 .build();
     }
 }
