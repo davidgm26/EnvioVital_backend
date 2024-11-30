@@ -3,8 +3,8 @@ package com.safa.enviovital.controladores;
 import com.safa.enviovital.dto.*;
 import com.safa.enviovital.excepciones.NotFoundException.AlmacenNameAlredyExistsException;
 import com.safa.enviovital.excepciones.Response;
+import com.safa.enviovital.modelos.Almacen;
 import com.safa.enviovital.servicios.AlmacenService;
-import com.safa.enviovital.servicios.ConductorService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +19,6 @@ public class AlmacenControlador {
 
     @Autowired
     private final AlmacenService almacenService;
-    @Autowired
-    private final ConductorService conductorService;
-
-
 
     /**
      * Endpoint para obtener todos los almacenes.
@@ -40,7 +36,12 @@ public class AlmacenControlador {
      */
     @GetMapping("/{id}")
     public ResponseEntity<AlmacenResponseDTO> obtenerAlmacenPorId(@PathVariable Integer id) {
-        return ResponseEntity.ok(almacenService.getAlmacenPorId(id));
+        Almacen a = almacenService.getAlmacenPorId(id);
+        return ResponseEntity.ok(AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(a));
+    }
+    @GetMapping("/usuario/{idUsuario}")
+    public ResponseEntity<AlmacenResponseDTO> getAlmacenByUsuarioId(@PathVariable Integer idUsuario) {
+        return ResponseEntity.ok(almacenService.getAlmacenByUsuarioId(idUsuario));
     }
 
     /**
@@ -102,6 +103,12 @@ public class AlmacenControlador {
     public ResponseEntity<Response> eliminarRegistro(@PathVariable Integer eventoAlmacenId) {
         return ResponseEntity.ok(almacenService.eliminarRegistroAlmacenEnEvento(eventoAlmacenId));
     }
+
+    @PutMapping("/estado/{id}")
+    public ResponseEntity<AlmacenResponseDTO> changeAlmacenState(@PathVariable Integer id) {
+        return ResponseEntity.ok(AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(almacenService.changeAlmacenState(id)));
+    }
+
 
 
 

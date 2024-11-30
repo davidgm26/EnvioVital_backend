@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 @Builder
 public class EventoResponseDto {
 
+    private Integer id;
     private String nombre;
     private String descripcion;
     private boolean activo;
@@ -21,8 +22,10 @@ public class EventoResponseDto {
     private Set<EventoAlmacenDtoResponse> almacenes;
 
 
+
     public static EventoResponseDto EventoResponseDtoFromEvento(Evento evento) {
         return EventoResponseDto.builder()
+                .id(evento.getId())
                 .descripcion(evento.getDescripcion())
                 .nombre(evento.getNombre())
                 .activo(evento.getEsActivo())
@@ -32,6 +35,8 @@ public class EventoResponseDto {
                                 .map(EventoAlmacenDtoResponse::toDto)
                                 .collect(Collectors.toSet())
                 )
+
+
                 .build();
     }
 

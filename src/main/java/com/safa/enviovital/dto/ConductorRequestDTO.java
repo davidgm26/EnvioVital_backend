@@ -1,5 +1,6 @@
 package com.safa.enviovital.dto;
 
+import com.safa.enviovital.modelos.Conductor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,4 +22,18 @@ public class ConductorRequestDTO {
     private LocalDate fechaNacimiento;
     private String email;
     private UsuarioRequestDTO usuario;
+
+    public static Conductor conductorFromRequest(ConductorRequestDTO dto) {
+        return Conductor.builder()
+                .email(dto.getEmail())
+                .nombre(dto.getNombre())
+                .apellidos(dto.getApellidos())
+                .dni(dto.getDni())
+                .direccion(dto.getDireccion())
+                .telefono(dto.getTelefono())
+                .fechaNacimiento(dto.getFechaNacimiento())
+                .build();
+
+    }
+
 }

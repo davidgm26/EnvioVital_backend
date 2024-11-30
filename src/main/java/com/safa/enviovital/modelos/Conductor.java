@@ -2,6 +2,7 @@ package com.safa.enviovital.modelos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jdk.jshell.Snippet;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(exclude = {"usuario", "eventoAlmacenConductores"})
+@Builder
 public class Conductor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +45,9 @@ public class Conductor {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(name = "es_activo")
+    private Boolean esActivo;
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id")
     @JsonIgnore
@@ -50,4 +55,9 @@ public class Conductor {
 
     @OneToMany(mappedBy = "conductor", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<EventoAlmacenConductor> eventoAlmacenConductores = new HashSet<>();
+
+    @OneToMany(mappedBy = "conductor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Vehiculo> vehiculos = new HashSet<>();
+
+
 }

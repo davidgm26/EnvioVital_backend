@@ -30,6 +30,7 @@ public class TipoVehiculoService {
 
     /**
      * Método que retorna un tipo de vehículo por su ID sin usar streams ni bucles.
+     *
      * @param id ID del tipo de vehículo
      * @return TipoVehiculoResponseDTO o excepción si no existe
      */
@@ -80,5 +81,12 @@ public class TipoVehiculoService {
                 HttpStatus.OK.value(),
                 LocalDateTime.now()
         );
+    }
+
+    public TipoVehiculo fromDTO(TipoVehiculoResponseDTO tipoVehiculo) {
+        return TipoVehiculo.builder()
+                .id(tipoVehiculo.getId())
+                .nombre(tipoVehiculo.getNombre())
+                .build();
     }
 }
