@@ -107,6 +107,12 @@ public class AlmacenControlador {
         return ResponseEntity.ok(almacenService.eliminarRegistroAlmacenEnEvento(eventoAlmacenId));
     }
 
+    @GetMapping("/listaConductores/{almacenId}")
+    public ResponseEntity<List<ConductorResponseDTO>> obtenerConductoresPorAlmacen(@PathVariable Integer almacenId) {
+        List<ConductorResponseDTO> conductores = almacenService.obtenerConductoresPorAlmacen(almacenId);
+        return ResponseEntity.ok(conductores);
+    }
+
 
 
 

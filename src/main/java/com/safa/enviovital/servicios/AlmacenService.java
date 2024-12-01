@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -35,6 +36,7 @@ public class AlmacenService {
 
     @Autowired
     private final EventoAlmacenRepositorio eventoAlmacenRepositorio;
+    private final EventoAlmacenConductorRepositorio eventoAlmacenConductorRepositorio;
     @Autowired
     private EventoService eventoService;
 
@@ -198,6 +200,16 @@ public class AlmacenService {
                 HttpStatus.OK.value(),
                 LocalDateTime.now()
         );
+    }
+
+    public List<ConductorResponseDTO> obtenerConductoresPorAlmacen(Integer almacenId) {
+        List<EventoAlmacenConductor> eventoAlmacenConductores = eventoAlmacenConductorRepositorio.findByEventoAlmacenId_AlmacenId(almacenId);
+        Set<Conductor> uniqueConductors = eventoAlmacenConductores.stream()
+                .map(EventoAlmacenConductor::getConductor)
+                .collect(Collectors.toSet());
+        return uniqueConductors.stream()
+                .map(ConductorResponseDTO::ConductorResponseDtoFromConductor)
+                .collect(Collectors.toList());
     }
 
 
