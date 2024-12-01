@@ -33,8 +33,10 @@ CREATE TABLE ENVIOVITAL.CONDUCTOR
     direccion        VARCHAR(500),
     telefono         VARCHAR(15),
     fecha_nacimiento DATE,
-    email            VARCHAR(50) UNIQUE,
-    id_usuario       INT    NOT NULL
+    email    		 VARCHAR(50) UNIQUE,
+    id_usuario       INT    NOT NULL,
+    es_activo        BOOLEAN default TRUE
+
 );
 
 CREATE TABLE ENVIOVITAL.ALMACEN
@@ -157,37 +159,27 @@ VALUES ('Álava'),
        ('Zaragoza');
 
 
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (1, 'admin', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 0);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (7, 'almacen1', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (8, 'almacen2', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (9, 'almacen3', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (10, 'almacen4', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (11, 'almacen5', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (2, 'conductor1', '$2a$10$AIjQb5I4z5Jfwdb/cP/kUelcGGCYs3TVkGxiOcNOJ9mrcuosOs4le', 1);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (3, 'conductor2', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 1);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (4, 'conductor3', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 1);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (5, 'conductor4', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 1);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (6, 'conductor5', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 1);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (12, 'almacen6', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (13, 'almacenr7', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (14, 'almacen8', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (15, 'almacen9', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (16, 'almacen10', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (17, 'almacen11', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (18, 'almacen12', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (19, 'almacen13', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (20, 'almacen14', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
-INSERT INTO enviovital.usuario (id, username, password, rol) VALUES (21, 'almacen15', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
-
-
-
-
-
-
-
-
-
-
+INSERT INTO enviovital.usuario (username, password, rol) VALUES ('admin', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 0);
+INSERT INTO enviovital.usuario (username, password, rol) VALUES ('almacen1', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
+INSERT INTO enviovital.usuario (username, password, rol) VALUES ('almacen2', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
+INSERT INTO enviovital.usuario (username, password, rol) VALUES ('almacen3', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
+INSERT INTO enviovital.usuario (username, password, rol) VALUES ('almacen4', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
+INSERT INTO enviovital.usuario (username, password, rol) VALUES ('almacen5', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
+INSERT INTO enviovital.usuario (username, password, rol) VALUES ('conductor1', '$2a$10$AIjQb5I4z5Jfwdb/cP/kUelcGGCYs3TVkGxiOcNOJ9mrcuosOs4le', 1);
+INSERT INTO enviovital.usuario (username, password, rol) VALUES ('conductor2', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 1);
+INSERT INTO enviovital.usuario (username, password, rol) VALUES ('conductor3', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 1);
+INSERT INTO enviovital.usuario (username, password, rol) VALUES ('conductor4', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 1);
+INSERT INTO enviovital.usuario (username, password, rol) VALUES ('conductor5', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 1);
+INSERT INTO enviovital.usuario (username, password, rol) VALUES ('almacen6', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
+INSERT INTO enviovital.usuario (username, password, rol) VALUES ('almacenr7', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
+INSERT INTO enviovital.usuario (username, password, rol) VALUES ('almacen8', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
+INSERT INTO enviovital.usuario (username, password, rol) VALUES ('almacen9', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
+INSERT INTO enviovital.usuario (username, password, rol) VALUES ('almacen10', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
+INSERT INTO enviovital.usuario (username, password, rol) VALUES ('almacen11', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
+INSERT INTO enviovital.usuario (username, password, rol) VALUES ('almacen12', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
+INSERT INTO enviovital.usuario (username, password, rol) VALUES ('almacen13', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
+INSERT INTO enviovital.usuario (username, password, rol) VALUES ('almacen14', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
+INSERT INTO enviovital.usuario (username, password, rol) VALUES ('almacen15', '$2a$10$SYnbgV9pDlVVN6A9Mip7P.JjlUFoZqsSynYhmew0PrEM2wwPXa7.C', 2);
 
 
 
@@ -200,7 +192,7 @@ VALUES ('Camion'),
 
 
 
-INSERT INTO ENVIOVITAL.CONDUCTOR (nombre, apellidos, dni, direccion, telefono, id_usuario, fecha_nacimiento, email)
+INSERT INTO ENVIOVITAL.CONDUCTOR (nombre, apellidos, dni, direccion, telefono, id_usuario, fecha_nacimiento, email, es_activo)
 VALUES
     ('Antonio', 'García López', '12345678A', 'Calle Gran Vía, Madrid', '612345678', 2, '1980-05-15', 'antonio.garcia@example.es'),
     ('María', 'Martínez Sánchez', '12345679B', 'Calle Alcalá, Madrid', '622345678', 3, '1985-08-22', 'maria.martinez@example.es'),
