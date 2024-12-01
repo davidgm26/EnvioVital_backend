@@ -32,9 +32,8 @@ public class AlmacenService {
     private ProvinciaService provinciaService;
     @Autowired
     private UsuarioService usuarioService;
-
     @Autowired
-    private final EventoAlmacenRepositorio eventoAlmacenRepositorio;
+    private  EventoAlmacenRepositorio eventoAlmacenRepositorio;
     @Autowired
     private EventoService eventoService;
     @Autowired
@@ -76,10 +75,16 @@ public class AlmacenService {
      */
 
     @Transactional
-    public AlmacenResponseDTO guardar(AlmacenRequestDTO requestDTO) throws AlmacenNameAlredyExistsException {
-        Almacen almacen = AlmacenRequestDTO.AlmacenRequestDtoToAlmacen(requestDTO);
-        return AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(almacen);
-
+    public Almacen guardar(AlmacenRequestDTO requestDTO) throws AlmacenNameAlredyExistsException, UsernameAlredyExistsException {
+        Provincia provincia = provinciaService.getProvinciaById(requestDTO.getIdProvincia());
+        Usuario u = usuarioService.crearUsuario(requestDTO.getUsuario());
+        Almacen almacen = AlmacenRequestDTO.AlmacenRequestDtoToAlmacen(requestDTO,provincia);
+        u.setRol(Rol.ALMACEN);
+        almacen.setUsuario(u);
+        almacen.setEsActivo(true);
+        usuarioService.guardarUsuario(u);
+        emailService.sendRegistrationEmail(almacen.getEmail(), almacen.getNombre());
+        return guardarAlmacen(almacen);
     }
 
     /**

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 
@@ -19,7 +20,7 @@ public class ConductorRequestDTO {
     private String dni;
     private String direccion;
     private String telefono;
-    private LocalDate fechaNacimiento;
+    private String fechaNacimiento;
     private String email;
     private UsuarioRequestDTO usuario;
 
@@ -31,7 +32,7 @@ public class ConductorRequestDTO {
                 .dni(dto.getDni())
                 .direccion(dto.getDireccion())
                 .telefono(dto.getTelefono())
-                .fechaNacimiento(dto.getFechaNacimiento())
+                .fechaNacimiento(LocalDate.parse(dto.getFechaNacimiento()))
                 .build();
 
     }

@@ -2,6 +2,7 @@ package com.safa.enviovital.controladores;
 
 import com.safa.enviovital.dto.*;
 import com.safa.enviovital.excepciones.NotFoundException.AlmacenNameAlredyExistsException;
+import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.modelos.Almacen;
 import com.safa.enviovital.servicios.AlmacenService;
@@ -50,8 +51,8 @@ public class AlmacenControlador {
      * @return AlmacenResponseDTO con los datos del almacén guardado
      */
     @PostMapping("/guardar")
-    public ResponseEntity<AlmacenResponseDTO> guardarAlmacen(@RequestBody AlmacenRequestDTO requestDTO) throws AlmacenNameAlredyExistsException {
-        return ResponseEntity.ok(almacenService.guardar(requestDTO));
+    public ResponseEntity<AlmacenResponseDTO> guardarAlmacen(@RequestBody AlmacenRequestDTO requestDTO) throws AlmacenNameAlredyExistsException, UsernameAlredyExistsException {
+        return ResponseEntity.ok(AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(almacenService.guardar(requestDTO)));
     }
 
     /**

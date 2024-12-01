@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -24,18 +25,26 @@ import java.util.Optional;
 public class ConductorService {
 
     @Autowired
-    private final ConductorRepositorio conductorRepositorio;
+    private  ConductorRepositorio conductorRepositorio;
 
-    private final UsuarioRepositorio usuarioRepositorio;
+    @Autowired
+    private  UsuarioRepositorio usuarioRepositorio;
 
-    private final EventoAlmacenRepositorio eventoAlmacenRepositorio;
+    @Autowired
+    private  EventoAlmacenRepositorio eventoAlmacenRepositorio;
 
-    private final EventoAlmacenConductorRepositorio eventoAlmacenConductorRepositorio;
-    
-    private final VehiculoRepositorio vehiculoRepositorio;
+    @Autowired
+    private  EventoAlmacenConductorRepositorio eventoAlmacenConductorRepositorio;
+
+
+    @Autowired
+    private  VehiculoRepositorio vehiculoRepositorio;
 
     @Autowired
     private  UsuarioService usuarioService;
+
+    @Autowired
+    private EmailService emailService;
 
     /**
      * Método para obtener todos los conductores.
@@ -56,7 +65,6 @@ public class ConductorService {
                 .orElseThrow(() -> new ConductorNotFoundException(id));
     }
 
-    // GET /conductores/usuario/{idUsuario} hazlo sin dto, usar el builder de ConductorResponse
     public ConductorResponseDTO getConductorByUsuarioId(Integer idUsuario) {
         Conductor conductor = conductorRepositorio.findConductorByUsuarioId(idUsuario)
                 .orElseThrow(() -> new ConductorNotFoundException("No se ha encontrado ningún conductor con el usuario ID " + idUsuario));
@@ -82,7 +90,9 @@ public class ConductorService {
         var c =ConductorRequestDTO.conductorFromRequest(requestDTO);
         u.setRol(Rol.CONDUCTOR);
         c.setUsuario(u);
-        return conductorRepositorio.save(c);
+        c.setEsActivo(true);
+        emailService.sendRegistrationEmail(c.getEmail(),c.getNombre());
+        return guardarConductor(c);
 
     }
 
@@ -99,7 +109,7 @@ public class ConductorService {
         c.setDni(dto.getDni());
         c.setDireccion(dto.getDireccion());
         c.setTelefono(dto.getTelefono());
-        c.setFechaNacimiento(dto.getFechaNacimiento());
+        c.setFechaNacimiento(LocalDate.parse(dto.getFechaNacimiento()));
         c.setEmail(dto.getEmail());
         return guardarConductor(c);
     }
