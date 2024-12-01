@@ -22,6 +22,7 @@ public class ConductorResponseDTO {
     private LocalDate fechaNacimiento;
     private String email;
     private Integer idUsuario;
+    private boolean activo;
 
     public static ConductorResponseDTO ConductorResponseDtoFromConductor(Conductor conductor) {
         return ConductorResponseDTO.builder()
@@ -34,6 +35,7 @@ public class ConductorResponseDTO {
                 .fechaNacimiento(conductor.getFechaNacimiento())
                 .email(conductor.getEmail())
                 .idUsuario(conductor.getUsuario().getId())
+                .activo(conductor.getEsActivo())
                 .build();
     }
 

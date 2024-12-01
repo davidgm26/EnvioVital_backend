@@ -102,6 +102,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(AlmacenNameAlredyExistsException.class)
+    public ResponseEntity<Response> handleAlmacenNameAlredyExistsException(AlmacenNameAlredyExistsException ex) {
+        Response errorResponse = new Response(
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(UsernameAlredyExistsException.class)
     public ResponseEntity<Response>handleUsernameAlredyExistsException(UsernameAlredyExistsException ex) {
         Response errorResponse = new Response(
@@ -109,7 +120,29 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 LocalDateTime.now()
         );
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(AlmacenEmailAlredyExistsException.class)
+    public ResponseEntity<Response> handleAlmacenEmailAlredyExistsException(AlmacenEmailAlredyExistsException ex) {
+        Response errorResponse = new Response(
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AlmacenUsuarioAlredyExistsException.class)
+    public ResponseEntity<Response> handleAlmacenUsuarioAlredyExistsException(AlmacenUsuarioAlredyExistsException ex) {
+        Response errorResponse = new Response(
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)

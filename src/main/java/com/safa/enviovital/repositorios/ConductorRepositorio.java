@@ -13,11 +13,11 @@ import java.util.Optional;
 @Repository
 public interface ConductorRepositorio extends JpaRepository<Conductor, Integer> {
 
-    @Query("SELECT new com.safa.enviovital.dto.ConductorResponseDTO(c.id, c.nombre, c.apellidos, c.dni, c.direccion, c.telefono, c.fechaNacimiento, c.email, c.usuario.id) " +
+    @Query("SELECT new com.safa.enviovital.dto.ConductorResponseDTO(c.id, c.nombre, c.apellidos, c.dni, c.direccion, c.telefono, c.fechaNacimiento, c.email, c.usuario.id, c.esActivo) " +
             "FROM Conductor c WHERE c.id = :id")
     Optional<ConductorResponseDTO> findConductorByIdWithDTO(Integer id);
 
-    @Query("SELECT new com.safa.enviovital.dto.ConductorResponseDTO(c.id, c.nombre, c.apellidos, c.dni, c.direccion, c.telefono, c.fechaNacimiento, c.email, c.usuario.id) " +
+    @Query("SELECT new com.safa.enviovital.dto.ConductorResponseDTO(c.id, c.nombre, c.apellidos, c.dni, c.direccion, c.telefono, c.fechaNacimiento, c.email, c.usuario.id, c.esActivo) " +
             "FROM Conductor c")
     List<ConductorResponseDTO> findAllConductoresWithDTO();
 
