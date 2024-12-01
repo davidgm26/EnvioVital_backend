@@ -222,7 +222,6 @@ VALUES
     ('Almacén Navarrete', 'Almacenes navarros central', 'Calle Madrid, 29, 40995 Navarra', TRUE, 33, 21, 'sur.jatttttnaga@example.es', NULL);
 
 
-select * from provincia p ;
 
 INSERT INTO ENVIOVITAL.EVENTO (nombre, descripcion, es_activo, id_provincia, foto_url)
 VALUES
