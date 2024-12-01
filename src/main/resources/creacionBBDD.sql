@@ -3,7 +3,6 @@ DROP SCHEMA IF EXISTS ENVIOVITAL CASCADE;
 CREATE SCHEMA IF NOT EXISTS ENVIOVITAL;
 
 
--- Create tables
 CREATE TABLE ENVIOVITAL.PROVINCIA
 (
     id     SERIAL NOT NULL PRIMARY KEY,
@@ -48,7 +47,8 @@ CREATE TABLE ENVIOVITAL.ALMACEN
     email        VARCHAR(50) UNIQUE,
     es_activo    BOOLEAN  DEFAULT TRUE,
     id_provincia SMALLINT NOT NULL,
-    id_usuario   INT      NOT NULL
+    id_usuario   INT      NOT NULL,
+    foto_url VARCHAR(255)
 );
 
 CREATE TABLE ENVIOVITAL.EVENTO
@@ -57,7 +57,8 @@ CREATE TABLE ENVIOVITAL.EVENTO
     nombre       VARCHAR(50),
     descripcion  VARCHAR(500),
     es_activo    BOOLEAN,
-    id_provincia SMALLINT NOT NULL
+    id_provincia SMALLINT NOT NULL,
+    foto_url VARCHAR(255)
 );
 
 CREATE TABLE ENVIOVITAL.VEHICULO
@@ -101,10 +102,6 @@ ALTER TABLE ENVIOVITAL.VEHICULO
     ADD CONSTRAINT FK_VEHICULO_CONDUCTOR FOREIGN KEY (id_conductor) REFERENCES ENVIOVITAL.CONDUCTOR (id);
 ALTER TABLE ENVIOVITAL.VEHICULO
     ADD CONSTRAINT FK_VEHICULO_TIPOVEHICULO FOREIGN KEY (id_tipo_vehiculo) REFERENCES ENVIOVITAL.TIPOVEHICULO (id);
-ALTER TABLE ENVIOVITAL.EVENTO ADD COLUMN foto_url VARCHAR(255);
-ALTER TABLE enviovital.almacen
-    ADD COLUMN foto_url VARCHAR(255);
-
 
 
 INSERT INTO ENVIOVITAL.PROVINCIA (nombre)
@@ -194,16 +191,16 @@ VALUES ('Camion'),
 
 INSERT INTO ENVIOVITAL.CONDUCTOR (nombre, apellidos, dni, direccion, telefono, id_usuario, fecha_nacimiento, email, es_activo)
 VALUES
-    ('Antonio', 'García López', '12345678A', 'Calle Gran Vía, Madrid', '612345678', 2, '1980-05-15', 'antonio.garcia@example.es'),
-    ('María', 'Martínez Sánchez', '12345679B', 'Calle Alcalá, Madrid', '622345678', 3, '1985-08-22', 'maria.martinez@example.es'),
-    ('Carlos', 'Rodríguez Gómez', '12345680C', 'Avenida Diagonal, Barcelona', '632345678', 4, '1990-01-30', 'carlos.rodriguez@example.es'),
-    ('Laura', 'Hernández Ruiz', '12345681D', 'Calle Serrano, Madrid', '642345678', 5, '1987-03-12', 'laura.hernandez@example.es'),
-    ('Pedro', 'López Fernández', '12345682E', 'Paseo de Gracia, Barcelona', '652345678', 6, '1982-11-25', 'pedro.lopez@example.es'),
-    ('Alba', 'Vidal Galan', '12345000E', 'Paseo de Gracia, Barcelona', '652345608', 7, '1980-11-25', 'ala.lz@example.com'),
-    ('Antonio', 'Perez Garcia', '10045000E', 'Paseo de Gracia, Barcelona', '600345608', 8, '1988-12-22', 'anala.lyz@example.com'),
-    ('Luis', 'Ferraz Lope', '47340693Y', 'Cañada Real, Lebrija', '722443099', 9, '1995-11-11', 'payasa@live.com'),
-    ('Pablo', 'Pedroso Perez', '47340690I', 'Calle Gol, Sevilla', '722443000', 10, '1990-01-01', 'pedroso@live.com'),
-    ('Alberto', 'Gordez Pino', '46320994H', ' Calle Calatrava, 89', '722443770', 11, '1991-09-09', 'pineo@live.com');
+    ('Antonio', 'García López', '12345678A', 'Calle Gran Vía, Madrid', '612345678', 2, '1980-05-15', 'antonio.garcia@example.es',TRUE),
+    ('María', 'Martínez Sánchez', '12345679B', 'Calle Alcalá, Madrid', '622345678', 3, '1985-08-22', 'maria.martinez@example.es',TRUE),
+    ('Carlos', 'Rodríguez Gómez', '12345680C', 'Avenida Diagonal, Barcelona', '632345678', 4, '1990-01-30', 'carlos.rodriguez@example.es',TRUE),
+    ('Laura', 'Hernández Ruiz', '12345681D', 'Calle Serrano, Madrid', '642345678', 5, '1987-03-12', 'laura.hernandez@example.es',TRUE),
+    ('Pedro', 'López Fernández', '12345682E', 'Paseo de Gracia, Barcelona', '652345678', 6, '1982-11-25', 'pedro.lopez@example.es',TRUE),
+    ('Alba', 'Vidal Galan', '12345000E', 'Paseo de Gracia, Barcelona', '652345608', 7, '1980-11-25', 'ala.lz@example.com',TRUE),
+    ('Antonio', 'Perez Garcia', '10045000E', 'Paseo de Gracia, Barcelona', '600345608', 8, '1988-12-22', 'anala.lyz@example.com',TRUE),
+    ('Luis', 'Ferraz Lope', '47340693Y', 'Cañada Real, Lebrija', '722443099', 9, '1995-11-11', 'payasa@live.com',TRUE),
+    ('Pablo', 'Pedroso Perez', '47340690I', 'Calle Gol, Sevilla', '722443000', 10, '1990-01-01', 'pedroso@live.com',TRUE),
+    ('Alberto', 'Gordez Pino', '46320994H', ' Calle Calatrava, 89', '722443770', 11, '1991-09-09', 'pineo@live.com',TRUE);
 
 
 INSERT INTO ENVIOVITAL.ALMACEN (nombre, descripcion, direccion, es_activo, id_provincia, id_usuario, email, foto_url)
