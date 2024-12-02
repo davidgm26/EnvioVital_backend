@@ -18,8 +18,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
-import org.springframework.security.web.firewall.HttpFirewall;
-import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 @Configuration
 @RequiredArgsConstructor
@@ -46,6 +44,8 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.PUT, "conductores/**").hasAnyAuthority(Rol.ADMIN.name(),Rol.CONDUCTOR.name())
                         .requestMatchers("/conductores/editar/").permitAll()
                         .requestMatchers(HttpMethod.POST, "/almacenes/**", "/conductores/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/almacenes/**", "conductores/**").permitAll()
+                        .requestMatchers("/conductores/editar/","/tiposVehiculo/**","/vehiculos/**","/provincias/**","/almacenes/guardar", "/conductores/guardar", "conductores/vehiculosRegistrados/**").permitAll()
                         .requestMatchers("/usuarios/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()

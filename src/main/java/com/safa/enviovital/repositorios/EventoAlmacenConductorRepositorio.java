@@ -16,6 +16,8 @@ public interface EventoAlmacenConductorRepositorio extends JpaRepository<EventoA
 
     List<EventoAlmacenConductor> findEventoAlmacenConductorByConductorId(Integer conductorId);
 
+    List<EventoAlmacenConductor> findByEventoAlmacenId_AlmacenId(Integer almacenId);
+
 
 
 }

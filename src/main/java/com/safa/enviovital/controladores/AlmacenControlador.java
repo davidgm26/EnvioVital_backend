@@ -105,6 +105,12 @@ public class AlmacenControlador {
         return ResponseEntity.ok(almacenService.eliminarRegistroAlmacenEnEvento(eventoAlmacenId));
     }
 
+    @GetMapping("/listaConductores/{almacenId}")
+    public ResponseEntity<List<ConductorResponseDTO>> obtenerConductoresPorAlmacen(@PathVariable Integer almacenId) {
+        List<ConductorResponseDTO> conductores = almacenService.obtenerConductoresPorAlmacen(almacenId);
+        return ResponseEntity.ok(conductores);
+    }
+    
     @PutMapping("/estado/{id}")
     public ResponseEntity<AlmacenResponseDTO> changeAlmacenState(@PathVariable Integer id) {
         return ResponseEntity.ok(AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(almacenService.changeAlmacenState(id)));
