@@ -1,5 +1,6 @@
 package com.safa.enviovital.security.config;
 
+import com.safa.enviovital.enumerados.Rol;
 import com.safa.enviovital.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
-import org.springframework.security.web.firewall.HttpFirewall;
-import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 @Configuration
 @RequiredArgsConstructor
@@ -36,9 +35,14 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/almacenes/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/almacenes/**","/conductores/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/provincias/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/evento/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/almacenes/**", "conductores/**","/evento/**").hasAuthority(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/evento/**").hasAuthority(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "/evento/**").hasAuthority(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "conductores/**").hasAnyAuthority(Rol.ADMIN.name(),Rol.CONDUCTOR.name())
+                        .requestMatchers("/conductores/editar/").permitAll()
                         .requestMatchers(HttpMethod.POST, "/almacenes/**", "/conductores/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/almacenes/**", "conductores/**").permitAll()
                         .requestMatchers("/conductores/editar/","/tiposVehiculo/**","/vehiculos/**","/provincias/**","/almacenes/guardar", "/conductores/guardar", "conductores/vehiculosRegistrados/**").permitAll()

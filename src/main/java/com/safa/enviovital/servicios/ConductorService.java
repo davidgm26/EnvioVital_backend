@@ -11,11 +11,11 @@ import com.safa.enviovital.repositorios.*;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -25,21 +25,26 @@ import java.util.Optional;
 public class ConductorService {
 
     @Autowired
-    private final ConductorRepositorio conductorRepositorio;
+    private  ConductorRepositorio conductorRepositorio;
 
-    private final UsuarioRepositorio usuarioRepositorio;
+    @Autowired
+    private  UsuarioRepositorio usuarioRepositorio;
+
+    @Autowired
+    private  EventoAlmacenRepositorio eventoAlmacenRepositorio;
+
+    @Autowired
+    private  EventoAlmacenConductorRepositorio eventoAlmacenConductorRepositorio;
 
 
-    private final EventoAlmacenRepositorio eventoAlmacenRepositorio;
-
-    private final EventoAlmacenConductorRepositorio eventoAlmacenConductorRepositorio;
-
-    private final AlmacenRepositorio almacenRepositorio;
-
-    private final VehiculoRepositorio vehiculoRepositorio;
+    @Autowired
+    private  VehiculoRepositorio vehiculoRepositorio;
 
     @Autowired
     private  UsuarioService usuarioService;
+
+    @Autowired
+    private EmailService emailService;
 
     /**
      * Método para obtener todos los conductores.
@@ -60,13 +65,15 @@ public class ConductorService {
                 .orElseThrow(() -> new ConductorNotFoundException(id));
     }
 
-    // GET /conductores/usuario/{idUsuario} hazlo sin dto, usar el builder de ConductorResponse
     public ConductorResponseDTO getConductorByUsuarioId(Integer idUsuario) {
         Conductor conductor = conductorRepositorio.findConductorByUsuarioId(idUsuario)
                 .orElseThrow(() -> new ConductorNotFoundException("No se ha encontrado ningún conductor con el usuario ID " + idUsuario));
         return ConductorResponseDTO.ConductorResponseDtoFromConductor(conductor);
     }
 
+    public Conductor guardarConductor(Conductor c){
+        return conductorRepositorio.save(c);
+    }
 
 
     /**
@@ -74,68 +81,39 @@ public class ConductorService {
      * @param requestDTO Datos del conductor a guardar
      * @return ConductorResponseDTO con los datos del conductor guardado
      */
-    @Transactional
-    public ConductorResponseDTO guardar(ConductorRequestDTO requestDTO) throws UsernameAlredyExistsException {
+    @Transactional    
+    public Conductor guardar(ConductorRequestDTO requestDTO) throws UsernameAlredyExistsException {
         if(usuarioRepositorio.findTopByUsername(requestDTO.getUsuario().getUsername()).isPresent()){
             throw new UsernameAlredyExistsException(requestDTO.getUsuario().getUsername());
         }
         Usuario u = usuarioService.crearUsuario(requestDTO.getUsuario());
-        Conductor c = Conductor.builder()
-                .nombre(requestDTO.getNombre())
-                .apellidos(requestDTO.getApellidos())
-                .dni(requestDTO.getDni())
-                .direccion(requestDTO.getDireccion())
-                .telefono(requestDTO.getTelefono())
-                .fechaNacimiento(requestDTO.getFechaNacimiento())
-                .email(requestDTO.getEmail())
-                .usuario(u)
-                .build();
-
+        var c =ConductorRequestDTO.conductorFromRequest(requestDTO);
         u.setRol(Rol.CONDUCTOR);
-        conductorRepositorio.save(c);
-        return ConductorResponseDTO.ConductorResponseDtoFromConductor(c);
+        c.setUsuario(u);
+        c.setEsActivo(true);
+        emailService.sendRegistrationEmail(c.getEmail(),c.getNombre());
+        return guardarConductor(c);
+
     }
 
     /**
      * Método para editar un conductor existente.
      * @param id ID del conductor a editar
-     * @param requestDTO Datos del conductor a editar
+     * @param dto Datos del conductor a editar
      * @return ConductorResponseDTO con los datos del conductor editado
      */
-    public ConductorResponseDTO editar(Integer id, ConductorRequestDTO requestDTO) {
-        Conductor conductor = conductorRepositorio.findById(id)
-                .orElseThrow(() -> new ConductorNotFoundException("El conductor con ID " + id + " no existe"));
-
-        conductor.setNombre(requestDTO.getNombre());
-        conductor.setApellidos(requestDTO.getApellidos());
-        conductor.setDni(requestDTO.getDni());
-        conductor.setDireccion(requestDTO.getDireccion());
-        conductor.setTelefono(requestDTO.getTelefono());
-        conductor.setFechaNacimiento(requestDTO.getFechaNacimiento());
-        conductor.setEmail(requestDTO.getEmail());
-        usuarioService.guardarUsuario(conductor.getUsuario());
-        conductorRepositorio.save(conductor);
-
-        return ConductorResponseDTO.ConductorResponseDtoFromConductor(conductor);
+    public Conductor editar(Integer id, ConductorRequestDTO dto) {
+        Conductor c  = conductorRepositorio.findById(id).orElseThrow(() -> new ConductorNotFoundException("Conductor no encontrado"));
+        c.setNombre(dto.getNombre());
+        c.setApellidos(dto.getApellidos());
+        c.setDni(dto.getDni());
+        c.setDireccion(dto.getDireccion());
+        c.setTelefono(dto.getTelefono());
+        c.setFechaNacimiento(LocalDate.parse(dto.getFechaNacimiento()));
+        c.setEmail(dto.getEmail());
+        return guardarConductor(c);
     }
 
-    /**
-     * Método para eliminar un conductor.
-     * @param id ID del conductor a eliminar
-     * @return Respuesta con el mensaje de eliminación
-     */
-    public Response eliminar(Integer id) {
-        Conductor conductor = conductorRepositorio.findById(id)
-                .orElseThrow(() -> new ConductorNotFoundException("El conductor con ID " + id + " no existe"));
-
-        conductorRepositorio.delete(conductor);
-
-        return new Response(
-                "Conductor con ID " + id + " ha sido eliminado exitosamente",
-                HttpStatus.OK.value(),
-                LocalDateTime.now()
-        );
-    }
 
     public ResponseEntity<Response> registrarConductorEnEventoAlmacen(Integer eventoAlmacenId, Integer conductorId) {
         EventoAlmacen eventoAlmacen = eventoAlmacenRepositorio.findById(eventoAlmacenId)
@@ -200,6 +178,25 @@ public class ConductorService {
                 .email(dto.getEmail())
                 .build();
     }
+
+    public Conductor cambiarEstadoConductor(int id) {
+        Conductor c = conductorRepositorio.findById(id).get();
+        c.setEsActivo(!c.getEsActivo());
+        return conductorRepositorio.save(c);
+    }
+
+    /**
+     * Método para eliminar un conductor.
+     * @param id ID del conductor a eliminar
+     * @return Respuesta con el mensaje de eliminación
+     */
+    public void borrarConductor(int id) {
+        Conductor c = conductorRepositorio.findById(id).orElseThrow(() -> new ConductorNotFoundException("Conductor no encontrado"));
+        c.getVehiculos().remove(c);
+        c.getEventoAlmacenConductores().remove(c);
+        conductorRepositorio.delete(c);
+    }
+
 
     public List<VehiculoResponseDTO> getVehiculosByConductorId(Integer id){
         List<Vehiculo> vehiculos = vehiculoRepositorio.findVehiculosByConductorId(id);

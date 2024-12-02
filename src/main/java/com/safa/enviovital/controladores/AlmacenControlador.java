@@ -1,10 +1,11 @@
 package com.safa.enviovital.controladores;
 
 import com.safa.enviovital.dto.*;
+import com.safa.enviovital.excepciones.NotFoundException.AlmacenNameAlredyExistsException;
 import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.excepciones.Response;
+import com.safa.enviovital.modelos.Almacen;
 import com.safa.enviovital.servicios.AlmacenService;
-import com.safa.enviovital.servicios.ConductorService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +20,6 @@ public class AlmacenControlador {
 
     @Autowired
     private final AlmacenService almacenService;
-    @Autowired
-    private final ConductorService conductorService;
-
-
 
     /**
      * Endpoint para obtener todos los almacenes.
@@ -40,7 +37,8 @@ public class AlmacenControlador {
      */
     @GetMapping("/{id}")
     public ResponseEntity<AlmacenResponseDTO> obtenerAlmacenPorId(@PathVariable Integer id) {
-        return ResponseEntity.ok(almacenService.getAlmacenPorId(id));
+        Almacen a = almacenService.getAlmacenPorId(id);
+        return ResponseEntity.ok(AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(a));
     }
     @GetMapping("/usuario/{idUsuario}")
     public ResponseEntity<AlmacenResponseDTO> getAlmacenByUsuarioId(@PathVariable Integer idUsuario) {
@@ -53,8 +51,8 @@ public class AlmacenControlador {
      * @return AlmacenResponseDTO con los datos del almacén guardado
      */
     @PostMapping("/guardar")
-    public ResponseEntity<AlmacenResponseDTO> guardarAlmacen(@RequestBody AlmacenRequestDTO requestDTO)throws UsernameAlredyExistsException {
-        return ResponseEntity.ok(almacenService.guardar(requestDTO));
+    public ResponseEntity<AlmacenResponseDTO> guardarAlmacen(@RequestBody AlmacenRequestDTO requestDTO) throws AlmacenNameAlredyExistsException, UsernameAlredyExistsException {
+        return ResponseEntity.ok(AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(almacenService.guardar(requestDTO)));
     }
 
     /**
@@ -111,6 +109,11 @@ public class AlmacenControlador {
     public ResponseEntity<List<ConductorResponseDTO>> obtenerConductoresPorAlmacen(@PathVariable Integer almacenId) {
         List<ConductorResponseDTO> conductores = almacenService.obtenerConductoresPorAlmacen(almacenId);
         return ResponseEntity.ok(conductores);
+    }
+    
+    @PutMapping("/estado/{id}")
+    public ResponseEntity<AlmacenResponseDTO> changeAlmacenState(@PathVariable Integer id) {
+        return ResponseEntity.ok(AlmacenResponseDTO.AlmacenResponseDtoFromAlmacen(almacenService.changeAlmacenState(id)));
     }
 
 
