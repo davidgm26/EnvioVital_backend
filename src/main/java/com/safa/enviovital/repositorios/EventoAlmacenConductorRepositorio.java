@@ -1,8 +1,6 @@
 package com.safa.enviovital.repositorios;
 
-import com.safa.enviovital.modelos.Almacen;
-import com.safa.enviovital.modelos.Conductor;
-import com.safa.enviovital.modelos.Evento;
+
 import com.safa.enviovital.modelos.EventoAlmacenConductor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
@@ -19,6 +17,7 @@ public interface EventoAlmacenConductorRepositorio extends JpaRepository<EventoA
 
     Optional<EventoAlmacenConductor> findEventoAlmacenConductorByConductorIdAndEventoAlmacenId(@Param("conductorId") Integer conductorId, @Param("eventoAlmacenId") Integer eventoAlmacenId);
 
+    List<EventoAlmacenConductor> findByEventoAlmacenId_AlmacenId(Integer almacenId);
 
 
 

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +33,8 @@ public class AlmacenService {
     private ProvinciaService provinciaService;
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
+    private  EventoAlmacenConductorRepositorio eventoAlmacenConductorRepositorio;
     @Autowired
     private  EventoAlmacenRepositorio eventoAlmacenRepositorio;
     @Autowired
@@ -188,6 +191,16 @@ public class AlmacenService {
                 "Se ha eliminado correctamente el registro " + EventoAlmacenId + ".",
                 HttpStatus.OK.value(),
                 LocalDateTime.now());
+    }
+
+    public List<ConductorResponseDTO> obtenerConductoresPorAlmacen(Integer almacenId) {
+        List<EventoAlmacenConductor> eventoAlmacenConductores = eventoAlmacenConductorRepositorio.findByEventoAlmacenId_AlmacenId(almacenId);
+        Set<Conductor> uniqueConductors = eventoAlmacenConductores.stream()
+                .map(EventoAlmacenConductor::getConductor)
+                .collect(Collectors.toSet());
+        return uniqueConductors.stream()
+                .map(ConductorResponseDTO::ConductorResponseDtoFromConductor)
+                .collect(Collectors.toList());
     }
 
     public Almacen changeAlmacenState(int id) {

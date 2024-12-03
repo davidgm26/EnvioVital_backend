@@ -46,6 +46,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/almacenes/**", "/conductores/**").permitAll()
                         .requestMatchers("/usuarios/**","/provincias/**").permitAll()
                         .requestMatchers("/conductores/editar/","/tiposVehiculo/**","/vehiculos/**","/provincias/**","/almacenes/guardar", "/conductores/guardar").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/almacenes/**", "conductores/**").permitAll()
                         .requestMatchers("/usuarios/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
