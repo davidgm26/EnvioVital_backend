@@ -165,4 +165,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
+
+    @ExceptionHandler(YaInscritoEnEventoAlmacen.class)
+    public ResponseEntity<Response>handleYaInscritoEnEventoAlmacen(YaInscritoEnEventoAlmacen ex) {
+        Response errorResponse = new Response(
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
 }

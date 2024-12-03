@@ -4,12 +4,16 @@ import com.safa.enviovital.dto.*;
 import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.excepciones.Response;
 import com.safa.enviovital.modelos.Conductor;
+import com.safa.enviovital.modelos.EventoAlmacenConductor;
+import com.safa.enviovital.repositorios.ConductorRepositorio;
 import com.safa.enviovital.servicios.ConductorService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/conductores")
@@ -17,6 +21,8 @@ import java.util.List;
 public class ConductorControlador {
 
     private final ConductorService conductorService;
+
+    private final ConductorRepositorio conductorRepository;
 
     /**
      * Endpoint para obtener todos los conductores.
@@ -77,17 +83,18 @@ public class ConductorControlador {
      * @param conductorId ID del conductor
      * @return ResponseEntity con el mensaje de éxito o error
      */
-    @PostMapping("/registrarse/{eventoAlmacenId}/{conductorId}")
-    public ResponseEntity<Response> registrarConductorEnEventoAlmacen(
+    @PostMapping("/registrarse/{eventoAlmacenId}/{conductorId}/{almacenId}")
+    public ResponseEntity<EventoAlmacenConductorDto> registrarConductorEnEventoAlmacen(
             @PathVariable Integer eventoAlmacenId,
-            @PathVariable Integer conductorId) {
-        return conductorService.registrarConductorEnEventoAlmacen(eventoAlmacenId, conductorId);
+            @PathVariable Integer conductorId,
+            @PathVariable Integer almacenId) {
+        return conductorService.registrarConductorEnEventoAlmacen(eventoAlmacenId, conductorId,almacenId);
     }
 
     @GetMapping("/almacenesRegistrados/{conductorId}")
     public ResponseEntity<List<ListaAlmacenesRegistradosByConductorDTO>> listarAlmacenesRegistradosByConductor(@PathVariable Integer conductorId) {
-        return ResponseEntity.ok(conductorService.obtenerEventoAlmacenPorConductor(conductorId));
-    }
+         return ResponseEntity.ok(conductorService.obtenerEventoAlmacenPorConductor(conductorId));
+    }   
 
     @DeleteMapping("/eliminarRegistro/{eventoAlmacenConductorId}")
     public ResponseEntity<Response> eliminarRegistro(@PathVariable Integer eventoAlmacenConductorId) {
@@ -95,15 +102,18 @@ public class ConductorControlador {
     }
 
     // endpoint para obtener los vehiculos registrados de un conductor
-
     @GetMapping("/vehiculosRegistrados/{conductorId}")
     public ResponseEntity<List<VehiculoResponseDTO>> listarVehiculosRegistradosByConductor(@PathVariable Integer conductorId) {
         return ResponseEntity.ok(conductorService.getVehiculosByConductorId(conductorId));
     }
-
     @PutMapping("/estado/{id}")
     private ResponseEntity<ConductorResponseDTO> changeConductorState(@PathVariable int id){
         return ResponseEntity.ok(ConductorResponseDTO.ConductorResponseDtoFromConductor(conductorService.cambiarEstadoConductor(id)));
+    }
+
+    @GetMapping("/inscripcion/{idEventoAlmacen}/{idConductor}/{idAlmacen}")
+    private ResponseEntity<Boolean> comprobarInscripcion(@PathVariable int idEventoAlmacen,@PathVariable int idConductor,@PathVariable int idAlmacen) {
+        return ResponseEntity.ok(conductorService.conductorInscritoEnEventoAlmacen(idEventoAlmacen, idConductor,idAlmacen));
     }
 
 

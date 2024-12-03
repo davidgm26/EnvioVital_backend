@@ -4,7 +4,6 @@ import com.safa.enviovital.dto.EventoRequestDto;
 import com.safa.enviovital.dto.EventoResponseDto;
 import com.safa.enviovital.modelos.Evento;
 import com.safa.enviovital.servicios.EventoService;
-import jakarta.persistence.NamedEntityGraph;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

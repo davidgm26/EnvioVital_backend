@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventoAlmacenDtoResponse {
+    private Integer id;
     private Integer idEvento;
     private Integer idAlmacen;
     private String nombreAlmacen;
@@ -17,6 +18,7 @@ public class EventoAlmacenDtoResponse {
 
     public static EventoAlmacenDtoResponse toDto(EventoAlmacen eventoAlmacen) {
         return EventoAlmacenDtoResponse.builder()
+                .id(eventoAlmacen.getId())
                 .idEvento(eventoAlmacen.getEvento().getId())
                 .idAlmacen(eventoAlmacen.getAlmacen().getId())
                 .nombreAlmacen(eventoAlmacen.getAlmacen().getNombre())
