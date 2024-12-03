@@ -8,6 +8,14 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -19,21 +27,29 @@ public class TipoVehiculoControlador {
 
     private final TipoVehiculoService tipoVehiculoService;
 
-    /**
-     * Endpoint para obtener todos los tipos de vehículos.
-     * @return Lista de tipos de vehículos
-     */
+    @Operation(summary = "Obtén la lista de todos los tipos de vehículos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Se han obtenido la lista de los tipos de vehículos correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TipoVehiculoResponseDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "No tienes autorización para realizar esta petición", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Se ha expirado el token JWT o no tienes acceso para realizar esta petición debido a tu rol", content = @Content),
+            @ApiResponse(responseCode = "404", description = "No se ha encontrado la lista de tipos de vehículos", content = @Content)
+    })
     @GetMapping("/lista")
     public ResponseEntity<List<TipoVehiculoResponseDTO>> listarTiposVehiculo() {
         return ResponseEntity.ok(tipoVehiculoService.getAll());
     }
 
-    /**
-     * Endpoint para obtener un tipo de vehículo por su ID.
-     *
-     * @param id ID del tipo de vehículo
-     * @return TipoVehiculoResponseDTO
-     */
+    @Operation(summary = "Obtén un tipo de vehículo por su ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Se ha obtenido el tipo de vehículo correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TipoVehiculoResponseDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "No tienes autorización para realizar esta petición", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Se ha expirado el token JWT o no tienes acceso para realizar esta petición debido a tu rol", content = @Content),
+            @ApiResponse(responseCode = "404", description = "No se ha encontrado el tipo de vehículo", content = @Content)
+    })
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerTipoVehiculoPorId(@PathVariable Integer id) {
         try {
@@ -45,31 +61,41 @@ public class TipoVehiculoControlador {
         }
     }
 
-    /**
-     * Endpoint para guardar un nuevo tipo de vehículo.
-     * @param requestDTO Datos del tipo de vehículo a guardar
-     * @return TipoVehiculoResponseDTO con los datos del tipo de vehículo guardado
-     */
+    @Operation(summary = "Guarda un nuevo tipo de vehículo")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Se ha guardado el tipo de vehículo correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TipoVehiculoResponseDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "No tienes autorización para realizar esta petición", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Se ha expirado el token JWT o no tienes acceso para realizar esta petición debido a tu rol", content = @Content),
+            @ApiResponse(responseCode = "404", description = "No se ha encontrado el tipo de vehículo", content = @Content)
+    })
     @PostMapping("/guardar")
     public ResponseEntity<TipoVehiculoResponseDTO> guardarTipoVehiculo(@RequestBody TipoVehiculoRequestDTO requestDTO) {
         return ResponseEntity.ok(tipoVehiculoService.guardar(requestDTO));
     }
 
-    /**
-     * Endpoint para editar un tipo de vehículo.
-     * @param id ID del tipo de vehículo a editar
-     * @param requestDTO Datos del tipo de vehículo a editar
-     * @return TipoVehiculoResponseDTO con los datos del tipo de vehículo editado
-     */
+    @Operation(summary = "Edita un tipo de vehículo")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Se ha editado el tipo de vehículo correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TipoVehiculoResponseDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "No tienes autorización para realizar esta petición", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Se ha expirado el token JWT o no tienes acceso para realizar esta petición debido a tu rol", content = @Content),
+            @ApiResponse(responseCode = "404", description = "No se ha encontrado el tipo de vehículo", content = @Content)
+    })
     @PutMapping("/editar/{id}")
     public ResponseEntity<TipoVehiculoResponseDTO> editarTipoVehiculo(@PathVariable Integer id, @RequestBody TipoVehiculoRequestDTO requestDTO) {
         return ResponseEntity.ok(tipoVehiculoService.editar(id, requestDTO));
     }
 
-    /**
-     * Endpoint para eliminar un tipo de vehículo.
-     * @param id ID del tipo de vehículo a eliminar
-     */
+    @Operation(summary = "Elimina un tipo de vehículo")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Se ha eliminado el tipo de vehículo correctamente", content = @Content),
+            @ApiResponse(responseCode = "401", description = "No tienes autorización para realizar esta petición", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Se ha expirado el token JWT o no tienes acceso para realizar esta petición debido a tu rol", content = @Content),
+            @ApiResponse(responseCode = "404", description = "No se ha encontrado el tipo de vehículo", content = @Content)
+    })
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<Response> eliminarTipoVehiculo(@PathVariable Integer id) {
         Response respuesta = tipoVehiculoService.eliminar(id);
