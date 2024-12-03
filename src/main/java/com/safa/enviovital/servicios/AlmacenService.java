@@ -14,7 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +40,9 @@ public class AlmacenService {
     private final EventoAlmacenRepositorio eventoAlmacenRepositorio;
     @Autowired
     private EventoService eventoService;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
 
     /**
@@ -203,7 +210,65 @@ public class AlmacenService {
     }
 
 
+    /**
+     * Método para obtener un almacén por el nombre de usuario.
+     * @param username Nombre de usuario
+     * @return Optional con el almacén si se encuentra, o vacío si no se encuentra
+     */
+
+
+    public Optional<Almacen> obtenerAlmacenPorUsername(String username) {
+        return almacenRepositorio.findAlmacenByUsername(username);
+    }
 
 
 
+    public ResponseEntity<String> subirFotoAlmacen(MultipartFile file) {
+        //Extraemos el nombre de usuario del token
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String  username = authentication.getName(); //Obtener el nombre de usuario del token
+
+        // Buscar el almacén asociado al usuario
+        Optional<Almacen> almacenOptional = obtenerAlmacenPorUsername(username);
+        if (almacenOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Almacén inexistente en el usuario: " + username);
+        }
+
+        Almacen almacen = almacenOptional.get();
+
+        // Verificar si el achivo está vacío
+        if (file.isEmpty()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("El archivo está vacío");
+        }
+
+        //Guardar el archivo y generar la URL
+        String urlFoto = fileStorageService.saveFile(file);
+        urlFoto = "http://localhost:8081/uploads/" + urlFoto; // Ajustar según tu configuración
+
+        //Actualizar la URL en el servicio
+        actualizarFotoUrl(almacen, urlFoto);
+
+        return ResponseEntity.ok("Archivo subido correctamente. URL: " + urlFoto);
+    }
+
+
+    public Almacen actualizarFotoUrl(Almacen almacen, String urlFoto) {
+        // Actualizar la propiedad fotoUrl del almacén
+        almacen.setFotoUrl(urlFoto);
+
+        // Guardar los cambios en el repositorio
+        almacenRepositorio.save(almacen);
+
+        // Devolver el objeto Almacen actualizado
+        return almacen;
+    }
 }
+
+
+
+
+
+
+

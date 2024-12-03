@@ -3,18 +3,25 @@ package com.safa.enviovital.controladores;
 import com.safa.enviovital.dto.*;
 import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.excepciones.Response;
+import com.safa.enviovital.modelos.Almacen;
 import com.safa.enviovital.servicios.AlmacenService;
 import com.safa.enviovital.servicios.ConductorService;
 import com.safa.enviovital.servicios.FileStorageService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/almacenes")
@@ -116,18 +123,12 @@ public class AlmacenControlador {
 
     //Comprobar que subirFoto funciona
 
-    @CrossOrigin(origins = "http://localhost:4200") // Permitir solicitudes desde Angular
     @PostMapping(value="/testUpload", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> testUpload(@RequestPart("file") MultipartFile file) {
-        String urlFoto = null;
-        if (!file.isEmpty()) {
-            urlFoto = fileStorageService.saveFile(file);
-            urlFoto = "http://localhost:8081/testUpload" + urlFoto;
-        }
-        return ResponseEntity.ok("Archivo subido correctamente: " + urlFoto);
+        return almacenService.subirFotoAlmacen(file);
+
+
     }
-
-
 
 
 

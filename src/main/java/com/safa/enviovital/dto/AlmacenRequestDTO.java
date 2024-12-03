@@ -16,4 +16,5 @@ public class AlmacenRequestDTO {
     private String email;
     private Integer idProvincia;
     private UsuarioRequestDTO usuario;
+    private String fotoUrl;
 }
