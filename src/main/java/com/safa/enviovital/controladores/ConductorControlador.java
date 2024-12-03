@@ -117,6 +117,15 @@ public class ConductorControlador {
         return ResponseEntity.ok(conductorService.getVehiculosByConductorId(conductorId));
     }
 
+    //Comprobar que subirFoto funciona
+
+    @PostMapping(value="/testUpload", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> testUpload(@RequestPart("file") MultipartFile file) {
+        return conductorService.subirFotoConductor(file);
+
+
+    }
+
 
 
 }

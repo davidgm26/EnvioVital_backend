@@ -14,7 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,6 +40,9 @@ public class ConductorService {
     private final AlmacenRepositorio almacenRepositorio;
 
     private final VehiculoRepositorio vehiculoRepositorio;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @Autowired
     private  UsuarioService usuarioService;
@@ -205,5 +211,66 @@ public class ConductorService {
         List<Vehiculo> vehiculos = vehiculoRepositorio.findVehiculosByConductorId(id);
         return vehiculos.stream().map(VehiculoResponseDTO::VehiculoResponseDTOfromVehiculo).toList();
     }
+
+    /**
+     * Método para obtener un conductor por el nombre de usuario.
+     * @param username Nombre de usuario
+     * @return Optional con el conductor si se encuentra, o vacío si no se encuentra
+     */
+
+    public Optional<Conductor> obtenerConductorPorUsername(String username) {
+        return conductorRepositorio.findConductorByUsername(username);
+    }
+
+
+    public ResponseEntity<String> subirFotoConductor(MultipartFile file) {
+        //Extraemos el nombre de usuario del token
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String  username = authentication.getName(); //Obtener el nombre de usuario del token
+
+        // Buscar el conductor asociado al usuario
+        Optional<Conductor> conductorOptional = obtenerConductorPorUsername(username);
+        if (conductorOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Conductor inexistente en el usuario: " + username);
+        }
+
+        Conductor conductor = conductorOptional.get();
+
+        // Verificar si el achivo está vacío
+        if (file.isEmpty()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("El archivo está vacío");
+        }
+
+        //Guardar el archivo y generar la URL
+        String urlFoto = fileStorageService.saveFile(file);
+        urlFoto = "http://localhost:8081/uploads/" + urlFoto; // Ajustar según tu configuración
+
+        //Actualizar la URL en el servicio
+        actualizarFotoUrl(conductor, urlFoto);
+
+        return ResponseEntity.ok("Archivo subido correctamente. URL: " + urlFoto);
+    }
+
+
+    public Conductor actualizarFotoUrl(Conductor conductor, String urlFoto) {
+        // Actualizar la propiedad fotoUrl del conductor
+        conductor.setFotoUrl(urlFoto);
+
+        // Guardar los cambios en el repositorio
+
+        conductorRepositorio.save(conductor);
+
+        // Devolver el objeto Conductor actualizado
+        return conductor;
+    }
+
+
+
+
+
+
+
 
 }

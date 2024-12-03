@@ -1,6 +1,7 @@
 package com.safa.enviovital.repositorios;
 
 import com.safa.enviovital.dto.ConductorResponseDTO;
+import com.safa.enviovital.modelos.Almacen;
 import com.safa.enviovital.modelos.Conductor;
 import com.safa.enviovital.modelos.Vehiculo;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,6 +25,9 @@ public interface ConductorRepositorio extends JpaRepository<Conductor, Integer> 
     //GET /conductores/usuario/{idUsuario}  hazlo sin dto
     @Query("SELECT c FROM Conductor c WHERE c.usuario.id = :idUsuario")
     Optional<Conductor> findConductorByUsuarioId(Integer idUsuario);
+
+    @Query("SELECT c FROM Conductor c JOIN c.usuario u ON c.usuario.id = u.id WHERE u.username = :username")
+    Optional<Conductor> findConductorByUsername(String username);
 
 
 
