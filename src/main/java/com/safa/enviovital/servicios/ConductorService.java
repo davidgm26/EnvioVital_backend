@@ -6,6 +6,7 @@ import com.safa.enviovital.excepciones.NotFoundException.ConductorNotFoundExcept
 import com.safa.enviovital.excepciones.NotFoundException.EventoAlmacenNotFoundException;
 import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.excepciones.Response;
+import com.safa.enviovital.excepciones.YaInscritoEnEventoAlmacen;
 import com.safa.enviovital.modelos.*;
 import com.safa.enviovital.repositorios.*;
 import jakarta.transaction.Transactional;
@@ -114,8 +115,8 @@ public class ConductorService {
         return guardarConductor(c);
     }
 
-
-    public ResponseEntity<Response> registrarConductorEnEventoAlmacen(Integer eventoAlmacenId, Integer conductorId) {
+    @Transactional
+    public ResponseEntity<EventoAlmacenConductorDto> registrarConductorEnEventoAlmacen(Integer eventoAlmacenId, Integer conductorId) throws YaInscritoEnEventoAlmacen {
         EventoAlmacen eventoAlmacen = eventoAlmacenRepositorio.findById(eventoAlmacenId)
                 .orElseThrow(() -> new EventoAlmacenNotFoundException("EventoAlmacen no encontrado"));
 
@@ -124,12 +125,7 @@ public class ConductorService {
 
         Optional<EventoAlmacenConductor> existingEventoAlmacenConductor = eventoAlmacenConductorRepositorio.findByEventoAlmacenIdAndConductorId(eventoAlmacenId, conductorId);
         if (existingEventoAlmacenConductor.isPresent()) {
-            Response response = new Response(
-                    "El conductor con ID " + conductorId + " ya está registrado en el EventoAlmacen con ID " + eventoAlmacenId + ".",
-                    HttpStatus.BAD_REQUEST.value(),
-                    LocalDateTime.now()
-            );
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            throw new YaInscritoEnEventoAlmacen(conductor.getNombre());
         }
 
 
@@ -140,13 +136,7 @@ public class ConductorService {
 
         eventoAlmacenConductorRepositorio.save(eventoAlmacenConductor);
 
-        Response response = new Response(
-                "El conductor con ID " + conductorId + " ha sido registrado exitosamente en el EventoAlmacen con ID " + eventoAlmacenId + ".",
-                HttpStatus.OK.value(),
-                LocalDateTime.now()
-        );
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(EventoAlmacenConductorDto.fromEntity(eventoAlmacenConductor));
     }
 
     public List<ListaAlmacenesRegistradosByConductorDTO> obtenerEventoAlmacenPorConductor(Integer idConductor) {
@@ -154,14 +144,14 @@ public class ConductorService {
         return lista.stream().map(ListaAlmacenesRegistradosByConductorDTO::toDto).toList();
     }
 
-    public Response eliminarRegistroConductorEnEventoAlmacen(Integer eventoAlmanceConductorId) {
-        EventoAlmacenConductor eventoAlmacenConductor = eventoAlmacenConductorRepositorio.findById(eventoAlmanceConductorId)
+    public Response eliminarRegistroConductorEnEventoAlmacen(Integer eventoAlmancenConductorId) {
+        EventoAlmacenConductor eventoAlmacenConductor = eventoAlmacenConductorRepositorio.findById(eventoAlmancenConductorId)
                 .orElseThrow(() -> new EventoAlmacenNotFoundException("EventoAlmacenConductor no encontrado"));
 
         eventoAlmacenConductorRepositorio.delete(eventoAlmacenConductor);
 
         return new Response(
-                "Se ha eliminado correctamente el registro " + eventoAlmanceConductorId + ".",
+                "Se ha eliminado correctamente el registro " + eventoAlmancenConductorId + ".",
                 HttpStatus.OK.value(),
                 LocalDateTime.now()
         );
@@ -177,6 +167,15 @@ public class ConductorService {
                 .fechaNacimiento(dto.getFechaNacimiento())
                 .email(dto.getEmail())
                 .build();
+    }
+
+    public Boolean conductorInscritoEnEventoAlmacen(int idConductor, int idEventoAlmacen){
+        EventoAlmacen eventoAlmacen = eventoAlmacenRepositorio.findById(idEventoAlmacen).get();
+        Optional<EventoAlmacenConductor> eventoAlmacenConductor = eventoAlmacenConductorRepositorio.findEventoAlmacenConductorByConductorIdAndEventoAlmacenId(idConductor,eventoAlmacen.getId());
+        if (eventoAlmacenConductor.isPresent()){
+            return true;
+        }
+        return false;
     }
 
     public Conductor cambiarEstadoConductor(int id) {
