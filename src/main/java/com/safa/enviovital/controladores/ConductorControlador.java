@@ -83,19 +83,20 @@ public class ConductorControlador {
      * @param conductorId ID del conductor
      * @return ResponseEntity con el mensaje de éxito o error
      */
-    @PostMapping("/registrarse/{eventoAlmacenId}/{conductorId}")
+    @PostMapping("/registrarse/{eventoAlmacenId}/{conductorId}/{almacenId}")
     public ResponseEntity<EventoAlmacenConductorDto> registrarConductorEnEventoAlmacen(
             @PathVariable Integer eventoAlmacenId,
-            @PathVariable Integer conductorId) {
-        return conductorService.registrarConductorEnEventoAlmacen(eventoAlmacenId, conductorId);
+            @PathVariable Integer conductorId,
+            @PathVariable Integer almacenId) {
+        return conductorService.registrarConductorEnEventoAlmacen(eventoAlmacenId, conductorId,almacenId);
     }
 
     @GetMapping("/almacenesRegistrados/{conductorId}")
     public ResponseEntity<List<ListaAlmacenesRegistradosByConductorDTO>> listarAlmacenesRegistradosByConductor(@PathVariable Integer conductorId) {
-        return ResponseEntity.ok(conductorService.obtenerEventoAlmacenPorConductor(conductorId));
-    }
+         return ResponseEntity.ok(conductorService.obtenerEventoAlmacenPorConductor(conductorId));
+    }   
 
-    @DeleteMapping("/eliminarRegistro/{eventoAlmacxenConductorId}")
+    @DeleteMapping("/eliminarRegistro/{eventoAlmacenConductorId}")
     public ResponseEntity<Response> eliminarRegistro(@PathVariable Integer eventoAlmacenConductorId) {
         return ResponseEntity.ok(conductorService.eliminarRegistroConductorEnEventoAlmacen(eventoAlmacenConductorId));
     }
@@ -110,9 +111,9 @@ public class ConductorControlador {
         return ResponseEntity.ok(ConductorResponseDTO.ConductorResponseDtoFromConductor(conductorService.cambiarEstadoConductor(id)));
     }
 
-    @GetMapping("/inscripcion/{idEventoAlmacen}/{idConductor}")
-    private ResponseEntity<Boolean> comprobarInscripcion(@PathVariable int idEventoAlmacen,@PathVariable int idConductor) {
-        return ResponseEntity.ok(conductorService.conductorInscritoEnEventoAlmacen(idEventoAlmacen, idConductor));
+    @GetMapping("/inscripcion/{idEventoAlmacen}/{idConductor}/{idAlmacen}")
+    private ResponseEntity<Boolean> comprobarInscripcion(@PathVariable int idEventoAlmacen,@PathVariable int idConductor,@PathVariable int idAlmacen) {
+        return ResponseEntity.ok(conductorService.conductorInscritoEnEventoAlmacen(idEventoAlmacen, idConductor,idAlmacen));
     }
 
 

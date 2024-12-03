@@ -1,13 +1,10 @@
 package com.safa.enviovital.repositorios;
 
 
-import com.safa.enviovital.dto.AlmacenResponseDTO;
-import com.safa.enviovital.dto.EventoAlmacenDtoResponse;
 import com.safa.enviovital.modelos.Almacen;
 import com.safa.enviovital.modelos.Evento;
 import com.safa.enviovital.modelos.EventoAlmacen;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -22,5 +19,9 @@ public interface EventoAlmacenRepositorio extends JpaRepository<EventoAlmacen, I
     List<EventoAlmacen> findEventoAlmacenByEventoId(@Param("idEvento") Integer idEvento);
 
     List<EventoAlmacen> findEventoAlmacenByAlmacenId(@Param("idAlmacen") Integer idAlmacen);
+
+    Optional <EventoAlmacen> findEventoAlmacenByAlmacenIdAndEventoId(@Param("idAlmacen") Integer idAlmacen, @Param("idEvento") Integer idEvento);
+
+    List<EventoAlmacen> findAllByEventoId(Integer eventoAlmacenId);
 }
 

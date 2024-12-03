@@ -11,11 +11,12 @@ import java.util.Optional;
 
 @Repository
 public interface EventoAlmacenConductorRepositorio extends JpaRepository<EventoAlmacenConductor, Integer> {
+
     Optional<EventoAlmacenConductor> findByEventoAlmacenIdAndConductorId(Integer eventoAlmacenId, Integer conductorId);
 
     List<EventoAlmacenConductor> findEventoAlmacenConductorByConductorId(Integer conductorId);
 
-    Optional<EventoAlmacenConductor> findEventoAlmacenConductorByConductorIdAndEventoAlmacenId(@Param("conductorId") Integer conductorId, @Param("eventoAlmacenId") Integer eventoAlmacenId);
+    EventoAlmacenConductor findEventoAlmacenConductorByConductorIdAndEventoAlmacenId(@Param("conductorId") Integer conductorId, @Param("eventoAlmacenId") Integer eventoAlmacenId);
 
     List<EventoAlmacenConductor> findByEventoAlmacenId_AlmacenId(Integer almacenId);
 
