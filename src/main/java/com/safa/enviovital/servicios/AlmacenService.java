@@ -223,6 +223,8 @@ public class AlmacenService {
 
 
 
+
+
     public ResponseEntity<String> subirFotoAlmacen(MultipartFile file) {
         //Extraemos el nombre de usuario del token
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -253,7 +255,6 @@ public class AlmacenService {
         return ResponseEntity.ok("Archivo subido correctamente. URL: " + urlFoto);
     }
 
-
     public Almacen actualizarFotoUrl(Almacen almacen, String urlFoto) {
         // Actualizar la propiedad fotoUrl del almacén
         almacen.setFotoUrl(urlFoto);
@@ -264,6 +265,19 @@ public class AlmacenService {
         // Devolver el objeto Almacen actualizado
         return almacen;
     }
+
+   public String obtenerFotoUrl(String username) {
+    // Buscar el almacén por su username y lanzar una excepción si no se encuentra
+    Almacen almacen = almacenRepositorio.findAlmacenByUsername(username)
+            .orElseThrow(() -> new AlmacenNotFoundException(username));
+
+    // Devolver la propiedad fotoUrl del almacén
+    return almacen.getFotoUrl();
+}
+
+
+
+
 }
 
 

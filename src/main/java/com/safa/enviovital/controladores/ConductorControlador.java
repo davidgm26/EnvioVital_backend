@@ -119,12 +119,18 @@ public class ConductorControlador {
 
     //Comprobar que subirFoto funciona
 
-    @PostMapping(value="/testUpload", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value="/upload", consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> testUpload(@RequestPart("file") MultipartFile file) {
         return conductorService.subirFotoConductor(file);
 
 
     }
+
+    @GetMapping("/foto/{username}")
+    public ResponseEntity<String> getFotoConductor(@PathVariable String username) {
+        return ResponseEntity.ok(conductorService.getFotoUrl(username));
+    }
+
 
 
 

@@ -10,4 +10,6 @@ public class AlmacenNotFoundException extends RuntimeException {
         super("No existen almacenes");
     }
 
+    public AlmacenNotFoundException(String username) {
+        super("El almacén con nombre de usuario " + username + " no existe");}
 }

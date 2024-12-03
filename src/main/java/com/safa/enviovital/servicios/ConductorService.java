@@ -266,6 +266,15 @@ public class ConductorService {
         return conductor;
     }
 
+    public String getFotoUrl(String username) {
+        Conductor conductor = conductorRepositorio.findConductorByUsername(username)
+                .orElseThrow(() -> new ConductorNotFoundException("Conductor no encontrado"));
+        return conductor.getFotoUrl();
+    }
+
+
+
+
 
 
 
