@@ -10,6 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AlmacenEditarDTO {
+    private Integer id;
     private String nombre;
     private String descripcion;
     private String direccion;

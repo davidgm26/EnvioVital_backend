@@ -123,8 +123,9 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
-    @ExceptionHandler(AlmacenEmailAlredyExistsException.class)
-    public ResponseEntity<Response> handleAlmacenEmailAlredyExistsException(AlmacenEmailAlredyExistsException ex) {
+
+    @ExceptionHandler(EmailAlredyExistsException.class)
+    public ResponseEntity<Response> handleEmailAlredyExistsException(EmailAlredyExistsException ex) {
         Response errorResponse = new Response(
                 ex.getMessage(),
                 HttpStatus.BAD_REQUEST.value(),
@@ -134,8 +135,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(AlmacenUsuarioAlredyExistsException.class)
-    public ResponseEntity<Response> handleAlmacenUsuarioAlredyExistsException(AlmacenUsuarioAlredyExistsException ex) {
+    @ExceptionHandler(DniAlredyExistsException.class)
+    public ResponseEntity<Response> handleDniAlredyExistsException(DniAlredyExistsException ex) {
         Response errorResponse = new Response(
                 ex.getMessage(),
                 HttpStatus.BAD_REQUEST.value(),
@@ -165,7 +166,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
-
     @ExceptionHandler(YaInscritoEnEventoAlmacen.class)
     public ResponseEntity<Response>handleYaInscritoEnEventoAlmacen(YaInscritoEnEventoAlmacen ex) {
         Response errorResponse = new Response(
@@ -175,5 +175,4 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
-
 }
