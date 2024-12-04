@@ -48,6 +48,8 @@ public class ConductorService {
     private EmailService emailService;
     @Autowired
     private AlmacenService almacenService;
+    @Autowired
+    private AlertaRepositorio alertaRepositorio;
 
     /**
      * Método para obtener todos los conductores.
@@ -121,28 +123,27 @@ public class ConductorService {
     }
 
     @Transactional
-    public ResponseEntity<EventoAlmacenConductorDto> registrarConductorEnEventoAlmacen(Integer eventoAlmacenId, Integer conductorId,Integer idAlmacen) throws YaInscritoEnEventoAlmacen {
-
+    public ResponseEntity<EventoAlmacenConductorDto> registrarConductorEnEventoAlmacen(Integer eventoAlmacenId, Integer conductorId, Integer idAlmacen) throws YaInscritoEnEventoAlmacen {
         EventoAlmacen e = eventoAlmacenRepositorio.getById(eventoAlmacenId);
-        //Busco todos los eventos almacen de un evento.
-        List<EventoAlmacen> almacenesEvento = eventoAlmacenRepositorio.findAllByEventoId(e.getEvento().getId()  );
+        List<EventoAlmacen> almacenesEvento = eventoAlmacenRepositorio.findAllByEventoId(e.getEvento().getId());
         Conductor c = conductorRepositorio.findById(conductorId).get();
-        //Comprubo almacen por almacen que sea el que yo busco
         for (EventoAlmacen eventoAlmacen : almacenesEvento) {
-            //Encuentra el que yo quiero
             if (eventoAlmacen.getAlmacen().getId().equals(idAlmacen)) {
-                //Compruebo si ya está inscrito el usuario
-                if (conductorInscritoEnEventoAlmacen(conductorId,eventoAlmacenId,idAlmacen)){
+                if (conductorInscritoEnEventoAlmacen(conductorId, eventoAlmacenId, idAlmacen)) {
                     throw new YaInscritoEnEventoAlmacen(c.getNombre());
                 }
-                //Creacion del evento-almacen-conductor
                 EventoAlmacenConductor eventoAlmacenConductor = new EventoAlmacenConductor();
                 eventoAlmacenConductor.setEventoAlmacen(eventoAlmacen);
                 eventoAlmacenConductor.setConductor(c);
                 eventoAlmacenConductorRepositorio.save(eventoAlmacenConductor);
+
+                // Crear y guardar la alerta
+                Alerta alerta = new Alerta();
+                alerta.setMensaje("El conductor " + c.getNombre() + " se ha registrado en el evento " + eventoAlmacen.getEvento().getNombre());
+                alerta.setUsuario(eventoAlmacen.getAlmacen().getUsuario());
+                alertaRepositorio.save(alerta);
+
                 return ResponseEntity.ok(EventoAlmacenConductorDto.fromEntity(eventoAlmacenConductor));
-            } else {
-                //Si encuentra el que busco
             }
         }
         throw new YaInscritoEnEventoAlmacen(c.getNombre());

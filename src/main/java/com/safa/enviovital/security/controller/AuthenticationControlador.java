@@ -3,7 +3,9 @@ package com.safa.enviovital.security.controller;
 import com.safa.enviovital.dto.UsuarioRequestDTO;
 import com.safa.enviovital.excepciones.NotFoundException.UsernameAlredyExistsException;
 import com.safa.enviovital.excepciones.Response;
+import com.safa.enviovital.modelos.Alerta;
 import com.safa.enviovital.modelos.Usuario;
+import com.safa.enviovital.repositorios.AlertaRepositorio;
 import com.safa.enviovital.security.dto.ChangePasswordRequest;
 import com.safa.enviovital.security.dto.LoginRequest;
 import com.safa.enviovital.security.dto.LoginResponse;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -27,9 +30,11 @@ public class AuthenticationControlador {
     @Autowired
     AuthenticationService authenticationService;
 
+
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
-        return ResponseEntity.ok(authenticationService.login(loginRequest));
+        LoginResponse loginResponse = authenticationService.login(loginRequest);
+        return ResponseEntity.ok(loginResponse);
     }
 
     @PostMapping("/register")
