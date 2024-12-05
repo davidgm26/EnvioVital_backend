@@ -5,6 +5,7 @@ import com.safa.enviovital.modelos.Almacen;
 import com.safa.enviovital.modelos.Evento;
 import com.safa.enviovital.modelos.EventoAlmacen;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +17,8 @@ public interface EventoAlmacenRepositorio extends JpaRepository<EventoAlmacen, I
     Optional<EventoAlmacen> findByEventoAndAlmacen(Evento evento, Almacen almacen);
 
 
-    List<EventoAlmacen> findEventoAlmacenByEventoId(@Param("idEvento") Integer idEvento);
+    @Query("SELECT ea FROM EventoAlmacen ea WHERE ea.evento.id = :idEvento AND ea.almacen.esActivo = true")
+    List<EventoAlmacen> findEventoAlmacenByEventoIdAndEsActivo(@Param("idEvento") Integer idEvento);
 
     List<EventoAlmacen> findEventoAlmacenByAlmacenId(@Param("idAlmacen") Integer idAlmacen);
 

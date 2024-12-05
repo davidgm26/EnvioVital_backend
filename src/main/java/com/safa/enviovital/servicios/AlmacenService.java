@@ -172,7 +172,7 @@ public class AlmacenService {
     public List<EventoAlmacenDtoResponse> obtenerEventoAlmacenPorEvento(Integer idEvento) {
         // Llamar al repositorio para obtener la lista de relaciones entre eventos y
         // almacenes
-        List<EventoAlmacen> lista = eventoAlmacenRepositorio.findEventoAlmacenByEventoId(idEvento);
+        List<EventoAlmacen> lista = eventoAlmacenRepositorio.findEventoAlmacenByEventoIdAndEsActivo(idEvento);
         return lista.stream().map(EventoAlmacenDtoResponse::toDto).toList();
     }
 

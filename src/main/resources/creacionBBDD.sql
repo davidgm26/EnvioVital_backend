@@ -251,6 +251,9 @@ VALUES (1, 1, 1),
        (4, 2, 1),
        (5, 2, 2),
        (6, 2, 3);
+
+
+
 -- Actualizar la secuencia de la tabla USUARIO
 SELECT setval(pg_get_serial_sequence('enviovital.usuario', 'id'), coalesce(max(id), 1)) FROM enviovital.usuario;
 

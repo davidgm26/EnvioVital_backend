@@ -216,6 +216,13 @@ public void borrarConductor(int id) {
     Conductor c = conductorRepositorio.findById(id).orElseThrow(() -> new ConductorNotFoundException("Conductor no encontrado"));
     c.getVehiculos().remove(c);
     c.getEventoAlmacenConductores().remove(c);
+
+
+
+
+
+
+
     conductorRepositorio.delete(c);
 }
 
