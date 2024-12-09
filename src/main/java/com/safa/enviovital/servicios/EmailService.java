@@ -13,6 +13,11 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
+    /**
+     *  Metodo para enviar el correo de bienvenida a un usuario.
+     * @param toEmail
+     * @param name
+     */
     public void sendRegistrationEmail(String toEmail, String name) {
         try {
             MimeMessage message = mailSender.createMimeMessage();

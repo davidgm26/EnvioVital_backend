@@ -27,23 +27,16 @@ public class ConductorService {
 
     @Autowired
     private ConductorRepositorio conductorRepositorio;
-
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
-
     @Autowired
     private EventoAlmacenRepositorio eventoAlmacenRepositorio;
-
     @Autowired
     private EventoAlmacenConductorRepositorio eventoAlmacenConductorRepositorio;
-
-
     @Autowired
     private VehiculoRepositorio vehiculoRepositorio;
-
     @Autowired
     private UsuarioService usuarioService;
-
     @Autowired
     private EmailService emailService;
     @Autowired
@@ -71,6 +64,12 @@ public class ConductorService {
                 .orElseThrow(() -> new ConductorNotFoundException(id));
     }
 
+    /**
+     * Método para obtener un conductor por su ID de usuario.
+     *
+     * @param idUsuario ID del usuario
+     * @return Devuelve el conductor buscado
+     */
     public ConductorResponseDTO getConductorByUsuarioId(Integer idUsuario) {
         Conductor conductor = conductorRepositorio.findConductorByUsuarioId(idUsuario)
                 .orElseThrow(() -> new ConductorNotFoundException("No se ha encontrado ningún conductor con el usuario ID " + idUsuario));
@@ -122,6 +121,15 @@ public class ConductorService {
         return guardarConductor(c);
     }
 
+    /**
+     * Metodo para registrar a un conductor dentro de un almacen que se encuentra inscrito en un evento.
+     *
+     * @param eventoAlmacenId,
+     * @param conductorId,
+     * @param idAlmacen,
+     * @return Registra al conductor en el almacen especifico para un evento especifico.
+     * @throws YaInscritoEnEventoAlmacen, si el usuario está inscrito salta un error.
+     */
     @Transactional
     public ResponseEntity<EventoAlmacenConductorDto> registrarConductorEnEventoAlmacen(Integer eventoAlmacenId, Integer conductorId, Integer idAlmacen) throws YaInscritoEnEventoAlmacen {
         EventoAlmacen e = eventoAlmacenRepositorio.getById(eventoAlmacenId);
@@ -149,11 +157,23 @@ public class ConductorService {
         throw new YaInscritoEnEventoAlmacen(c.getNombre());
     }
 
+    /**
+     * Metodo para obtener todos los eventos con sus almacenes a los que está inscrito un conductor.
+     *
+     * @param idConductor
+     * @return
+     */
     public List<ListaAlmacenesRegistradosByConductorDTO> obtenerEventoAlmacenPorConductor(Integer idConductor) {
         List<EventoAlmacenConductor> lista = eventoAlmacenConductorRepositorio.findEventoAlmacenConductorByConductorId(idConductor);
         return lista.stream().map(ListaAlmacenesRegistradosByConductorDTO::toDto).toList();
     }
 
+    /**
+     * Metodo para como conductor, eliminarse de un almacen inscrito en un evento.
+     *
+     * @param eventoAlmancenConductorId
+     * @return
+     */
     public Response eliminarRegistroConductorEnEventoAlmacen(Integer eventoAlmancenConductorId) {
         EventoAlmacenConductor eventoAlmacenConductor = eventoAlmacenConductorRepositorio.findById(eventoAlmancenConductorId)
                 .orElseThrow(() -> new EventoAlmacenNotFoundException("EventoAlmacenConductor no encontrado"));
@@ -167,6 +187,12 @@ public class ConductorService {
         );
     }
 
+    /**
+     * Metodo para convertir en entidad un dto
+     *
+     * @param dto
+     * @return Conductor creado con los datos del dto
+     */
     public Conductor fromDTO(ConductorResponseDTO dto) {
         return Conductor.builder()
                 .id(dto.getId())
@@ -180,6 +206,15 @@ public class ConductorService {
                 .build();
     }
 
+    /**
+     * Metodo para comprobar si un conductor ya se encuentra inscrito en un almacen para un evento específico.
+     *
+     * @param idConductor
+     * @param idEventoAlmacen
+     * @param idAlmacen
+     * @return Devuelve true o false segun esté o no inscrito.
+     */
+
     public Boolean conductorInscritoEnEventoAlmacen(int idConductor, int idEventoAlmacen, int idAlmacen) {
         //Busco el evento
         Optional<EventoAlmacen> e = eventoAlmacenRepositorio.findById(idEventoAlmacen);
@@ -190,8 +225,8 @@ public class ConductorService {
             //Busco el evento almacen de este almacen
             if (eventoAlmacen.getAlmacen().getId().equals(idAlmacen)) {
                 //Busco el eventoAlmacenConductor por el id del evento almacen y del conductor
-                EventoAlmacenConductor eventoAlmacenConductor = eventoAlmacenConductorRepositorio.findEventoAlmacenConductorByConductorIdAndEventoAlmacenId(idConductor,eventoAlmacen.getId());
-                if(eventoAlmacenConductor == null){
+                EventoAlmacenConductor eventoAlmacenConductor = eventoAlmacenConductorRepositorio.findEventoAlmacenConductorByConductorIdAndEventoAlmacenId(idConductor, eventoAlmacen.getId());
+                if (eventoAlmacenConductor == null) {
                     return false;
                 }
             }
@@ -199,37 +234,40 @@ public class ConductorService {
         return true;
     }
 
+    /**
+     * Metodo para cambiar el estado de un conducto
+     *
+     * @param id
+     * @return Actulizacion del conductor con el estado contrario al que tiene.
+     */
+    public Conductor cambiarEstadoConductor(int id) {
+        Conductor c = conductorRepositorio.findById(id).get();
+        c.setEsActivo(!c.getEsActivo());
+        return conductorRepositorio.save(c);
+    }
 
-public Conductor cambiarEstadoConductor(int id) {
-    Conductor c = conductorRepositorio.findById(id).get();
-    c.setEsActivo(!c.getEsActivo());
-    return conductorRepositorio.save(c);
-}
-
-/**
- * Método para eliminar un conductor.
- *
- * @param id ID del conductor a eliminar
- * @return Respuesta con el mensaje de eliminación
- */
-public void borrarConductor(int id) {
-    Conductor c = conductorRepositorio.findById(id).orElseThrow(() -> new ConductorNotFoundException("Conductor no encontrado"));
-    c.getVehiculos().remove(c);
-    c.getEventoAlmacenConductores().remove(c);
-
-
-
-
-
-
-
-    conductorRepositorio.delete(c);
-}
+    /**
+     * Método para eliminar un conductor.
+     *
+     * @param id ID del conductor a eliminar
+     * @return Respuesta con el mensaje de eliminación
+     */
+    public void borrarConductor(int id) {
+        Conductor c = conductorRepositorio.findById(id).orElseThrow(() -> new ConductorNotFoundException("Conductor no encontrado"));
+        c.getVehiculos().remove(c);
+        c.getEventoAlmacenConductores().remove(c);
+        conductorRepositorio.delete(c);
+    }
 
 
-public List<VehiculoResponseDTO> getVehiculosByConductorId(Integer id) {
-    List<Vehiculo> vehiculos = vehiculoRepositorio.findVehiculosByConductorId(id);
-    return vehiculos.stream().map(VehiculoResponseDTO::VehiculoResponseDTOfromVehiculo).toList();
-}
+    /**
+     *  Metodo para obtener todos los vehiculos que tiene registrado un conductor específico.
+     * @param id
+     * @return Lista con todos los vehiculos de un conducor
+     */
+    public List<VehiculoResponseDTO> getVehiculosByConductorId(Integer id) {
+        List<Vehiculo> vehiculos = vehiculoRepositorio.findVehiculosByConductorId(id);
+        return vehiculos.stream().map(VehiculoResponseDTO::VehiculoResponseDTOfromVehiculo).toList();
+    }
 
 }
