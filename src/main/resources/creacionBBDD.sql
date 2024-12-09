@@ -188,11 +188,11 @@ VALUES (1, 'Antonio', 'García López', '12345678A', 'Calle Gran Vía, Madrid', 
 
 INSERT INTO ENVIOVITAL.ALMACEN (id, nombre, descripcion, direccion, es_activo, id_provincia, id_usuario, email)
 VALUES
-    (1, 'Almacén Central Madrid', 'Almacén principal de distribución en Madrid', 'Calle Mayor, 10, 28013 Madrid', TRUE, 30, 7, 'central.madrid@example.es'),
-    (2, 'Almacén Norte Barcelona', 'Almacén regional para Cataluña', 'Avenida Diagonal, 250, 08013 Barcelona', FALSE, 9, 8, 'norte.barcelona@example.es'),
-    (3, 'Centro Logístico Valencia', 'Centro de operaciones en Valencia', 'Calle Colón, 45, 46004 Valencia', TRUE, 45, 9, 'logistico.valencia@example.es'),
-    (4, 'Depósito Sevilla', 'Depósito regional para Andalucía', 'Avenida de la Constitución, 1, 41001 Sevilla', FALSE, 40, 10, 'deposito.sevilla@example.es'),
-    (5, 'Almacén Sur Málaga', 'Almacén de productos del sur', 'Calle Larios, 12, 29015 Málaga', TRUE, 31, 11, 'sur.malaga@example.es');
+    (1, 'Almacén Central Madrid', 'Necesitamos conductores voluntarios con furgonetas grandes para el desplazamiento de alimentos no perecederos, ropa y productos de limpieza destinados a diferentes puntos de distribución en Madrid.', 'Calle Mayor, 10, 28013 Madrid', TRUE, 30, 7, 'central.madrid@example.es'),
+    (2, 'Almacén Norte Barcelona', 'Se requiere apoyo de conductores con vehículos para el transporte de material escolar, ropa de abrigo y alimentos hacia zonas rurales de Cataluña.', 'Avenida Diagonal, 250, 08013 Barcelona', FALSE, 9, 8, 'norte.barcelona@example.es'),
+    (3, 'Centro Logístico Valencia', 'Buscamos conductores que puedan colaborar con furgonetas para el traslado de productos de higiene personal, medicamentos y alimentos hacia centros comunitarios en Valencia.', 'Calle Colón, 45, 46004 Valencia', TRUE, 45, 9, 'logistico.valencia@example.es'),
+    (4, 'Depósito Sevilla', 'Necesitamos vehículos grandes para transportar ropa de cama, alimentos no perecederos y productos de limpieza a zonas rurales en Andalucía.', 'Avenida de la Constitución, 1, 41001 Sevilla', FALSE, 40, 10, 'deposito.sevilla@example.es'),
+    (5, 'Almacén Sur Málaga', 'Se solicita apoyo de conductores voluntarios con furgonetas para el reparto de productos de primera necesidad, como alimentos, ropa y artículos de higiene, en la región sur.', 'Calle Larios, 12, 29015 Málaga', TRUE, 31, 11, 'sur.malaga@example.es');
 
 INSERT INTO ENVIOVITAL.EVENTO (id, nombre, descripcion, es_activo, id_provincia)
 VALUES

@@ -18,6 +18,7 @@ public class ListaAlmacenesRegistradosByConductorDTO {
     private String direccionAlmacen;
     private String nombreEvento;
     private String descripcionEvento;
+    private String emailAlmacen;
     private String nombreProvincia;
     private Boolean estado;
     public static ListaAlmacenesRegistradosByConductorDTO toDto(EventoAlmacenConductor eventoAlmacenConductor) {
@@ -28,6 +29,7 @@ public class ListaAlmacenesRegistradosByConductorDTO {
                 .direccionAlmacen(eventoAlmacenConductor.getEventoAlmacen().getAlmacen().getDireccion())
                 .nombreEvento(eventoAlmacenConductor.getEventoAlmacen().getEvento().getNombre())
                 .descripcionEvento(eventoAlmacenConductor.getEventoAlmacen().getEvento().getDescripcion())
+                .emailAlmacen(eventoAlmacenConductor.getEventoAlmacen().getAlmacen().getEmail())
                 .nombreProvincia(eventoAlmacenConductor.getEventoAlmacen().getEvento().getProvincia().getNombre())
                 .estado(eventoAlmacenConductor.getEventoAlmacen().getEvento().getEsActivo())
 
