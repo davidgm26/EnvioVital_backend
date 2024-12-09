@@ -158,6 +158,12 @@ public class AlmacenService {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     *  Metodo que se usa solamente para guardar un almacen
+     *  en la base de datos
+     * @param a, recibe un almacen
+     * @return el almacen que ha recibido por parametros guardaddo en base de datos
+     */
     public Almacen guardarAlmacen(Almacen a) {
         return almacenRepositorio.save(a);
     }
@@ -176,11 +182,23 @@ public class AlmacenService {
         return lista.stream().map(EventoAlmacenDtoResponse::toDto).toList();
     }
 
+
+    /**
+     * Método para obtener los eventos en los que esta registrado un almacen.
+     *
+     * @param idAlmacen ID del evento
+     * @return Lista de AlmacenResponseDTO
+     */
     public List<ListaEventosByAlmacenDTO> obtenerEventoAlmacenPorAlmacen(Integer idAlmacen) {
         List<EventoAlmacen> lista = eventoAlmacenRepositorio.findEventoAlmacenByAlmacenId(idAlmacen);
         return lista.stream().map(ListaEventosByAlmacenDTO::toDto).toList();
     }
 
+    /**
+     *  Metodo para eliminar inscripicion de un almacen en un evento
+     * @param EventoAlmacenId
+     * @return Respuesta con el mensaje de eliminación
+     */
     public Response eliminarRegistroAlmacenEnEvento(Integer EventoAlmacenId) {
         EventoAlmacen eventoAlmacen = eventoAlmacenRepositorio.findById(EventoAlmacenId)
                 .orElseThrow(() -> new EventoAlmacenNotFoundException("EventoAlmacen no encontrado"));
@@ -193,6 +211,11 @@ public class AlmacenService {
                 LocalDateTime.now());
     }
 
+    /**
+     *  Metodo para obtener todos los conductores inscritos en un almacen.
+     * @param almacenId
+     * @return
+     */
     public List<ConductorResponseDTO> obtenerConductoresPorAlmacen(Integer almacenId) {
         List<EventoAlmacenConductor> eventoAlmacenConductores = eventoAlmacenConductorRepositorio.findByEventoAlmacenId_AlmacenId(almacenId);
         Set<Conductor> uniqueConductors = eventoAlmacenConductores.stream()
@@ -203,6 +226,11 @@ public class AlmacenService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     *  Metodo para cambiar el estado del almacen,
+     * @param id, id del almacen
+     * @return
+     */
     public Almacen changeAlmacenState(int id) {
         Almacen a = getAlmacenPorId(id);
         a.setEsActivo(!a.getEsActivo());

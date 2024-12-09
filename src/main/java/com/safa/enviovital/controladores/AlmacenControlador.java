@@ -276,6 +276,11 @@ public class AlmacenControlador {
                             content = @Content(mediaType = "application/json")
                     ),
                     @ApiResponse(
+                            responseCode = "403",
+                            description = "No está autorizado para realizar esta funcion.",
+                            content = @Content(mediaType = "application/json")
+                    ),
+                    @ApiResponse(
                             responseCode = "500",
                             description = "Error interno del servidor",
                             content = @Content(mediaType = "application/json")
@@ -296,7 +301,7 @@ public class AlmacenControlador {
     @Operation(
             summary = "Eliminar un almacén",
             description = "Elimina un almacén existente por su ID.",
-            tags = {"Almacenes"}
+            tags = {"Admin"}
     )
     @ApiResponses(
             value = {
@@ -350,6 +355,11 @@ public class AlmacenControlador {
                     @ApiResponse(
                             responseCode = "404",
                             description = "Evento o almacén no encontrado",
+                            content = @Content(mediaType = "application/json")
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "No tiene autorizacion para realizar esta funcion.",
                             content = @Content(mediaType = "application/json")
                     ),
                     @ApiResponse(
@@ -467,6 +477,11 @@ public class AlmacenControlador {
                             content = @Content(mediaType = "application/json")
                     ),
                     @ApiResponse(
+                            responseCode = "403",
+                            description = "No tienes autorizacion para realizar esta funcion",
+                            content = @Content(mediaType = "application/json")
+                    ),
+                    @ApiResponse(
                             responseCode = "500",
                             description = "Error interno del servidor",
                             content = @Content(mediaType = "application/json")
@@ -512,9 +527,9 @@ public class AlmacenControlador {
     }
 
     @Operation(
-            summary = "Cambiar el estado de un almacén, funcion disponible solo para admin",
+            summary = "Cambiar el estado de un almacén",
             description = "Permite cambiar el estado de un almacén entre activo o inactivo.",
-            tags = {"Almacenes"}
+            tags = {"Admin"}
     )
     @ApiResponses(
             value = {
