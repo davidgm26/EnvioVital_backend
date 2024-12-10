@@ -66,7 +66,7 @@ Este usuario tiene una lista de funcionalidades limitada a gestionar su perfil, 
 
 ---
 
-## Desarrollado por-
+## Desarrollado por:
 
 - [Luis Marin Carmona](https://github.com/lmarinc)
 - [Alba Maria Vidal](https://github.com/amsafa)
