@@ -44,6 +44,14 @@ API programado en Java con [Spring Boot](https://spring.io/projects/spring-boot)
  
 4. Si tienes la API arrancada podrás ver la documentacion [pinchando aqui](http://localhost:8080/swagger-ui/index.html)
 
+## AVISO
+
+Por motivos de seguridad y encriptacion. En caso de querer utilizar los usuarios por defecto de la base de datos, primero crea un Conductor o Almacén dentro de al app.
+
+Al crearlo ve a tu gestor de bbdd, copia y pega la contraseña del usuario que creaste (la verás hasheada) al resto de usuarios para así poderte loguear con ellos.
+
+Por lo tanto, si el usuario que creaste su contraseña es "123456789" y haces esto, podrás entrar con esa misma al resto de perfiles, incluidos el admin.
+
 ## Usuarios
 
 El proyecto cuenta con tres perfiles de usuario: Administrador, Conductor y  Almacen,  A continuación se detallan los usuarios predefinidos para cada perfil:
