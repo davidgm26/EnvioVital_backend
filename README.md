@@ -40,9 +40,8 @@ API programado en Java con [Spring Boot](https://spring.io/projects/spring-boot)
 
 2. Ejecuta el fichero .SQL para generar la base de datos.
 
-3. Ejecta el proyecto de spring con el comando `mvn spring-boot:run` en caso de que 
-lo estes ejecutando desde la consola, ten en cuenta que el proyecto por defecto viene con el prefil de produccion por lo que si no tienes activada la base de datos realizando el paso anterior no arrancara.
-
+3. Ejecta el proyecto de spring con el comando `mvn spring-boot:run`
+ 
 4. Si tienes la API arrancada podrás ver la documentacion [pinchando aqui](http://localhost:8080/swagger-ui/index.html)
 
 ## Usuarios
